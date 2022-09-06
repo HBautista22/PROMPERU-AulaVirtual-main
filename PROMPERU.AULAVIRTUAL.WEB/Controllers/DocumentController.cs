@@ -407,7 +407,7 @@ namespace PROMPERU.AULAVIRTUAL.WEB.Controllers
                 }
 
                 LocalReport report = new LocalReport();
-                report.ReportPath = Server.MapPath("~/Reports/rptPlantillaCertificado_" + versionCertificado + ".rdlc");
+                report.ReportPath = Server.MapPath("~/Reports/rptPlantillaCertificadoTurismo_" + versionCertificado + ".rdlc");
                 report.DisplayName = downloadName;
 
                 var NombreEmpresa = viewUsuarioMatricula.RazonSocial;
