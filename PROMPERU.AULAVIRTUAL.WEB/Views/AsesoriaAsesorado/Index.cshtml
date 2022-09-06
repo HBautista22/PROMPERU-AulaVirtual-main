@@ -1,0 +1,192 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Asesoria.AsesoriaAsesoradoViewModel
+@using PROMPERU.AULAVIRTUAL.BE.Aesorias
+@{
+    ViewBag.Title = "Asesoria";
+    ViewBag.Seccion = "MisAsesoriasAsesorado";
+
+    Dictionary<string, string> Estados = new Dictionary<string, string>()
+{
+{ "SOL", "Solicitado" },
+{ "ACE", "Aceptado" },
+{ "REC", "Rechazado" },
+{ "ATE", "Atendido" },
+{ "CAN", "Cancelado" }
+};
+}
+@section Scripts
+{
+    <link href='~/Scripts/fullcalendar-5.4.0/lib/main.css' rel='stylesheet' />
+    <script src='~/Scripts/fullcalendar-5.4.0/lib/main.js'></script>
+    <link rel="stylesheet" href="~/Content/assets/plugins/jquery-ui/jquery-ui.css" />
+    <script src='~/Content/assets/js/Asesoria/AsesoriaAsesorado.js'></script>
+
+    <script>
+        var initialLocaleCode = 'es';
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl,
+        {
+            initialView: 'timeGridWeek',
+            slotMinTime: '09:00:00',
+            slotMaxTime: '19:00:00',
+            firstDay: @((int)DateTime.Now.AddDays(1).DayOfWeek),
+            weekends:false,
+            height: 'auto',
+            width:'auto',
+            allDaySlot: false,
+            slotLabelFormat: [
+                {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                }
+            ],
+            headerToolbar:
+            {
+                left: 'prev,next',
+                center: 'title',
+                right: '' //'dayGridMonth,dayGridWeek,dayGridDay'
+            },
+            initialDate: '@(DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"))',
+            locale: initialLocaleCode,
+            navLinks: false, // can click day/week names to navigate views
+            editable: false,
+            dayMaxEvents: true, // allow "more" link when too many events
+            eventSources: [
+                {
+                    url: '/AsesoriaAsesorado/AsesoriasRemotasListarBloques',
+                    method: 'GET',
+                    //extraParams: {
+                    //    custom_param1: 'something',
+                    //    custom_param2: 'somethingelse'
+                    //},
+                    failure: function ()
+                    {
+                        alert('there was an error while fetching events!');
+                    }
+                }
+
+            ]
+        });
+
+        document.addEventListener('DOMContentLoaded', function ()
+        {
+
+            calendar.render();
+
+            setTimeout(function () { updateCalendar(); }, 5000);
+        });
+
+        function updateCalendar()
+        {
+            calendar.refetchEvents();
+            setTimeout(function () { updateCalendar(); }, 5000);
+        }
+
+    </script>
+}
+@section Styles{
+    <style>
+        .widget-11 .widget-11-table tr td:first-child {
+            width: 55% !important;
+        }
+        /*.ui-state-hover .ui-icon, .ui-state-focus .ui-icon, .ui-button:hover .ui-icon, .ui-button:focus .ui-icon {
+            background-image: url(/content/assets/img/ui-icons_555555_256x240.png);
+        }*/
+        .ui-dialog-titlebar-close {
+            background-image: url(/content/assets/img/ui-icons_777777_256x240.png);
+        }
+
+        .ui-dialog-titlebar-close {
+            background-position: -96px -128px;
+        }
+
+        .ui-icon-closethick {
+            background-position: -96px -128px;
+        }
+
+        .ui-dialog {
+            max-height: 450px;
+            overflow-y: auto;
+            z-index: 1500;
+        }
+
+        .ui-widget-overlay {
+            opacity: .50 !important;
+            filter: Alpha(Opacity=50) !important;
+            background: rgb(50, 50, 50) !important;
+            z-index: 1490 !important;
+        }
+    </style>
+}
+<div class="padding-25 sm-padding-10 container-fluid">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h2 class="usuarios m-b-20 text-black">&nbsp; Asesorias disponibles <span style="font-size:0.5em;cursor:help;" onclick="javascript: $('<div class=\'coDialog\' title=\'Instrucciones\' ><img src=\'/Content/assets/img/MiniGuiaTelexportemos.png\' ></div>').dialog({minWidth: 1335, Height: 450,  modal: true,  appendTo: 'body'});return false;" data-toggle="tooltip" title="<span style='font-family:breePeru-Light;'>Si tienes dudas para agendar tu cita da clic aquí</span>" data-placement="right" data-container="body" data-html="true"><sup>(?)</sup></span></h2>
+        </div>
+        <div class="col-xs-12">
+            <div id="calendar"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h2 class="usuarios m-b-20 text-black">&nbsp;Mis Solicitudes </h2>
+        </div>
+        <div class="col-xs-12">
+            <table class="table table-condensed table-hover table-bordered bg-white">
+                <thead>
+                <th class="text-center text-black" style="width:20%">Nombre</th>
+                <th class="text-center text-black" style="width:20%">Fecha</th>
+                <th class="text-center text-black" style="width:30%">Enlace</th>
+                <th class="text-center text-black" style="width:25%">Estado de solicitud</th>
+                <th class="text-center text-black" style="width:10%"></th>
+                </thead>
+                <tbody>
+                    @foreach (AsesoriaAsesoradoSolicitud ase in Model.AsesoriasSolicitadas)
+                    {
+                        <tr>
+                            <td class="text-table">
+                                @ase.Asre_Nombre
+                            </td>
+                            <td class="text-table">
+                                <span class="">@ase.Asre_Inicio</span>
+                            </td>
+                            <td class="text-table text-center ">
+                                <span class="">
+                                    @if (ase.Sola_Estado == "ACE")
+                                    {
+                                        <a href="/conferencia?RoomName=@ase.Asre_ConferenciaId">Ingresar a la Videoconferencia</a>
+                                    }
+                                </span>
+                            </td>
+                            <td class="text-center text-table">
+                                <span class="cf-advisory-table__hint rejected">@Estados[ase.Sola_Estado]</span>
+                            </td>
+                            <td class="text-center text-table col-2 ">
+                                @if (ase.Sola_Estado == "SOL")
+                                {
+                                    <span class=""><a href="javascript:AnularSolicitud(@ase.Sola_Id)">Anular</a></span>
+                                }
+                            </td>
+                        </tr>
+                    }
+ 
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="dialog-confirm" title="Solicitar Entrevista?" class="form-group" style="display:none;">
+        <p>Seleccione con quien desea la entrevista:</p>
+        <p>
+            <select class="form-control" id="Asesores" name="Asesores"></select>
+        </p>
+        <p>
+            Escriba por qué desea recibir la asesoría / Escriba el motivo de su consulta:
+        </p>
+        <p>
+            <textarea class="form-control" id="Consulta" name="Consulta"></textarea>
+        </p>
+    </div>
+</div>

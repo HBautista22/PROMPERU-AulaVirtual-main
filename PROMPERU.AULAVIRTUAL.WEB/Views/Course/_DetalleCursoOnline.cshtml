@@ -1,0 +1,36 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course._DetalleCursoOnlineViewModel
+@{
+    Layout = ConstantHelpers.Layout.MODAL_LAYOUT_PATH;
+    var CursoOnline = @Model.CursoOnline;
+    var MatriculaCursoOnline = @Model.MatriculaCursoOnline;
+}
+<div class="row">
+    <div class="col-sm-12 full-height item-description">
+        <h2 class="semi-bold no-margin font-montserrat"><i class="fa fa-book"></i>&nbsp;@CursoOnline.Nombre</h2>
+        <p class="rating fs-12 m-t-5">
+            <i class="fa fa-star "></i>
+            <i class="fa fa-star "></i>
+            <i class="fa fa-star "></i>
+            <i class="fa fa-star-o"></i>
+            <i class="fa fa-star-o"></i>
+        </p>
+        <p class="fs-13">
+            @Html.Raw(CursoOnline.Descripcion)
+        </p>
+        <div class="row m-b-20 m-t-20">
+            <div class="col-xs-6">
+                <span class="font-montserrat all-caps fs-11">Nota</span>
+            </div>
+            <div class="col-xs-6 text-right">@MatriculaCursoOnline.Nota</div>
+        </div>
+        <div class="row m-t-20 m-b-10">
+            <div class="col-xs-6">
+                <span class="font-montserrat all-caps fs-11">Porcentaje de Avance:</span>
+            </div>
+            <div class="col-xs-6 text-right">@MatriculaCursoOnline.PorcentajeAvance </div>
+        </div>
+    </div>
+</div>
+@section Footer{
+    <!--<a class="btn btn-info pull-left" href="@Url.Action("DescargarDocumento", "Document", new { CursoOnlineId = CursoOnline.CursoOnlineId })"><i class="fa fa-download"></i>&nbsp;Descargar Certificado</a>-->
+}

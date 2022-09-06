@@ -1,0 +1,99 @@
+﻿@using PROMPERU.AULAVIRTUAL.BE.CURSOS
+@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Notificaciones.EditAddNotificacionViewModel
+@{
+    ViewBag.Title = "EditAddNotificacionCurso";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item">
+                    <a href="#">Inicio</a>
+                </li>
+                <li class="breadcrumb-item active">Notificación</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Notificación</h2>
+        </div>
+    </div><!-- /.row -->
+}
+
+<div class="row">
+    <div class="col-lg-12 box-grey-content">
+        <h2>Agregar Notificacion</h2>
+        <div class="content-form-grey">
+            <form method="post" id="searchUser">
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(x => x.NotificacionId)
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Titulo</label>
+
+                            @Html.TextBoxFor(x => x.Titulo, new { @class = "form-control", @placeholder = "Ingresar Titulo" })
+                            @Html.ValidationMessageFor(x => x.Titulo)
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Asunto</label>
+                            @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Ingresar asunto" })
+                            @Html.ValidationMessageFor(x => x.Nombre)
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="">Curso</label>
+
+                            @*@Html.DropDownListFor(x => x.CursoOnlineId, new SelectList(Model.LstCursoOnline, "CursoOnlineId", "Nombre", Model.CursoOnlineId), "[- Seleccionar -]", new { @class = "form-control ", @name = "CursoOnlineId" })*@
+                            <select class="form-control" name="CursoOnlineId">
+                                <option value="" selected>[- Seleccionar -]</option>
+                                <option value="">Todos</option>
+                                @foreach (CursoOnline item in Model.LstCursoOnline)
+                                {
+                                    <option value="@item.CursoOnlineId">@item.Nombre</option>
+                                }
+                            </select>
+                            @Html.ValidationMessageFor(x => x.CursoOnlineId)
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="">Descripción</label>
+
+                            @Html.TextAreaFor(x => x.Contenido, new { @class = "form-control", @cols = "30", @rows = "10" })
+                            @Html.ValidationMessageFor(x => x.Contenido)
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="icheck-primary activo-2">
+                                @Html.CheckBoxFor(m => m.Estado, new { @checked = "checked" })
+                                <label for="Estado">
+                                    ¿Está activo?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-btn">
+                        <input type="submit" class="btn btn-primary" value="Guardar">
+                        <a class="btn btn-cancelar pull-center text-btn-generico" href="@Url.Action("ListNotificacionesAdm", "Notificaciones")">Cancelar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

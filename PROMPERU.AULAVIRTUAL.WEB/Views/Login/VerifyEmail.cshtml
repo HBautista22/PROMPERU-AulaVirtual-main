@@ -1,0 +1,21 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Home.VerifyEmailViewModel
+@{
+    ViewBag.Title = "Verificacion de Correo";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+
+@using System.Configuration
+@{var url_aula = ConfigurationManager.AppSettings["PORTAL.Url"].ToString(); }
+
+<header class="masthead masthead-login">
+    <div class="container">
+        <div class="intro-text" style="text-align: -webkit-center;">
+            <div class="form-group text-center"><div class="lb-login-iniciar">@ViewBag.mensaje</div></div>
+            <div class="col-md-12" style="text-align: -moz-center;">
+                    <div class="form-group">
+                        <a href="@url_aula/Login" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Ingresar a AulaVirtual</a>
+                    </div>
+                </div>
+            </div>
+    </div>
+</header>

@@ -1,0 +1,54 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.ViewAccesosViewModel
+@{
+    ViewBag.Title = "ViewAccesosNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Accesos</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Accesos</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row table-acciones table-content list-empresa">
+    <div class="col-sm-6">
+        <h2>Lista de Accesos</h2>
+    </div>
+
+</div>
+<div class="row mis-solicitudes table-content">
+    <div class="col-sm-12 btns-table">
+        <a href="@Url.Action("ListUsuario", "User")" class="btn btn-secondary">Regresar</a>
+    </div>
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list tipo-empresa" align="center">
+            <thead>
+                <tr>
+                    <th>Fecha Acceso</th>
+                    <th>Detalles</th>
+                    <th>Tipo Acceso</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.LstAccesos)
+                {
+                    <tr>
+                        <td class="text-table"><label class="label label-info"> @item.FechaAcceso.ToShortDateString() </label> &nbsp; <label class="label label-default"> @item.FechaAcceso.ToShortTimeString() </label> <label class="label" style="background:none"> @item.IPAcceso </label></td>
+                        <td class="text-left text-table" style="white-space: nowrap;">@(!String.IsNullOrEmpty(item.UserAgent) ? item.UserAgent.Replace(Environment.NewLine, String.Empty) : " - Restingido - ")</td>
+                        <td class="text-center text-table"><span class="label label-inverse">@item.TipoAcceso</span></td>
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+        @Html.PagedListPager(Model.LstAccesos, page => Url.Action("ViewAccesos", new { p = page, UsuarioId = Model.UsuarioId }), ConstantHelpers.Bootstrap3Pager)
+    </div>
+</div>

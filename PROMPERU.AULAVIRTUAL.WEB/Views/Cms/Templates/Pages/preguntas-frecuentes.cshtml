@@ -1,0 +1,55 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Cms.ViewPaginaViewModel
+@{
+    var model = Model;
+    var preguntasFrecuentes = model.PreguntaFrecuentes;
+
+    //var preguntasFrecuentes = Model.Datos.CMS_PreguntaFrecuente.Where(x => x.EsPublicado).OrderByDescending(x => x.Id).ToList();
+}
+<!-- Jumbotron -->
+<div class="card card-image" style="background-image: url('@Url.GetCmsResourceUrl("img/banner-pf.jpg")'); background-repeat: no-repeat; background-size: cover;">
+    <div class="text-white text-center rgba-stylish-strong py-55 px-4">
+        <div class="py-55">
+            <h2 class="agenda">Preguntas Frecuentes</h2>
+        </div>
+    </div>
+</div>
+<!-- Jumbotron -->
+
+<section class="page-section" style="padding: 30px 0;">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb d-inline-flex pl-4 pt-0 ml-5">
+            <li class="breadcrumb-item pr-2"><a href="/">Inicio</a></li>
+            <li class="breadcrumb-item active"><a class="pl-2" href="#!">Preguntas Frecuentes</a></li>
+        </ol>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <!--  <div class="col-md-12">
+                <h2 class="agenda-de-actividade mt-0 ml-5 text-center">Preguntas Frecuentes</h2>
+              </div>-->
+            <div class="col-md-12">
+                <div class="accordion" id="accordionExample">
+
+                    @foreach (var item in preguntasFrecuentes)
+                    {
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#pnl-@item.Id" aria-expanded="true" aria-controls="collapseOne" style="font-size: 30px;">
+                                        @item.Pregunta
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="pnl-@item.Id" class="collapse show" aria-labelledby="headingOne" >
+                                <div class="card-body">
+                                    @item.Respuesta
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

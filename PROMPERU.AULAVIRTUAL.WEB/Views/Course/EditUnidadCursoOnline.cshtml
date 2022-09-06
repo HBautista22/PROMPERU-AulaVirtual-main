@@ -1,0 +1,303 @@
+@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.EditUnidadCursoOnlineViewModel
+
+@{
+    ViewBag.Title = "Unidad";
+    ViewBag.Seccion = "Cursos";
+    ViewBag.SubSeccion = "Cursos";
+}
+
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListCursoOnlineAlumno", "Course")">Cursos</a></li>
+    <li><a href="@Url.Action("ViewCursoOnlineAdmin", "Course", new { CursoOnlineId = Model.CursoOnlineId })">Curso</a></li>
+
+}
+@section Scripts
+{
+    <script>
+
+        function editFileSection(option) {
+
+            var target = $('#editfile');
+
+            if (option === 0) {
+                target.show('slow');
+            } else {
+                target.hide('slow');
+                $('#ArchivoAdicional').val('');
+            }
+
+        }
+
+        $('.dropzone').dropzone({
+            maxFiles: 1,
+            acceptedFiles: ".zip",
+            dictMaxFilesExceeded: "Solo puede subir 1 archivo/s",
+            dictResponseError: "Sucedió un error al subir el archivo",
+            dictInvalidFileType: "El archivo debe ser un zip",
+            init: function () {
+                this.on("success", function (file, responseText) {
+                    $('.bg-danger-lighter').removeClass('bg-danger-lighter');
+                });
+                this.on("error", function (file, responseText) {
+                    document.querySelector('[data-dz-errormessage]').textContent = "Ocurrió un error al subir el archivo";
+                });
+                this.on("addedfile", function (file) {
+                    var removeButton = Dropzone.createElement('<button class="btn btn-danger btn-xs m-t-10">Remover</button>');
+
+                    var _this = this;
+                    removeButton.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        _this.removeFile(file);
+
+                    });
+                    file.previewElement.appendChild(removeButton);
+                });
+            }
+        })
+    </script>
+}
+<div class="container-fluid container-fixed-lg">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <h3 class="usuarios">Agregar Unidad</h3>
+                </div>
+
+                <form class="form form-horizontal" method="post" enctype="multipart/form-data">
+                    <div class="panel-body">
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(x => x.UnidadCursoOnlineId)
+                        @Html.HiddenFor(x => x.CursoOnlineId)
+                        @Html.HiddenFor(x => x.UnidadCursoOnlinePadreId)
+
+
+                        @if (Model.UnidadPadre != null)
+                        {
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">
+                                    Unidad padre
+                                </label>
+                                <div class='col-sm-3'>
+                                    <b>@Model.UnidadPadre.Nombre</b>
+                                </div>
+                            </div>
+                            @Html.HiddenFor(m => m.UnidadCursoOnlinePadreId)
+                        }
+
+                            <div class="form-group">
+                                <div class="col-sm-12 m-t-10">
+                                    <div class="col-sm-6 m-t-10">
+                                        <div class="row">
+                                            <div class="col-sm-12 m-l-20">
+                                                @Html.LabelFor(x => x.Nombre, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                            </div>
+                                            <div class='col-sm-12'>
+                                                @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control bg" })
+                                                @Html.ValidationMessageFor(x => x.Nombre)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 m-t-10">
+                                        <div class="row">
+                                            <div class="col-sm-12 m-l-20">
+                                                <label class="col-sm-3 control-label text-add-categoria">
+                                                    Tipo de Unidad
+                                                </label>
+                                            </div>
+                                            <div class='col-sm-12'>
+                                                @Html.DropDownListFor(x => x.TipoUnidadId, new SelectList(Model.LstTipoUnidad, "TipoUnidadId", "Nombre"), "[--Seleccione--]", new { @class = "form-control bg" })
+                                                @Html.ValidationMessageFor(x => x.TipoUnidad)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 m-t-10">
+                                    <div class="col-sm-6 m-t-10">
+                                        @if (Model.RutaArchivoAdicional == null)
+                                        {
+                                            <div class="row">
+                                                <div class="col-sm-12 m-l-20">
+                                                    @Html.LabelFor(m => m.ArchivoAdicional, new { @class = "col-sm-12 control-label text-add-categoria" })
+                                                </div>
+                                                <div class='col-sm-12'>
+                                                    @Html.TextBoxFor(m => m.ArchivoAdicional, new { @class = "form-control bg", @type = "file", @accept = "application/pdf,video/mp4,video/x-m4v" })
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <div class="col-sm-12 m-l-20">
+                                                    @Html.LabelFor(m => m.ArchivoAdicional, new { @class = "col-sm-3 control-label text-add-categoria" })
+                                                </div>
+                                                <div class='col-sm-12'>
+                                                    <a class="btn btn-xs" @Data.ModalLink("_ViewContentAdditionalFile", new { UnidadCursoOnlineId = Model.UnidadCursoOnlineId, hasFile = true })><i class="fa fa-eye"></i> Ver archivo</a>
+                                                    <a class="btn btn-xs" onclick="editFileSection(0)"><i class="fa fa-pencil"></i> Cambiar</a>
+                                                    <div id="editfile" style="display:none">
+                                                        @Html.TextBoxFor(m => m.ArchivoAdicional, new { @class = "form-control bg", @type = "file", @accept = "application/pdf,video/mp4,video/x-m4v" })
+                                                        <a class="btn btn-xs btn-danger" onclick="editFileSection(1)"><i class="fa fa-pencil"></i> Cancelar</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        }
+                                    </div>
+                                    <div class="col-sm-6 m-t-10">
+                                        <div class="row">
+                                            <div class="col-sm-12 m-l-20">
+                                                @Html.LabelFor(x => x.TiempoPermanencia, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                            </div>
+                                            <div class='col-sm-12'>
+                                                @Html.TextBoxFor(x => x.TiempoPermanencia, new { @class = "form-control bg" })
+                                                @Html.ValidationMessageFor(x => x.TiempoPermanencia)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 m-t-10">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20 text-center">
+                                            <label class="col-sm-offset-4 col-sm-3 control-label text-add-categoria">
+                                                Tamaño del contenedor (Ancho x Alto)
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            @Html.TextBoxFor(x => x.AnchoContenedor, new { @class = "form-control bg", @placeholder = "Ancho del contenedor" })
+                                            @Html.ValidationMessageFor(x => x.AnchoContenedor)
+                                        </div>
+                                        <div class="col-sm-6">
+                                            @Html.TextBoxFor(x => x.AltoContenedor, new { @class = "form-control bg", @placeholder = "Alto del contenedor" })
+                                            @Html.ValidationMessageFor(x => x.AltoContenedor)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 m-t-10">
+                                    <div class="col-sm-6 m-t-10">
+                                        <div class="row" id="form-tipounidad">
+                                            <div class="col-sm-12 m-l-20">
+                                                <label class="col-sm-3 control-label text-add-categoria">
+                                                    Tipo de Unidad
+                                                </label>
+                                            </div>
+                                            <div class='col-sm-12'>
+                                                @Html.DropDownListFor(x => x.TipoUnidad, new SelectList(ConstantHelpers.ListTipoUnidad()), "[--Seleccione--]", new { @class = "form-control bg" })
+                                                @Html.ValidationMessageFor(x => x.TipoUnidad)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 m-t-10">
+                                        <div class="row">
+                                            <div class="col-sm-12 m-l-20">
+                                                @Html.LabelFor(x => x.RutaWeb, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                            </div>
+                                            <div class='col-sm-12'>
+                                                @Html.TextBoxFor(x => x.RutaWeb, new { @class = "form-control bg", @placeholder = "" })
+                                                @Html.Label("", "Enlace de internet ejemplo: https://www.youtube.com/watch?v=-wFgyCzq7FY", new { @class = "col-sm-6 control-label text-add-categoria" })
+                                                @Html.ValidationMessageFor(x => x.RutaWeb)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        @*@Html.EditorFor(x => x.Nombre)*@
+
+                        @*<div class="form-group" id="form-descripcion">
+            @Html.LabelFor(x => x.Descripcion, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-9">
+                @Html.TextAreaFor(x => x.Descripcion, new { @class = "form-control wysiwyg", placeholder = "Escriba la descripccion del Curso", rows = "10" })
+                @Html.ValidationMessageFor(x => x.Descripcion)
+            </div>
+        </div>*@
+
+                        @*<div class="form-group">
+            <label class="col-sm-3 control-label">
+                Subir Archivo
+            </label>
+            <div class='col-sm-9'>
+                <a class='btn btn-primary btnCargar' data-toggle='modal' href='#modal-cargarArchivo' role='button'><i class="fa fa-upload"></i>&nbsp;Cargar</a>
+            </div>
+        </div>*@
+
+
+
+                        @*<div class="form-group @(String.IsNullOrEmpty(Model.RutaArchivoInicio) ? "bg-danger-lighter" : String.Empty)">
+                            <label class="col-sm-3 control-label">
+                                Seleccionar Archivo
+                            </label>
+                            <div class='col-sm-9'>
+                                <a class='btn btn-primary btnSeleccionar' @Data.ModalLink("_SelectArchivo", "Course", new { CodigoCursoOnline = Model.CodigoCursoOnline, UnidadCursoOnlineGUID = Model.GUID, SelectedFile = Model.RutaArchivoInicio })><i class="fa fa-check"></i>&nbsp;Seleccionar</a>
+                            </div>
+                        </div>*@
+                        @Html.HiddenFor(x => x.CodigoCursoOnline)
+                        @Html.HiddenFor(x => x.GUID)
+                        @Html.HiddenFor(x => x.RutaArchivoInicio)
+
+                        @*@Html.EditorFor(x => x.RutaWeb)
+
+                        @Html.EditorFor(x => x.Estado)
+                        @Html.EditorFor(x => x.TiempoPermanencia)*@
+
+
+                        @Html.EditorFor(x => x.Estado)
+
+
+
+                    </div>
+
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-sm-12 col-sm-offset-4">
+                                <button class="btn btn-guardar-matricula pull-center text-btn-generico" type="submit">Guardar</button>
+                                <a class="btn btn-cancelar pull-center text-btn-generico" href="@Url.Action("ViewCursoOnlineAdmin", "Course", new { CursoOnlineId = @Model.CursoOnlineId })">Cancelar</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='modal fade' id='modal-cargarArchivo' tabindex='-1'>
+    <div class='modal-dialog'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <button aria-hidden='true' class='close' data-dismiss='modal' type='button'>×</button>
+                <h5>Cargar Archivo</h5>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="tools">
+                                <a class="collapse" href="javascript:;"></a>
+                                <a class="config" data-toggle="modal" href="#grid-config"></a>
+                                <a class="reload" href="javascript:;"></a>
+                                <a class="remove" href="javascript:;"></a>
+                            </div>
+                            <div class="alert alert-info" role="alert">
+                                <button class="close" data-dismiss="alert"></button>
+                                <strong><i class="fa fa-exclamation-triangle"></i>&nbsp;Sólo cargar archivos .zip</strong> Al cargar el archivo se el contenído será extraído y se borrará el contenído cargado previamente.<br>
+                            </div>
+                        </div>
+                        <div class="panel-body no-scroll no-padding">
+                            <form action="@Url.Action("_UploadArchivo", "Course", new { CodigoCursoOnline = Model.CodigoCursoOnline, UnidadCursoOnlineGUID = Model.GUID })" class="dropzone no-margin">
+                                <div class="fallback">
+                                    <input name="file" type="file" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='modal-footer'>
+                <button class='btn btn-default' data-dismiss='modal' type='button'>Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(x => x.RutaArchivoInicio, new { @class = "select-elementos form-control" })
+

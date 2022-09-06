@@ -1,0 +1,443 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Cms.ViewPaginaViewModel
+@using System.Configuration;
+@using PROMPERU.AULAVIRTUAL.BE.CMS
+@using PROMPERU.AULAVIRTUAL.BE.CURSOS
+@using PROMPERU.AULAVIRTUAL.WEB.ViewModel.Cms
+
+@{
+
+    ViewPaginaViewModel model = Model;// (PROMPERU.AULAVIRTUAL.WEB.ViewModel.Cms.ViewPaginaViewModel)ViewData["ViewPaginaViewModel"];
+
+    List<CMS_Testimonio> testimonios = model.Testimonios;
+    List<CMS_Certificate> certificates = model.Certificates;//   cMSDA.ListarCertificateDisponibles(); //Model.Datos.CMS_Certificate.Where(x => x.EsPublicado).OrderByDescending(x => x.Id).ToList();
+    List<CMS_Banner> banners = model.Banners;// cMSDA.ListarBannerDisponibles();    //Model.Datos.CMS_Banner.Where(x => x.EsPublicado).OrderByDescending(x => x.Id).ToList();
+    List<CursoOnlineResponse> cursos = model.Cursos;
+    string urlAula = model.Url_aula; //ConfigurationManager.AppSettings["PORTAL.AbsoluteUrl"].ToString();
+    List<CategoriaCursoOnline> categoria = model.CategoriaCursoOnline;
+    bool esTursmo = Convert.ToBoolean(ConfigurationManager.AppSettings["EsTurismo"]);
+
+}
+
+<section class="seccion banner">
+    <div class="content">
+        <div class="slider-principal">
+            @foreach (CMS_Banner item in banners.Where(x => x.EsPublicado))
+            {
+                <div class="item">
+                    <div class="caption">
+                        <h2>@item.TituloSuperior</h2>
+                        <p class="bajada">@item.TituloInferior</p>
+                        <a href="@Url.Action("Index", "Login")" class="btns-banner">Ingresa aquí <i class="fas fa-chevron-right"></i></a>
+                        <p class="ir-login">Si no tienes un usuario, <a href="@Url.Action("Register", "Front")">Ingresa aquí.</a></p>
+                    </div>
+                    <div class="image">
+                        <picture>
+                            <source srcset="@Url.Content(item.Imagen)" media="(min-width: 300px) and (max-width: 768px)">
+                            @*<img src="@Url.GetCmsResourceUrl("assets/images/d_banner_home.jpg")">*@
+                            <img src="@Url.Content(item.Imagen)">
+
+                        </picture>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+<section class="seccion cursos-destacados">
+    <div class="content">
+        <h2>@("curso_destacado".Label())</h2>
+        <div class="grid-cursos">
+            <div class="filtros">
+                <div class="filters">
+                    <ul class="filter clearfix">
+                        <li data-filter="todos" class="todos active">Todos</li>
+                        <li data-filter="mas-valorados" class="mas-valorados">Más valorados</li>
+                        <li data-filter="mas-recientes" class="mas-recientes">Más recientes</li>
+                        <li data-filter="eventos-webinar" class="eventos-webinar">Eventos</li>
+                    </ul>
+                </div>
+                <div class="search">
+                    <form>
+                        <div class="input-form">
+                            <input type="search" class="form-control icon" id="txtBuscarCurso" placeholder="Buscar curso" aria-label="Search">
+                        </div>
+                        <div class="input-form filter-group">
+                            <select name="categorias" class="categorias form-control select2">
+                                <option value="" selected disabled>Buscar por categoría</option>
+                                @foreach (var item in categoria)
+                                {
+                                    <option value="categoria-@item.CategoriaCursoOnlineId">@item.Nombre</option>
+                                }
+
+
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="slider-cursos-home">
+
+
+                @foreach (var item in cursos)
+                {
+
+                    <div class="item-card @item.tipo categoria-@item.CategoriaCursoOnlineId">
+                        <a href="@Url.Action("Index", "Login")"></a>
+                        <div class="image">
+                            <img src="@Url.GetCmsResourceUrl("assets/images/cards/card_curso_3.png")" alt="Exportación de Servicios">
+
+                        </div>
+                        <div class="body-card">
+                            @if (item.tipo == "mas-recientes")
+                            {
+                                <span class="tag">
+                                    <img src="@Url.GetCmsResourceUrl("assets/images/iconos/tag_nuevo.png")">
+                                </span>
+                            }
+
+                            <h2>@item.Nombre</h2>
+                            <div class="calification">
+                                <p>
+                                    <i class="@(item.Calificacion >= 1 ? "fas" : "far"  ) fa-star"></i>
+                                    <i class="@(item.Calificacion >= 2 ? "fas" : "far"  ) fa-star"></i>
+                                    <i class="@(item.Calificacion >= 3 ? "fas" : "far"  ) fa-star"></i>
+                                    <i class="@(item.Calificacion >= 4 ? "fas" : "far"  ) fa-star"></i>
+                                    <i class="@(item.Calificacion >= 5 ? "fas" : "far"  ) fa-star"></i>
+                                </p>
+                                <span>@item.CantidadCalificacion calificaciones</span>
+                            </div>
+                            <p>
+
+                                @if (item.Descripcion.Length > 150)
+                                {
+                                    <text>
+                                        " @item.Descripcion.Substring(0, 150)...
+                                    </text>
+                                }
+                                else
+                                {
+                                    <text>
+                                        @item.Descripcion.ToString()
+                                    </text>
+                                }
+
+
+
+
+                            </p>
+                            <div class="footer-card">
+                                <span class="btns-card">Ingresar <i class="fas fa-chevron-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @*
+                    <div class="item-card eventos-webinar categoria-3">
+                        <a href="#"></a>
+                        <div class="image">
+                            <img src="@Url.GetCmsResourceUrl("assets/images/cards/card_curso_3.png")" alt="Exportación de Servicios">
+                        </div>
+                        <div class="body-card">
+                            <h2>Herramientas de Inteligencia Comercial</h2>
+                            <div class="calification">
+                                <p>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </p>
+                                <span>222 calificaciones</span>
+                            </div>
+                            <p>Este módulo te permitirá conocer las nociones básicas a tener en consideración dentro de una exportación de servicios.</p>
+                            <div class="footer-card">
+                                <span class="btns-card">Ingresar <i class="fas fa-chevron-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-card mas-recientes categoria-1">
+                        <a href="#"></a>
+                        <div class="image">
+                            <img src="@Url.GetCmsResourceUrl("assets/images/cards/card_curso_1.png")" alt="Exportación de Servicios">
+                        </div>
+                        <div class="body-card">
+                            <span class="tag">
+                                <img src="@Url.GetCmsResourceUrl("assets/images/iconos/tag_nuevo.png")">
+                            </span>
+                            <h2>Consorcios de exportación</h2>
+                            <div class="calification">
+                                <p>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </p>
+                                <span>240 calificaciones</span>
+                            </div>
+                            <p>Este módulo te permitirá conocer las nociones básicas a tener en consideración dentro de una exportación de servicios.</p>
+                            <div class="footer-card">
+                                <span class="btns-card">Ingresar <i class="fas fa-chevron-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-card eventos-webinar categoria-2">
+                        <a href="#"></a>
+                        <div class="image">
+                            <img src="@Url.GetCmsResourceUrl("assets/images/cards/card_curso_2.png")" alt="Exportación de Servicios">
+                        </div>
+                        <div class="body-card">
+                            <h2>Exportación de Servicios</h2>
+                            <div class="calification">
+                                <p>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </p>
+                                <span>240 calificaciones</span>
+                            </div>
+                            <p>Este módulo te permitirá conocer las nociones básicas a tener en consideración dentro de una exportación de servicios.</p>
+                            <div class="footer-card">
+                                <span class="btns-card">Ingresar <i class="fas fa-chevron-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-card mas-valorados eventos-webinar categoria-3">
+                        <a href="#"></a>
+                        <div class="image">
+                            <img src="@Url.GetCmsResourceUrl("assets/images/cards/card_curso_3.png")" alt="Exportación de Servicios">
+                        </div>
+                        <div class="body-card">
+                            <h2>Exportación de Servicios</h2>
+                            <div class="calification">
+                                <p>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </p>
+                                <span>240 calificaciones</span>
+                            </div>
+                            <p>Este módulo te permitirá conocer las nociones básicas a tener en consideración dentro de una exportación de servicios.</p>
+                            <div class="footer-card">
+                                <span class="btns-card">Ingresar <i class="fas fa-chevron-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-card eventos-webinar categoria-3">
+                        <a href="#"></a>
+                        <div class="image">
+                            <img src="@Url.GetCmsResourceUrl("assets/images/cards/card_curso_3.png")" alt="Exportación de Servicios">
+                        </div>
+                        <div class="body-card">
+                            <h2>Herramientas de Inteligencia Comercial</h2>
+                            <div class="calification">
+                                <p>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </p>
+                                <span>222 calificaciones</span>
+                            </div>
+                            <p>Este módulo te permitirá conocer las nociones básicas a tener en consideración dentro de una exportación de servicios.</p>
+                            <div class="footer-card">
+                                <span class="btns-card">Ingresar <i class="fas fa-chevron-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-card mas-recientes categoria-1">
+                        <a href="#"></a>
+                        <div class="image">
+                            <img src="@Url.GetCmsResourceUrl("assets/images/cards/card_curso_1.png")" alt="Exportación de Servicios">
+                        </div>
+                        <div class="body-card">
+                            <span class="tag">
+                                <img src="@Url.GetCmsResourceUrl("assets/images/iconos/tag_nuevo.png")">
+                            </span>
+                            <h2>Consorcios de exportación</h2>
+                            <div class="calification">
+                                <p>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </p>
+                                <span>240 calificaciones</span>
+                            </div>
+                            <p>Este módulo te permitirá conocer las nociones básicas a tener en consideración dentro de una exportación de servicios.</p>
+                            <div class="footer-card">
+                                <span class="btns-card">Ingresar <i class="fas fa-chevron-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-card eventos-webinar categoria-2">
+                        <a href="#"></a>
+                        <div class="image">
+                            <img src="@Url.GetCmsResourceUrl("assets/images/cards/card_curso_2.png")" alt="Exportación de Servicios">
+                        </div>
+                        <div class="body-card">
+                            <h2>Exportación de Servicios</h2>
+                            <div class="calification">
+                                <p>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </p>
+                                <span>240 calificaciones</span>
+                            </div>
+                            <p>Este módulo te permitirá conocer las nociones básicas a tener en consideración dentro de una exportación de servicios.</p>
+                            <div class="footer-card">
+                                <span class="btns-card">Ingresar <i class="fas fa-chevron-right"></i></span>
+                            </div>
+                        </div>
+                    </div>*@
+
+            </div>
+        </div>
+    </div>
+</section>
+<section class="seccion nosotros">
+    <div class="content">
+        <div class="content-nosotros">
+            <h2>@("nosotros_titulo".Label())</h2>
+            <p> @("nosotros".Label());</p>
+            <div class="grid-nosotros">
+                <div class="item">
+                    <img src="@("nosotros_imagen1".Label())">
+                    <p>@("nosotros_imagen1_texto".Label())</p>
+                </div>
+                <div class="item">
+                    <img src="@("nosotros_imagen2".Label())">
+                    <p>@("nosotros_imagen2_texto".Label())</p>
+                </div>
+                <div class="item">
+                    <img src="@("nosotros_imagen3".Label())">
+                    <p>@("nosotros_imagen3_texto".Label())</p>
+                </div>
+                <div class="item">
+                    <img src="@("nosotros_imagen4".Label())">
+                    <p>@("nosotros_imagen4_texto".Label())</p>
+                </div>
+                <div class="item">
+                    <img src="@("nosotros_imagen5".Label())">
+                    <p>@("nosotros_imagen5_texto".Label())</p>
+                </div>
+            </div>
+        </div>
+        <div class="image-nosotros">
+            <img src="@("nosotros_foto".Label())">
+
+        </div>
+    </div>
+</section>
+<section class="seccion certificate">
+    <div class="content">
+        <h2>@("certificate_titulo".Label())</h2>
+        <div class="grid-certificate">
+            @foreach (var item in certificates)
+            {
+                <div class="item">
+                    <img src="@Url.Content(item.Imagen)">
+                    <h2> @item.Nombre</h2>
+                    <p>   @item.Sumilla</p>
+                </div>
+            }
+
+            @*<div class="item">
+                    <img src="@Url.GetCmsResourceUrl("assets/images/iconos/certificate.png")">
+                    <h2>¿Quiénes podrán certificarse?</h2>
+                    <p>Solo a las empresas con potencial exportador que hayan culminado de manera satisfactoria los módulos correspondientes a la “Ruta Básica Exportadora”.</p>
+                </div>
+                <div class="item">
+                    <img src="@Url.GetCmsResourceUrl("assets/images/iconos/potencial_exportador.png")">
+                    <h2>¿Quién es una empresa con potencial exportador?</h2>
+                    <p>Empresas que estén constituidas un tiempo igual o mayor a un año. Empresas con ventas iguales o superiores a los 150 000 soles anuales; o empresas que hayan mostrado registro de exportación en los últimos tres años.</p>
+                </div>*@
+        </div>
+    </div>
+</section>
+<section class="seccion contactanos">
+    <div class="content">
+        <h2>@("contacto_titulo".Label())</h2>
+        <div class="content-contactanos">
+            <div class="datos-contacto">
+                <h2>Información de Contacto:</h2>
+
+
+                <p><img src="@Url.GetCmsResourceUrl("assets/images/iconos/movil_contact.png")"> @("ic_telefono".Label())</p>
+                @if (!esTursmo)
+                {
+
+                    <p><img src="@Url.GetCmsResourceUrl("assets/images/iconos/icons-whatsapp.png")"> @("ic_telefono_celular".Label())</p>
+                }
+
+                @{
+                    var mailtocorreo = String.Concat("mailto:", "ic_correo".Label());
+                }
+
+                <p><img src="@Url.GetCmsResourceUrl("assets/images/iconos/mail_contact.png")"> <a href="@mailtocorreo">@("ic_correo".Label())</a></p>
+                @if (!esTursmo)
+                {
+                    <p><img src="@Url.GetCmsResourceUrl("assets/images/iconos/web_contact.png")"> <a href="@("link_tres".Label())" target="_blank">@("link_tres".Label())</a></p>
+                }
+
+            </div>
+            <div class="form-contacto">
+                <h2>Déjanos tu mensaje:</h2>
+                <form id="contactForm" action="Url.FrontUrl().SubmissionUrl(" ContactUsFormSubmission")" name="sentMessage">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="email" name="email" class="form-control" id="emailContact" placeholder="@("correo_titulo".Label())">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="nombre" class="form-control" id="nombreContac" placeholder="@("nombre_titulo".Label())">
+                        </div>
+                        <div class="form-group">
+                            <textarea name="mensaje" id="msjContact" cols="30" rows="10" placeholder="@("mensaje_titulo".Label())"></textarea>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-primary">@("boton_enviar".Label()) <i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="seccion banner-secundario">
+    <div class="content">
+        <a href="#" target="_blank">
+            <picture>
+                <source srcset="@Url.GetCmsResourceUrl("assets/images/d_banner_relacionado.jpg")" media="(min-width: 300px) and (max-width: 768px)">
+                <img src="@Url.GetCmsResourceUrl("assets/images/d_banner_relacionado.jpg")">
+            </picture>
+        </a>
+    </div>
+
+    @section Scripts{
+
+        <script>
+            $(document).ready(function () {
+                $("#txtBuscarCurso").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    $(".slick-track .item-card").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+        </script>
+
+
+    }
+</section>
+

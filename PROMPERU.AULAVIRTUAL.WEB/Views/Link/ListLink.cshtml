@@ -1,0 +1,65 @@
+﻿@model IEnumerable<PROMPERU.AULAVIRTUAL.BE.CURSOS.EnlacesInteres>
+@{
+    ViewBag.Title = "ListLink";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Enlaces de Interés</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Enlaces de Interés</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row">
+    <!-- Left col -->
+
+    <section class="col-lg-12">
+        <!-- .card -->
+        <div class="content-mis-cursos">
+            <div class="grid-items">
+                @foreach (var link in Model)
+                {
+                    <div class="item-card enlaces-interes">
+                        
+
+
+                        @if (link.Tipo == "ART")
+                        {
+                            <a href="@link.Url" target="_blank"></a>
+                        }
+
+                        @if (link.Tipo == "PDF")
+                        {
+                            <a href="@Url.Content(link.Pdf)" target="_blank"></a>
+                        }
+
+                        @if (link.Tipo == "VID")
+                        {
+                            <a href="https://www.youtube.com/watch?v=@link.CodigoYoutube" target="_blank"></a>
+                        }
+
+                        <div class="image">
+                            <img src="@Url.Content(link.Imagen)" alt="@link.Titulo">
+                        </div>
+                        <div class="body-card">
+                            <h2>@link.Titulo</h2>
+                            <p>@link.Descripcion</p>
+                            <div class="footer-card">
+                                <span class="btns-card">Ver más <i class="fas fa-chevron-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+            </div>
+        </div>
+        <!-- /.card -->
+    </section>
+</div>

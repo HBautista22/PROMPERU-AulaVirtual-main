@@ -1,0 +1,65 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Report.ListCursoOnlineViewModel
+@{
+    ViewBag.Title = "Cursos";
+    ViewBag.Seccion = "Reportes";
+    ViewBag.SubSeccion = "Certificados";
+}
+
+@*@section Breadcrumbs{}*@
+
+@section Jumbotron{
+<div class="container-fluid container-lg sm-p-l-20 sm-p-r-20 full-height">
+    <h4 class="usuarios m-b-20">@ViewBag.Title</h4>
+    <div class="inner full-height" style="transform: translateY(0px); opacity: 1;">
+        <form class="form row" method="post">
+            <div class="col-md-4 m-b-30">
+                <div class="form-group form-group-default input-group transparent center-margin rectangle-31">
+                    @Html.LabelFor(x => x.NombreCurso, new { @class = "buscar-usuario" })
+                    @Html.TextBoxFor(x => x.NombreCurso, new { @class = "form-control buscar-usuario" })
+                    <span class="input-group-addon"><i class="pg-search"></i></span>
+                </div>
+            </div>
+            <div class="col-md-4 m-b-30">
+                <button type="submit" class="btn btn-filtrar-usuario  btn-lg m-t-5 filtrar">&nbsp;FILTRAR</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+}
+
+<div class="container-fluid container-fixed-lg">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline no-footer" id="basicTable_wrapper">
+                    <table role="grid" class="table table-hover dataTable no-footer">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-11 title-table">Nombres</th>
+                                <th class="text-center title-table">Certificados</th>
+                                <th class="text-center title-table">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var curso in Model.LstCursoOnline)
+                            {
+                                var cantAlumnos = Model.DictAlumnosCursoOnline.GetValueOrDefault(curso.CursoOnlineId, 0);
+                                <tr>
+                                    <td class="text-table"><a href="@Url.Action("ViewCursoOnline","Course",new {CursoOnlineId = curso.CursoOnlineId })">@curso.Nombre</a></td>
+                                    <td class="text-center text-table">@cantAlumnos</td>
+                                    <td class="text-table">
+                                        <div class='base dropdown p-t-5 p-b-5'>
+                                            <a class="base p-l-50 @(cantAlumnos == 0 ? "disabled" : String.Empty)" href="@Url.Action("ViewCursoOnline", "Report", new { CursoOnlineId = curso.CursoOnlineId })">Detalle</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model.LstCursoOnline, page => Url.Action("ListCursoOnline", new { p = page }), ConstantHelpers.Bootstrap3Pager)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

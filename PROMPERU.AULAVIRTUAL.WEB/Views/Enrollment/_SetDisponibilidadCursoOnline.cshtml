@@ -1,0 +1,44 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Enrollment._SetDisponibilidadCursoOnlineViewModel
+
+@{
+    Layout = ConstantHelpers.Layout.MODAL_LAYOUT_PATH;
+    ViewBag.ModalClass = "";
+    ViewBag.ModalClass = "stick-up";
+    ViewBag.ModalDialogClass = "modal-md";
+    ViewBag.Form = new ModalFormHelpers("_SetDisponibilidadCursoOnline", "Enrollment", FormMethod.Post);
+    ViewBag.Icon = "fa fa-circle";
+    ViewBag.Title = Model.CursoOnline.Nombre;
+}
+
+
+<div class="form-group-attached">
+    <br />
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.DisponibilidadCursoOnlineId)
+    @Html.HiddenFor(x => x.CursoOnlineId)
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group form-group-default input-group">
+                @Html.LabelFor(x => x.FechaInicio)
+                @Html.TextBoxFor(x => x.FechaInicio, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", @autocomplete = "off" })
+            </div>
+            @Html.ValidationMessageFor(x => x.FechaInicio)
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group form-group-default input-group">
+                @Html.LabelFor(x => x.FechaFin)
+                @Html.TextBoxFor(x => x.FechaFin, "{0:dd/MM/yyyy}", new { @class = "form-control datepicker", @autocomplete = "off" })
+            </div>
+            @Html.ValidationMessageFor(x => x.FechaFin)
+        </div>
+    </div>
+</div>
+
+
+
+@section Footer{
+    <button class="btn btn-info pull-left" type="submit"><i class="fa fa-floppy-o"></i>&nbsp;Guardar Disponibilidad</button>
+}

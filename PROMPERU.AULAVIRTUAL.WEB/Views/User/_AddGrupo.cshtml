@@ -1,0 +1,133 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User._AddGrupoViewModel
+@{
+    Layout = ConstantHelpers.Layout.MODAL_LAYOUT_PATH;
+    ViewBag.ModalClass = "";
+    //ViewBag.ModalClass = "stick-up";
+    ViewBag.ModalDialogClass = "modal-md";
+    ViewBag.Form = new ModalFormHelpers("_AddGrupo", "User", FormMethod.Post);
+    //ViewBag.Icon = "fa fa-circle";
+    //ViewBag.Title = Model.CursoOnlineId;
+    ViewBag.DeshabilitarCerrarFooter = true;
+
+}
+
+@RazorHelpers.Content("assets/css/ListView.css", Url)
+
+<div class="form-group-attached text-center">
+    <br />
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.UsuarioId)
+    @Html.HiddenFor(x => x.ListItems, new { @id = "hitems" })
+    @Html.HiddenFor(x => x.Usuario_Id)
+    @Html.HiddenFor(x => x.MarcarTodo)
+
+    <h2>Agregar y/o Retirar Usuarios</h2>
+
+</div>
+
+@section Footer{
+    <!--<button class="btn btn-info pull-left" type="submit"><i class="fa fa-floppy-o"></i>&nbsp;Guardar Disponibilidad</button>-->
+
+    <div class="row">
+
+        <div class="loader-container">
+            <div class="loader-background"></div>
+            <div class="loader"></div>
+            <div class="loader-button">
+                <!--<button type="button" class="btn btn-primary" onclick="cancelRequest()">Cancelar</button>-->
+            </div>
+        </div>
+
+        <div class="col-lg-6 overflow-auto">
+            <h5 class="text-center">
+                Grupo Asignado <i class="fa fa-list-alt" aria-hidden="true"></i>
+            </h5>
+            <!--<label for="txtbusqueda1">Filtrar</label>-->
+
+            <select class="form-control" id="cbofiltro1" name="cbofiltro1">
+                <option>[-Seleccionar-]</option>
+                <option value="ALU">Emprendedores</option>
+                <option value="EMP">Empresas</option>
+                <option value="ALL">Todos</option>
+            </select>
+
+            <div class="input-group">
+                <input type="text" class="form-control" id="txtbusqueda1" name="txtbusqueda1" placeholder="Email, Ruc, Etc">
+                <span class="input-group-btn">
+                    <button class="form-control" type="button" id="btnadelante"><i class="fa fa-forward"></i></button>
+                </span>
+            </div><!-- /input-group -->
+
+            <ul id="enablesCourse" class="list-group connectedSortable text-left">
+
+                @{
+                    foreach (var detalle in Model.LstCursoGrupo)
+                    {
+                        <li class="list-group-item" id="@detalle.GrupoId">@detalle.Descripcion</li>
+                    }
+
+                }
+                <!--<li class="emptyMessage">Sin elementos</li>-->
+            </ul>
+
+        </div>
+
+        <div class="col-lg-6 overflow-auto">
+            <h5 class="text-center">
+                Grupos Disponibles <i class="fa fa-filter" aria-hidden="true"></i>
+            </h5>
+
+            <!--<input type="text" class="form-control" id="buscar" width="100%" />-->
+
+            <select class="form-control" id="cbofiltro2" name="cbofiltro2">
+                <option>[-Seleccionar-]</option>
+                <option value="ALU">Emprendedores</option>
+                <option value="EMP">Empresas</option>
+                <option value="ALL">Todos</option>
+            </select>
+
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <button class="form-control" id="btnatras" type="button"><i class="fa fa-backward"></i></button>
+                </span>
+                <input type="text" class="form-control" id="txtbusqueda2" name="txtbusqueda2" placeholder="filtrar">
+            </div><!-- /input-group -->
+
+
+            <ul id="disabledCourse" class="list-group connectedSortable text-left">
+
+                @{
+
+                    foreach (var grupo in Model.LstCursoOnlineMaestro)
+                    {
+                        <li class="list-group-item" id="@grupo.GrupoId">@grupo.Descripcion</li>
+                    }
+
+                }
+
+            </ul>
+
+
+
+        </div>
+
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-sm-5 col-sm-offset-1 align-self-center">
+            <div class="form-group form-group-default input-group">
+                <button class="btn btn-guardar-matricula pull-center text-btn-generico" type="submit">Guardar</button>
+            </div>
+        </div>
+        <div class="col-sm-5 col-sm-offset-1 align-self-center">
+            <div class="form-group form-group-default input-group">
+                <a class="btn btn-cancelar pull-center text-btn-generico" data-dismiss="modal" href="#">Cancelar</a>
+            </div>
+        </div>
+    </div>
+
+}
+
+@RazorHelpers.Content("assets/js/backend/ListView.js", Url)

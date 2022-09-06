@@ -1,0 +1,32 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course._SelectArchivoViewModel
+@{
+    Layout = ConstantHelpers.Layout.MODAL_LAYOUT_PATH;
+    ViewBag.Title = "Seleccionar Archivo";
+    
+}
+<div id="treeView"></div>
+
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            $("#treeView").dynatree({
+                checkbox: true,
+                classNames: { checkbox: "dynatree-radio" },
+                selectMode: 1,
+                initAjax: {
+                    url: '@Url.Action("_GetTreeview", "Course")',
+                    data: { CodigoCursoOnline: '@Model.CodigoCursoOnline', UnidadCursoOnlineGUID: '@Model.UnidadCursoOnlineGUID', SelectedFile: '@Model.SelectedFile' }
+                }, strings: {
+                    loading: "Cargando…",
+                    loadError: "Asegúrese de haber cargado un archivo previamente! "
+                },
+
+                onSelect: function (flag, node) {
+                    $('#RutaArchivoInicio').val(node.data.Path)
+                }
+            });
+        });
+    </script>
+}

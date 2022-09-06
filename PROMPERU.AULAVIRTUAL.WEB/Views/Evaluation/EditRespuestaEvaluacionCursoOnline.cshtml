@@ -1,0 +1,56 @@
+@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Evaluation.EditRespuestaEvaluacionCursoOnlineViewModel
+
+@{
+    ViewBag.Title = "RespuestaEvaluacionCursoOnline";
+}
+
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListRespuestaEvaluacionCursoOnline", "Course")">@ViewBag.Title</a></li>
+    
+}
+
+<div class="container-fluid container-fixed-lg">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+					
+                <div class="panel-heading">
+                    <h3 class="panel-title">RespuestaEvaluacionCursoOnline</h3>
+                </div>
+					
+				<form class="form form-horizontal" method="post">
+                    <div class="panel-body">
+							@Html.HiddenFor(x=>x.RespuestaEvaluacionCursoOnlineId)
+						
+							<div class='form-group'>
+								@Html.LabelFor(x=>x.PreguntaEvaluacionCursoOnlineId, new { @class="col-sm-3 control-label"})
+								<div class='col-sm-9'>
+									@Html.DropDownListFor(x => x.PreguntaEvaluacionCursoOnlineId, new SelectList(Model.LstPreguntaEvaluacionCursoOnline,"PreguntaEvaluacionCursoOnlineId","@_DEF_Nombre"),"[- Seleccionar -]", new { @class="form-control"})
+									@Html.ValidationMessageFor(x => x.PreguntaEvaluacionCursoOnlineId)
+								</div>
+							</div>
+							<div class='form-group'>
+								@Html.LabelFor(x=>x.RespuestaCursoOnlineId, new { @class="col-sm-3 control-label"})
+								<div class='col-sm-9'>
+									@Html.DropDownListFor(x => x.RespuestaCursoOnlineId, new SelectList(Model.LstRespuestaCursoOnline,"RespuestaCursoOnlineId","@_DEF_Nombre"),"[- Seleccionar -]", new { @class="form-control"})
+									@Html.ValidationMessageFor(x => x.RespuestaCursoOnlineId)
+								</div>
+							</div>
+							@Html.EditorFor(x=>x.OrdenMostrado)
+					</div>
+					
+					<div class="panel-footer">
+						<div class="row">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i>&nbsp;Guardar</button>
+								<a class="btn btn-default" href="@Url.Action("ListRespuestaEvaluacionCursoOnline", "Course")"><i class="fa fa-ban"></i>&nbsp;Cancelar</a>
+							</div>
+						</div>
+					</div>
+					
+				</form>
+				
+            </div>
+        </div>
+    </div>
+</div>

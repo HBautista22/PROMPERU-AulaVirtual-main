@@ -1,0 +1,66 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Report.ReportAsesoriaRemotaViewModel
+@{
+    ViewBag.Title = "ReportAsesoriaRemotaNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Reporte Asesoria Remota</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Reporte Asesoria Remota</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row table-acciones table-content list-empresa">
+    @*<div class="col-sm-6">
+        <h2>Lista de Tipo de Empresa</h2>
+    </div>*@
+ 
+</div>
+<div class="row mis-solicitudes table-content">
+
+
+    @if (Session.GetRol() == AppRol.Administrador)
+    {
+    <div class="col-sm-12 btns-table">
+
+        <a class="btn btn-secondary" href="@Url.Action("DownloadReportAsesoriaRemota", "Report", new { Type = "EXCEL" })">Descargar</a>
+    </div>
+    }
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list tipo-empresa" align="center">
+            <thead>
+                <tr>
+                    <th class="title-table">Asesoria</th>
+                    <th class="title-table">Asesor</th>
+                    <th class="title-table">Apellido</th>
+                    <th class="title-table">Email Asesor</th>
+                    <th class="title-table">Cargo Asesor</th>
+                    <th class="title-table">Inicio</th>
+                    <th class="title-table">Fin</th>
+                    <th class="title-table">Estado Asesoria</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var registro in Model.LstViewReporteAsesoriaRemota)
+                {
+                    <tr>
+                        <td class="text-table">@registro.Asre_Nombre</td>
+                        <td class="text-table">@registro.Nombre</td>
+                        <td class="text-table">@registro.Apellido</td>
+                        <td class="text-table">@registro.Email</td>
+                        <td class="text-table">@registro.Cargo</td>
+                        <td class="text-table">@registro.Asre_Inicio</td>
+                        <td class="text-table">@registro.Asre_Fin</td>
+                        <td class="text-table">@registro.Asre_Estado</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

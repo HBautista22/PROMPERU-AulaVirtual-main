@@ -1,0 +1,96 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.EditVideoUnidadCursoOnlineViewModel
+@{
+    ViewBag.Title = "EditVideoUnidadCursoOnline";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Editar Video</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Editar Video</h2>
+        </div>
+    </div><!-- /.row -->
+}
+
+@MessageHelpers.ShowMessages(TempData)
+
+@using (Html.BeginForm("EditVideoUnidadCursoOnline", "Course", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.VideoUnidadCursoOnlineId)
+    @Html.HiddenFor(x => x.UnidadCursoOnlineUnidadCursoOnlineId)
+    <div class="row">
+        <div class="col-lg-12 box-grey-content">
+            <h2>Agregar Video Unidad</h2>
+            <div class="content-form-grey">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Título del video</label>
+                            @Html.TextBoxFor(x => x.Titulo, new { @class = "form-control", required = "required" })
+                            @Html.ValidationMessageFor(x => x.Titulo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="">Duración</label>
+                            @Html.TextBoxFor(x => x.Duracion, new { @class = "form-control", required = "required" })
+                            @Html.ValidationMessageFor(x => x.Duracion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="">Tipo</label>
+                            <select name="Tipo" id="Tipo" class="tipoDoc form-control form-control-select form-select">
+                                <option value="1" @((Model.Tipo == "1") ? "selected='selected'" : "")>Video</option>
+                                <option value="2" @((Model.Tipo == "2") ? "selected='selected'" : "")>Session En vivo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            @*<label for="">Código (https://www.youtube.com/watch?v=<code>3gKhgc1imPw</code>) / Link https://www.ejemplo.com/</label>*@
+                            <label for="">Código (https://www.youtube.com/watch?v=<code>3gKhgc1imPw</code>)</label>
+                            @Html.TextBoxFor(x => x.CodigoYoutube, new { @class = "form-control", required = "required", pattern = "[A-Za-z0-9_-]" })
+                            @Html.ValidationMessageFor(x => x.CodigoYoutube, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="">Fecha Transmisión</label>
+                            @Html.TextBoxFor(x => x.FechaTransmision, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", required = "required" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Descripción</label>
+                            @Html.TextAreaFor(x => x.Descripcion, new { @class = "form-control", @rows = 5, required = "required" })
+                            @Html.ValidationMessageFor(x => x.Descripcion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Transcripción</label>
+                            @Html.TextAreaFor(x => x.Transcripcion, new { @class = "form-control", @rows = 5 })
+                            @Html.ValidationMessageFor(x => x.Transcripcion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-btn">
+            <input type="submit" class="btn btn-primary" value="Guardar">
+            @Html.ActionLink("Cancelar", "VideoUnidadCursoOnline", new { unidadCursoOnlineId = Model.UnidadCursoOnlineUnidadCursoOnlineId }, new { @class = "btn btn-secondary" })
+        </div>
+    </div>
+}

@@ -1,0 +1,677 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.RegisterViewModel
+@using Recaptcha.Web.Mvc;
+
+@{ ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout_new.cshtml"; }
+
+<style>
+    .g-recaptcha {
+        display: inline-block
+    }
+</style>
+
+
+<section class="seccion formularios" style="background: url(@("imagenregister".Label())); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="content">
+        <div class="content-form" style="min-height: 865px;">
+            <form id="registro" action="@Url.Action("Register")" method="post">
+                <h2>Regístrate</h2>
+                <div class="option-reg">
+                    <div class="form-check">
+                        <input id="tipoEmprendedor" class="form-check-input" type="radio" name="tipoRegistro">
+                        <label class="form-check-label" for="tipoEmprendedor">Emprendedor</label>
+                    </div>
+                    <div class="form-check">
+                        <input id="tipoEmpresa" class="form-check-input" type="radio" name="tipoRegistro" checked>
+                        <label class="form-check-label" for="tipoEmpresa">Empresa</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h3>Datos Personales</h3>
+                    <div class="row">
+                        <div class="d-flex col-sm-4">
+                            <div class="form-group col-5">
+                                <select name="tipoDoc" id="cbodocumento" class="tipoDoc form-control form-control-select form-select">
+                                    <option value="" selected disabled>Documento</option>
+                                    <option value="1">DNI</option>
+                                    <option value="2">CE</option>
+                                    <option value="3">Pasaporte</option>
+                                    <option value="4">Otros</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-7">
+                                <input type="text" class="form-control" id="DNI" name="DNI" placeholder="Número de documento" minlength="8" maxlength="9">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+
+                                @Html.TextBoxFor(x => Model.Nombres, new { @class = "form-control", @placeholder = "Nombre(s)" })
+                                @Html.ValidationMessageFor(x => Model.Nombres)
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+
+                                @Html.TextBoxFor(x => Model.Apellidos, new { @class = "form-control", @placeholder = "Apellidos" })
+                                @Html.ValidationMessageFor(x => Model.Apellidos)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+
+                                @Html.TextBoxFor(x => Model.Email, new { @class = "form-control", @placeholder = "Correo eletrónico" })
+                                @Html.ValidationMessageFor(x => Model.Email)
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+
+                                @Html.TextBoxFor(x => Model.ConfirmarEmail, new { @class = "form-control ", @placeholder = "Confirmar correo eletrónico" })
+                                @Html.ValidationMessageFor(x => Model.ConfirmarEmail)
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+
+                                @Html.PasswordFor(x => Model.Password, new { @class = "form-control ", @placeholder = "Contraseña" })
+                                @Html.ValidationMessageFor(x => Model.Password)
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                @*<select name="departamento" class="departamento form-control form-control-select form-select">
+                                        <option value="" selected disabled>Departamento</option>
+                                        <option value="1">Lima</option>
+                                        <option value="2">Arequipa</option>
+                                        <option value="3">Cusco</option>
+                                    </select>*@
+                                @Html.DropDownListFor(x => x.Region, new SelectList(Model.LstDepartamento, "DepartamentoId", "Nombre"), "Seleccionar", new { @id = "cbodepartamento", @class = "departamento form-control form-control-select form-select" })
+                                @Html.ValidationMessageFor(x => x.Region)
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                @*<select name="provincia" class="provincia form-control form-control-select form-select">
+                                        <option value="" selected disabled>Provincia</option>
+                                        <option value="1">Lima</option>
+                                        <option value="2">Arequipa</option>
+                                        <option value="3">Cusco</option>
+                                    </select>*@
+                                <select class="departamento form-control form-control-select form-select" id="cboprovincia">
+                                    <option value="0">Seleccionar</option>
+                                </select>
+                                @Html.ValidationMessageFor(x => x.Region)
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                @*<select name="distrito" class="distrito form-control form-control-select form-select">
+                                        <option value="" selected disabled>Distrito</option>
+                                        <option value="1">Lima</option>
+                                        <option value="2">Arequipa</option>
+                                        <option value="3">Cusco</option>
+                                    </select>*@
+                                <select class="departamento form-control form-control-select form-select" id="DistritoId" name="DistritoId">
+                                    <option value="0">Seleccionar</option>
+                                </select>
+                                @Html.ValidationMessageFor(x => x.Region)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Dirección">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="telefono" placeholder="Teléfono" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="9">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+
+
+                                @Html.DropDownListFor(x => Model.NacionalidadId2, new SelectList(Model.Nacionalidades, "ParametroId", "Descripcion"), "Nacionalidad", new { @id = "cbonacionalidad", @class = "nacionalidad form-control form-control-select form-select" })
+                                @Html.ValidationMessageFor(x => Model.NacionalidadId2)
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+
+                                @Html.DropDownListFor(x => Model.Sexo, new SelectList(Model.LstSexo, "ParametroId", "Descripcion"), "Género", new { @id = "cbosexo", @class = "genero form-control form-control-select form-select" })
+                                @Html.ValidationMessageFor(x => Model.Sexo)
+
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+
+                                @Html.DropDownListFor(x => Model.Sector, new SelectList(Model.LstSector, "SectorId", "Descripcion"), "Sector a la que pertenece", new { @id = "cbosector", @class = "sector form-control form-control-select form-select" })
+                                @Html.ValidationMessageFor(x => Model.Sector)
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="datosEmpresa" class="form-group">
+                    <h3>Datos de la Empresa</h3>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+
+                                @Html.TextBoxFor(x => Model.RUC, new { maxlength = 11, @class = "form-control", @placeholder = "RUC de la empresa" })
+                                @Html.ValidationMessageFor(x => Model.RUC)
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+
+                                @Html.TextBoxFor(x => Model.RazonSocial, new { @class = "form-control ", @placeholder = "Razón social" })
+                                @Html.ValidationMessageFor(x => Model.RazonSocial)
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+
+                                @Html.TextBoxFor(x => Model.CIIU, new { @class = "form-control", @placeholder = "Código (CIIU) de la empresa" })
+                                @Html.ValidationMessageFor(x => Model.CIIU)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4" style="display:none">
+                            <div class="form-group">
+
+                                @Html.TextBoxFor(x => Model.Productos, new { @class = "form-control", @placeholder = "Producto de la empresa" })
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                @Html.TextBoxFor(x => Model.EmailEmpresa, new { @class = "form-control", @placeholder = "Ingresa el correo de la empresa" })
+                                @Html.ValidationMessageFor(x => Model.EmailEmpresa)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group last-group">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="icheck-primary">
+                                    <input type="checkbox" id="tyc" name="tyc" data-bs-toggle="modal" data-bs-target="#modal-tyc">
+                                    
+                                    <label for="tyc">
+                                        He leído y acepto las <strong style="text-decoration: underline;">políticas de privacidad</strong>, el tratamiento de datos.
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="icheck-primary">
+                                    <input type="checkbox" id="tyc2" name="tyc2" data-bs-toggle="modal" data-bs-target="#modal-tyc2">
+                                    
+                                    <label for="tyc2">
+                                        He leído y acepto los   <strong style="text-decoration: underline;">Términos y condiciones</strong>.
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <span id="errorGeneral" class="errorGeneral" style="display: none;">
+                                <img src="@Url.GetCmsResourceUrl("assets/images/iconos/alert_msj.png")"> Uno o más campos son incorrectos
+                                
+                            </span>
+                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 text-center" style="padding-bottom:10px;">
+                            @Html.RecaptchaWidget()
+                        </div>
+                    </div>
+                    @MessageHelpers.ShowMessages(TempData)
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @Html.TextBoxFor(x => Model.AceptaTerminosCondiciones2)
+                            @Html.TextBoxFor(m => m.AceptaTerminosCondiciones)
+                            <button type="submit" class="btn btn-primary">Registrarme</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<div class="modal" id="modal-tyc" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="width: 100%;display:block;">Políticas de Privacidad</h4>
+                <button type="button" class="close" data-dismiss="modal" id="btnclosepoliticas" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                
+            </div>
+            <div class="modal-body">
+                <div class="content-body">
+                    <p>En la Comisión de Promoción del Perú para la Exportación y el Turismo, en adelante <strong>PROMPERÚ</strong>, somos conscientes de la elevada consideración que tiene la privacidad de los ciudadanos, colaboradores y de todas aquellas personas que se interesan por nuestros productos y servicios. Por tal razón, en conformidad con lo establecido en la Ley N° 29733, Ley de Protección de Datos Personales y/o sus normas reglamentarias, complementarias, modificatorias, sustitutorias y demás disposiciones aplicables (en adelante, “La Ley”), tenemos el compromiso de respetar su privacidad y proteger la confidencialidad de sus datos personales. El objetivo del presente aviso es dar a conocer la manera en que se recogen, se tratan y se protegen los datos personales a los que accedemos en el ejercicio de nuestras funciones y actividades.</p>
+                    <br>
+                    <h3>TRATAMIENTO DE DATOS PERSONALES</h3>
+                    <p>Se entiende por tratamiento de datos personales a cualquier operación o procedimiento técnico, automatizado o no, que permite la recopilación, registro, organización, almacenamiento, conservación, elaboración, modificación, consulta, utilización, bloqueo, supresión, comunicación por transferencia o por difusión, o cualquier otra forma de procesamiento que facilite el acceso, correlación o interconexión de los datos personales.</p>
+                    <p>Los datos personales recopilados por <strong>PROMPERÚ</strong>, mediante sus diversas plataformas y canales, podrán ser tratados, según aplique, para llevar a cabo las finalidades inherentes a la actividad de la organización, tales como:</p>
+                    <ul>
+                        <li>Promoción del Turismo.</li>
+                        <li>Promoción de las Exportaciones.</li>
+                        <li>Atención de solicitudes de uso de la Marca Perú.</li>
+                        <li>Contactabilidad para la absolución de consultas y reclamos.</li>
+                        <li>Servicios de provisión de información.</li>
+                        <li>Participación en eventos, sorteos y promociones.</li>
+                        <li>Control de visitantes.</li>
+                        <li>Personalizar/mejorar su experiencia en nuestras plataformas.</li>
+                    </ul>
+                    <p>Los datos personales son recopilados para los fines expuestos previamente, y no se extenderá a otra finalidad que no haya sido la establecida de manera inequívoca como tal al momento de su recopilación, excluyendo los casos de actividades de valor histórico, estadístico o científico cuando se utilice un procedimiento de disociación o anonimización.</p>
+                    <br>
+                    <h3>CONSENTIMIENTO</h3>
+                    <p><strong>PROMPERÚ</strong> realizará tratamiento sobre datos personales obtenidos con el consentimiento previo, expreso e informado del titular de los datos personales, de manera indefinida o hasta que revoque su consentimiento. Es responsabilidad del titular de los datos personales leer detenidamente el presente Aviso de Privacidad, debido a que, mediante su aceptación, usted otorga el consentimiento, informado e inequívoco, para el tratamiento de los datos acorde a las finalidades expuestas.</p>
+                    <p>Los datos proporcionados serán almacenados por <strong>PROMPERÚ</strong>, ubicado en Calle Uno Oeste 050, Edificio de Mincetur, Piso 14, San Isidro, Lima.</p>
+                    <br>
+                    <h3>CONFIDENCIALIDAD DE LA INFORMACIÓN</h3>
+                    <p><strong>PROMPERÚ</strong> guardará confidencialidad respecto a los datos personales proporcionados, de manera voluntaria, siendo que los mismos no serán remitidos a terceros ajenos a <strong>PROMPERÚ</strong>, salvo que se trate de un tercero encargado del tratamiento, conforme a lo indicado en el numeral 7 del artículo 2 de La Ley, bajo condiciones de seguridad y confidencialidad de la información; o, cuando por resolución judicial consentida y ejecutoriada; o, razones fundadas relativas a la defensa nacional, seguridad pública o la sanidad pública,  <strong>PROMPERÚ</strong> se encuentre obligada a comunicar la referida  información.</p>
+                    <br>
+                    <h3>SEGURIDAD DE LOS DATOS PERSONALES</h3>
+                    <p>En cumplimiento de la normativa vigente, <strong>PROMPERÚ</strong> adopta las medidas técnicas y  organizativas que resulten apropiadas para mantener la seguridad de los datos personales, con el objetivo de evitar su alteración, pérdida, tratamiento o acceso no autorizado que puedan afectar a la integridad, confidencialidad y disponibilidad de los datos personales.</p>
+                    <br>
+                    <h3>USO DE COOKIES Y PRIVACIDAD</h3>
+                    <p>Con la finalidad de personalizar/mejorar la experiencia de los usuarios de nuestras plataformas web, <strong>PROMPERÚ</strong> podrá emplear cookies, web beacons o tecnologías similares de recolección de datos. La información recolectada en este proceso incluye, a título enunciativo, más no limitativo:</p>
+                    <ol type="i">
+                        <li>La dirección IP de un usuario (Ej. yahoo.com – 192.168.1.1).</li>
+                        <li>El tipo de navegador web (Ej. Microsoft Internet Explorer) y de sistema operativo (Ej. Windows).</li>
+                        <li>Las páginas del sitio que un usuario visita.</li>
+                        <li>Otros sitios web que un usuario ha visitado antes de visitar el nuestro.</li>
+
+                    </ol>
+                    <p>Las cookies no recopilan, ni contienen su nombre o dirección de correo electrónico. Además, el usuario tendrá la opción de desactivarlas mediante la configuración de su navegador. Se debe tener en cuenta que, al desactivar las cookies, quizás no pueda utilizar algunas funciones personalizadas de nuestras plataformas web.</p>
+                    <p>
+                        Las web beacons son gráficos de 1×1, de un solo pixel, que permiten contar el número de usuarios que han visitado una página web en particular, o bien obtenido acceso a determinadas cookies. Podemos usar los web beacons en para contar los usuarios, así como para reconocer a los mismos al obtener acceso a nuestras cookies. Al igual que las cookies, los web beacons no recopilan, ni contienen su nombre o dirección de e-mail.
+                    </p>
+                    <br>
+                    <h3>REDES SOCIALES</h3>
+                    <p>En el escenario que, para facilitar su registro a nuestras plataformas web, usted emplee una cuenta de Redes Sociales (Ej. Facebook, Twitter), es importante señalar que <strong>PROMPERÚ</strong> podrá acceder a los datos que usted haya dispuesto en estos servicios, incluyendo información de sus contactos.</p>
+                    <p>Su decisión de usar los servicios de las Redes Sociales es siempre voluntaria; sin embargo, debe asegurarse que está de acuerdo con la información que éstos pueden poner a nuestra disposición, leyendo las políticas de privacidad de estos servicios.</p>
+                    <br>
+                    <h3>EJERCICIO DE DERECHOS</h3>
+                    <p>Conforme a la Ley, el titular de los datos personales podrá ejercer sus derechos de acceso, rectificación, cancelación y oposición o informarse sobre el manejo de su información, enviando su solicitud mediante correo electrónico a la dirección <a href="mailto:datospersonales@promperu.gob.pe">datospersonales@promperu.gob.pe</a>.</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="modal" id="modal-tyc2" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" style="width: 100%;display:block;">Términos y Condiciones </h4>
+                <button type="button" class="close" data-dismiss="modal" id="btncloseterminos" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="content-body">
+                    <p>En Promperú, tenemos muy en cuenta la privacidad de los visitantes de todos nuestros sitios web, incluyendo nuestras páginas y aplicaciones en Redes Sociales como Facebook y Twitter, y dispositivos móviles.</p>
+
+                    <p>Sabemos que mantener su confianza requiere que protejamos su privacidad, por ello, mediante esta “Política de Privacidad”, se detallan nuestras prácticas relacionadas con la información y las elecciones que usted, como visitante de este sitio, puede hacer en relación con la recopilación y uso de su información.</p>
+
+                    <h3>¿Qué información personal podemos preguntarle y qué uso le damos?</h3>
+
+                    <p>Cuando usted visita nuestro sitio, recolectamos su información personal (por ejemplo, su nombre, dirección, número de teléfono, dirección de e-mail, etc.) solamente cuando usted nos la proporciona de forma voluntaria. Dependiendo del objetivo para el cual haya proporcionado dicha información, podemos utilizarla para comunicarnos con usted con respecto a nuestros productos, servicios y promociones, para ofrecerle cualquier otra información que usted solicite, para personalizar su experiencia en nuestro sitio y/o para mejorar nuestras ofertas de productos y servicios.</p>
+
+                    <p>Se le podrá pedir información personal si usted: (i) Se registra para participar en un sorteo, un concurso u otra promoción; (ii) Se registra como usuario o publica contenido en nuestro sitio; (iii) Solicita que le enviemos un boletín u otro tipo de información o material, o: bien (iv) Participa en secciones de nuestro sitio web que soliciten información personal.</p>
+
+                    <p>Su participación en cualquiera de estas actividades (y por tanto, el suministro de datos personales) son totalmente voluntarios. Podemos utilizar la información que usted suministre para responder a sus preguntas o comentarios, para administrar nuestros sitios y promociones, para satisfacer su solicitud, suscripción o pedido, para proveerle una experiencia personalizada en nuestras webs o bien para suministrar o mejorar nuestros productos y servicios. No le enviaremos ningún boletín ni comunicación similar alguna por e-mail, a menos que usted expresamente haya otorgado su consentimiento.</p>
+
+                    <p>Si usted opta por recibir dichas comunicaciones por e-mail, siempre tendrá la oportunidad de “darse de baja” de la suscripción en cualquier momento.</p>
+
+                    <h3>¿Cómo utilizamos las “cookies”, “web beacons” o tecnologías similares?</h3>
+
+                    <p>Podemos emplear en nuestro sitio la tecnología de “cookies”, “web beacons” y dispositivos similares para facilitar la navegación y administración del mismo, así como para comprender y potenciar la efectividad de nuestro sitio y ofrecer una experiencia superior a los visitantes. La información rastreada a través de estos mecanismos incluye, a título enunciativo, pero no limitativo: (1) la dirección IP de un usuario (por ejemplo, yahoo.com – 192.168.1.1), (2) el tipo de navegador web (por ejemplo, Microsoft Internet Explorer) y de sistema operativo (por ejemplo, Windows o Linux) utilizado, (3) las páginas del sitio que un usuario visita; y, (4) otros sitios web que un usuario ha visitado antes de visitar el nuestro.</p>
+
+                    <p>La mayoría de los navegadores aceptan las “cookies” automáticamente, pero pueden configurarse para que no las aceptan, o bien avisarle al usuario cuando se envía alguna. Si usted quiere desactivar las “cookies”, remítase al menú de ayuda de su navegador para aprender a hacerlo. Tenga en cuenta que, si desactiva las “cookies”, quizás no pueda utilizar algunas funciones personalizadas de nuestro sitio. Las “cookies” no recopilan, ni contienen su nombre o dirección de e-mail. Los “web beacons” son gráficos de 1×1, de un solo pixel, que nos permiten contar el número de usuarios que han visitado una página web en particular, o bien obtener acceso a determinadas “cookies”. Podemos usar los “web beacons” en nuestro sitio web para contar los usuarios, así como para reconocer a los mismos al obtener acceso a nuestras “cookies”. Mediante el acceso a nuestras “cookies”, podemos personalizar nuestro sitio web, así como mejorar su experiencia en el mismo. También podemos incluir “web beacons” en mensajes de e-mail formateados en HTML que enviamos para determinar cuáles han sido abiertos. Al igual que las “cookies”, los “web beacons” no recopilan, ni contienen su nombre o dirección de e-mail. “Cookies” y tecnologías similares que usamos para “online behavioral advertising” – y su derecho a darse de baja. Se debe tener en cuenta que, terceros que prestan servicio a agencias de publicidad o determinando qué publicidad usted podría ver en otros sitios, pueden usar “cookies” para recopilar información (como, por ejemplo, las publicidades que ha visto, sitios web o páginas que ha visitado). Mediante el acceso a nuestras “cookies” podemos hacer una deducción sobre el tipo de contenido de publicidades en internet que podría ser relevante para usted.</p>
+
+                    <p>Asimismo, mientras usted visita nuestro sitio web, dichas “cookies” pueden ser usados por terceros para recopilar información y así mostrarle publicidades que creen ser relevante para usted cuando visita otros sitios web, que no son nuestros. Este método se llama “online behavioral advertising”. Puede darse de baja para que estos terceros no usen las “cookies” con fin de recopilar información de su computadora para “online behavioral advertising” haciendo clic aquí: http://preferences.truste.com/truste/. Se dará de baja solamente de las empresas que cumplan con los estándares de truste. Para darse de baja de todos los publicistas externos, debe desactivar las cookies en su navegador. Si se da de baja, estas agencias se comprometen a no usar las “cookies” (ni tecnologías similares) en esta forma con fin de recopilar información en cualquier sitio (no solo el nuestro) para realizar “online behavioral advertising”. Por favor, tenga en cuenta que el proceso de darse de baja en sí, requiere el uso de las “cookies”. En otras palabras, cuando se da de baja, se genera una “cookie” en el navegador que informa a los terceros que no deban usar “cookies” para realizar “online behavioral advertising”.</p>
+
+                    <p>Como consecuencia, si posteriormente usted borra las “cookies” de su navegador (como hace mucha gente de vez en cuando), su dada de baja estará perdida hasta que la restablezca. Además, por favor, tener en cuenta que el darse de baja no significa que ya no recibirá publicidades – solo significa que no recibirá publicidades que en otras circunstancias hubieran sido dirigidas a usted en base a las “cookies” de su computadora por empresas que cumplen con los estándares de confianza.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+
+    <script>
+        var ajaxCall;
+
+        function cancelRequest() {
+            ajaxCall.abort();
+        }
+        $(function () {
+
+            $('#btnclosepoliticas').click(function () {
+                $('#modal-tyc').modal('hide')
+            })
+
+            $('#btncloseterminos').click(function () {
+                $('#modal-tyc2').modal('hide')
+            })
+
+            $('#AceptaTerminosCondiciones2').hide();
+            $('#AceptaTerminosCondiciones').hide();
+
+            $('input').attr('autocomplete', 'off');
+            $('input[name="TipoRegistro"]').change(function () {
+                var value = $(this).val();
+                var section = $("#empresaSection");
+
+                if (value === "1") {
+                    section.hide('slow');
+                } else {
+                    section.show('slow');
+                }
+            });
+
+            $('#DNI').blur(function () {
+                var $this = $(this);
+                var value = $this.val();
+
+                if (value && value.length === 8 && $("[name='DNI']").valid()) {
+                    ajaxCall = $.ajax({
+                        data: { dni: value },
+                        method: 'post',
+                        url: '@Url.Action("FindPersonByDNI")',
+                        beforeSend: function () {
+                            $('.loader-container').show();
+                            document.activeElement.blur();
+                        },
+                        success: function (data) {
+                            if (data.status !== "200") {
+                                toastr.error('DNI incorrecto', data.message);
+                                return false;
+                            }
+                            console.log(data);
+                            toastr.success('DNI correcto', 'Por favor, completa los campos en blanco')
+                            $('#Nombres').val(data.result[0].nombres);
+                            $('#Apellidos').val(data.result[0].paterno + ' ' + data.result[0].materno);
+                            $('#Direccion').val(data.result[0].direccion);
+
+                        },
+                        error: function (jqXHR, exception) {
+                            if (jqXHR.statusText === "abort") {
+                                toastr.warning('Ha cancelado la consulta', '');
+                                return false;
+                            }
+                            toastr.error('Ha ocurrido un error en la consulta Reniec', '');
+                            console.log(jqXHR);
+                        },
+                        complete: function () {
+                            $('.loader-container').hide()
+                        }
+                    })
+                }
+            });
+
+            $("#Email").on("blur", function () {
+
+            var $this = $(this);
+
+            //$this.addClass("loadinggif");
+
+            $.ajax({
+            type: 'POST',
+            url: '@Url.Action("ValidarBaseCentral", "Front")',
+                dataType: 'json',
+                data: { correo: $this.val() },
+                success: function (result) {
+
+                    $("#EsNuevo").val(1);
+
+                    //$this.removeClass("loadinggif");
+                }
+            })
+                .always(function(data) {
+                    //$this.removeClass("loadinggif");
+                });
+
+        });
+
+            $('#RUC').blur(function () {
+                var $this = $(this);
+                var value = $this.val();
+
+                if (value && value.length === 11 && $("[name='RUC']").valid()) {
+                    ajaxCall = $.ajax({
+                        data: { ruc: value },
+                        method: 'post',
+                        url: '@Url.Action("FindCompanyByRUC")',
+                        beforeSend: function () {
+                            $('.loader-container').show();
+                            document.activeElement.blur();
+                        },
+                        success: function (data) {
+                            if (data.status !== "200") {
+                                toastr.error('RUC incorrecto', data.message);
+                                return false;
+                            }
+                            console.log(data);
+                            toastr.success('RUC correcto', 'Por favor, completa los campos en blanco')
+                            $('#RazonSocial').val(data.result[0].razon);
+                            $('#CIIU').val(data.result[0].codtipoempresa);
+
+                        },
+                        error: function (jqXHR, exception) {
+                            if (jqXHR.statusText === "abort") {
+                                toastr.warning('Ha cancelado la consulta', '');
+                                return false;
+                            }
+                            toastr.error('Ha ocurrido un error en la consulta Reniec', '');
+                            console.log(jqXHR);
+                        },
+                        complete: function () {
+                            $('.loader-container').hide()
+                        }
+                    })
+                }
+            });
+
+            $(".dropdown-item").on("click", function () {
+                $("#cbodocumento").find("a").removeClass("active");
+                $(this).addClass("active");
+
+                if ($(this).text() == "DNI") {
+                    $("#DNI").attr('maxlength', '8');
+                    $("form").removeData("validator");
+                    // change the range
+                    $("#DNI").attr("data-val-length-min", "8");
+                    // reapply the form's validator
+                    $.validator.unobtrusive.parse(document);
+
+                    $("#lbldocumento").text("DOCUMENTO DNI");
+
+                    $("#Nombres").val("");
+                    $("#Apellidos").val("");
+                    $("#Direccion").val("");
+
+
+                }
+                else if ($(this).text() == "CARNE_EXTRANJERIA") {
+                    $("#DNI").attr('maxlength', '20');
+                    // reset the form's validator
+                    $("form").removeData("validator");
+
+                    // change the range
+                    $("#DNI").attr("data-val-length-min", "6");
+
+                    // reapply the form's validator
+                    $.validator.unobtrusive.parse(document);
+
+                    $("#lbldocumento").text("DOCUMENTO EXTRANJERO");
+
+                    $("#Nombres").val("");
+                    $("#Apellidos").val("");
+                    $("#Direccion").val("");
+                }
+
+                $("#cbodocumento_val").val($(this).text());
+                $("#Nacionalidad").val($(this).text());
+
+                $("#DNI").attr("readonly", false);
+                $("#DNI").val("");
+                $("#DNI").focus();
+            });
+
+            $("#DNI").on("keypress", function (e, pid) {
+                var identifica = $("#cbodocumento_val").val();
+                var patt = new RegExp("^[0-9]+$");
+                var code = e.charCode || e.keyCode;
+                var input = $(this).val() + String.fromCharCode(code);
+
+                if (identifica == "DNI") {
+                    return patt.test(input);
+                }
+            });
+
+            $("#Email").blur(function () {
+                if ($('input[name="TipoRegistro"]:checked').val() == "0") {
+                    $.post("Consultar_Cuenta", { correo: $(this).val() }, function (data) {
+                        if (data == 1) {
+                            alertas();
+                        }
+                    });
+                }
+            });
+
+
+            function alertas() {
+                $('#mydialog').modal('show');
+            }
+
+            $("#btnconversion").on("click", function () {
+                $("#Conversion").val("1");
+            });
+
+
+            $("#btnrechazo").on("click", function () {
+                location.href = "/login";
+                $("#Conversion").val("0");
+            });
+
+            $.validator.addMethod('dni', function (value, element) {
+                var pattern = "^[0-9]+$";
+                return value.test(pattern);
+            }, 'Number must be divisible by 5');
+
+            $("#cbodepartamento").on("change", function () {
+                if ($("#cboprovincia > option").length > 1) {
+                    $("#cboprovincia option[value != '0']").remove();
+                }
+                if ($("#DistritoId > option").length > 1) {
+                    $("#DistritoId option[value != '0']").remove();
+                }
+
+                var $dropdown = $("#cboprovincia");
+
+                $.post("LlenarProvincia", { dep: $(this).val() })
+                    .done(function (data) {
+                        var arr = JSON.parse(data);
+                        $.each(arr, function () {
+                            $dropdown.append($("<option />").val(this.ProvinciaId).text(this.Nombre));
+                        });
+                    });
+            });
+
+            $("#cboprovincia").on("change", function () {
+                if ($("#DistritoId > option").length > 1) {
+                    $("#DistritoId option[value != '0']").remove();
+                }
+
+                var $dropdown = $("#DistritoId");
+                $.post("LlenarDistrito", { dep: $("#cbodepartamento").val(), prov: $(this).val() })
+                    .done(function (data) {
+                        var arr = JSON.parse(data);
+                        $.each(arr, function () {
+                            $dropdown.append($("<option />").val(this.DistritoId).text(this.Nombre));
+                        });
+                    });
+            });
+
+            $('#descarga').click(function (e) {
+                e.preventDefault();  //stop the browser from following
+                $.post("LinkDescarga")
+                    .done(function (data) {
+                        window.location.href = data;
+                    });
+            });
+
+            $("#subir").click(function (e) {
+                $("#subir_file").click();
+                $("#subir_file").on("change", function () {
+                    var nfile = $("#subir_file").val().split("\\").pop();
+                    $("#file_name").text(nfile);
+                });
+            });
+        });
+
+        $("#tyc").on("click", function () {
+
+            if ($(this).is(":checked") == true) {
+                $("#AceptaTerminosCondiciones").val(true);
+                //$('#AceptaTerminosCondiciones2').val("1");
+            }
+            else {
+                $("#AceptaTerminosCondiciones").val(false);
+                //$('#AceptaTerminosCondiciones2').val("0");
+            }
+        });
+
+        $("#tyc2").on("click", function () {
+
+            if ($(this).is(":checked") == true) {
+                //$("#AceptaTerminosCondiciones").val(false);
+                $('#AceptaTerminosCondiciones2').val("1");
+            }
+            else {
+                //$("#AceptaTerminosCondiciones").val(true);
+                $('#AceptaTerminosCondiciones2').val("0");
+            }
+        });
+
+
+        
+    </script>
+
+}

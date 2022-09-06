@@ -1,0 +1,183 @@
+@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.EditUsuarioViewModel
+
+@{
+    ViewBag.Title = "Editar Usuario";
+    ViewBag.Icon = "user_new";
+    ViewBag.Seccion = "Usuarios";
+}
+}
+
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListUsuario", "User")">Usuarios</a></li>
+}
+
+<div class="container-fluid container-fixed-lg">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <h3 class="usuarios">@ViewBag.Title</h3>
+                </div>
+
+                <form class="form form-horizontal fondo-generico" method="post">
+                    <div class="panel-body">
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(x => x.UsuarioId)
+
+                        <div class='form-group'>
+                            <div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        @Html.LabelFor(x => x.Nombre, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control bg" })
+                                        @Html.ValidationMessageFor(x => x.Nombre)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        @Html.LabelFor(x => x.Apellido, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @Html.TextBoxFor(x => x.Apellido, new { @class = "form-control bg" })
+                                        @Html.ValidationMessageFor(x => x.Apellido)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        @Html.LabelFor(x => x.Codigo, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @Html.TextBoxFor(x => x.Codigo, new { @class = "form-control bg" })
+                                        @Html.ValidationMessageFor(x => x.Codigo)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        @Html.LabelFor(x => x.Cargo, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @Html.TextBoxFor(x => x.Cargo, new { @class = "form-control bg" })
+                                        @Html.ValidationMessageFor(x => x.Cargo)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        @Html.LabelFor(x => x.GrupoId, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @* @Html.TextBoxFor(x => x.Grupo, new { @class = "form-control bg" })
+                    @Html.ValidationMessageFor(x => x.Grupo)*@
+
+                                        @Html.DropDownListFor(x => x.GrupoId, new SelectList(Model.LstGrupo, "GrupoId", "Descripcion", Model.GrupoId), "[- Seleccionar -]", new { @class = "form-control bg", @name = "Grupo" })
+                                        @Html.ValidationMessageFor(x => x.GrupoId)
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        @Html.LabelFor(x => x.Password, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @Html.TextBoxFor(x => x.Password, new { @class = "form-control bg" })
+                                        @Html.ValidationMessageFor(x => x.Password)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        @Html.LabelFor(x => x.Rol, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @Html.DropDownListFor(x => x.Rol, Model.LstRol, "[- Seleccionar -]", new { @class = "form-control bg" })
+                                        @Html.ValidationMessageFor(x => x.Rol)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        @Html.LabelFor(x => x.SexoId, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @Html.DropDownListFor(x => x.SexoId, Model.LstSexo, "[- Seleccionar -]", new { @class = "form-control bg" })
+                                        @Html.ValidationMessageFor(x => x.SexoId)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        @if (Session.GetRolCompleto() == ConstantHelpers.ROL.SUPERVISOR)
+                                        {@Html.LabelFor(x => x.EmpresaId, new { @class = "col-sm-6 control-label text-add-categoria" })}
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @if (Session.GetRolCompleto() == ConstantHelpers.ROL.SUPERVISOR)
+                                        {@Html.DropDownListFor(x => x.EmpresaId, new SelectList(Model.LstEmpresa, "EmpresaId", "RazonSocial", Model.EmpresaId), "[- Seleccionar -]", new { @class = "form-control bg", @readonly = (Session.GetRolCompleto() == ConstantHelpers.ROL.SUPERVISOR ? "true" : "false") })}
+                                    else
+                                    {
+                                        @Html.HiddenFor(x => x.EmpresaId)
+                                    }
+
+                                        @Html.ValidationMessageFor(x => x.EmpresaId)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        @Html.LabelFor(x => x.Email, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @Html.TextBoxFor(x => x.Email, new { @class = "form-control bg" })
+                                        @Html.ValidationMessageFor(x => x.Email)
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="col-sm-6 m-t-10">
+            <div class="row">
+                <div class="col-sm-12 m-l-20">
+                    @Html.LabelFor(x => x.Estado, new { @class = "col-sm-6 control-label text-add-categoria" })
+                </div>
+                <div class='col-sm-12'>
+                    <div class="checkbox check-info no-padding no-margin" style="display: inline-flex;width: 100%;">
+
+                        <label class="text-table ck-r-form" style="width: 100%;" for="Estado"></label>
+                    </div>
+                    @Html.ValidationMessageFor(x => x.Estado)
+                </div>
+            </div>
+        </div>*@
+                        </div>
+                        @Html.EditorFor(x => x.Estado)
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-4">
+                                <button class="btn btn-guardar-matricula pull-center text-btn-generico" type="submit">Guardar</button>
+                                <a class="btn btn-cancelar pull-center text-btn-generico" href="@Url.Action("ListUsuario", "User")">Cancelar</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

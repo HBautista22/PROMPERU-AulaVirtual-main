@@ -1,0 +1,145 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ListCategoriaCursoOnlineViewModel
+@{
+    ViewBag.Title = "Categorías";
+    ViewBag.Icon = "cubes";
+    ViewBag.Seccion = "Cursos";
+    ViewBag.SubSeccion = "Categorias";
+}
+
+@section Breadcrumbs{}
+
+<div class="container-fluid container-fixed-lg">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title pull-left">
+                    <h4 class="m-t-0 m-b-0 usuarios">@ViewBag.Title</h4>
+                </div>
+                <div class="btn-group pull-left m-b-10 m-l-20">
+                    <a class="btn btn-course-enable" href="@Url.Action("EditCategoriaCursoOnline", "Course")">Agregar Categoria</a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <div class="dataTables_wrapper form-inline no-footer" id="basicTable_wrapper">
+                        <table role="grid" class="table table-hover dataTable no-footer" id="basicTable">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th class="col-sm-12 title-table">Nombres</th>
+                                    <th class="text-center title-table"" style="min-width: 9.3em">Opciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var categoria in Model.LstCategoriaCursoOnline)
+                                {
+                                    <tr>
+                                        <td><div style="background-color:@categoria.Color;width: 10px;border-radius: 100%;height: 10px;"></div></td>
+                                        <td class="text-table">@categoria.Nombre</td>
+
+                                        <td class="text-table">
+                                            <div class='btn-group dropdown'>
+                                                <a class="btn base" style="overflow: hidden;" href="@Url.Action("EditCategoriaCursoOnline", "Course", new { CategoriaCursoOnlineId = categoria.CategoriaCursoOnlineId })">Editar</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        @Html.PagedListPager(Model.LstCategoriaCursoOnline, page => Url.Action("ListCategoriaCursoOnline", new { p = page }), ConstantHelpers.Bootstrap3Pager)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+@*<div class="container-fluid container-fixed-lg">
+
+    <div class="panel panel-transparent">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4 class="m-t-0 m-b-10"><i class="fa fa-@ViewBag.Icon"></i>&nbsp;@ViewBag.Title</h4>
+            </div>
+            <div class="btn-group pull-right m-b-10">
+                @if (Session.GetRol() == AppRol.Administrador)
+                {
+                    <a class="btn btn-primary" href="@Url.Action("EditCategoriaCursoOnline", "Course")"><i class="fa fa-plus"></i>&nbsp;Agregar Categoria</a>    
+                }
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+            @{ var numCurso = 0;}
+
+            @foreach (var categoria in Model.LstCategoriaCursoOnline)
+            {
+
+                if (numCurso % 4 == 0)
+                {
+                    if (numCurso != 0)
+                    {                    
+                        @Html.Raw("</div></div>")
+                    }
+                    <text><div class="col-md-12 col-xlg-12">
+                    <div class="row"> </text>
+                }         
+               
+                <div class="col-md-3">
+	
+                        <div class="widget-8 panel no-border bg-complete" style="background-color: @(categoria.Color ??  "")">
+	                        <div class="container-xs-height full-height">
+		                        <div class="row-xs-height">
+			                        <div class="col-xs-height col-top">
+				                        <div class="panel-heading top-left top-right">
+					                        <div class="panel-title text-black hint-text">
+						                        <span class="font-montserrat fs-11 all-caps">Categoría <i class="fa fa-chevron-right"></i>
+						                        </span>
+					                        </div>
+					                        <div class="panel-controls">
+						                        <ul>
+							                        <li>
+                                                        @if(Session.GetRol() == AppRol.Administrador){
+                                                            <a class="btn btn-xs btn-info" href="@Url.Action("EditCategoriaCursoOnline", "Course", new { CategoriaCursoOnlineId = categoria.CategoriaCursoOnlineId })"><i class="fa fa-pencil-square-o"></i>&nbsp;Editar</a>
+                                                        }
+							                        </li>
+						                        </ul>
+					                        </div>
+				                        </div>
+			                        </div>
+		                        </div>
+                                <a href="@Url.Action("ListCursoOnlineCategoria", "Course", new { CategoriaCursoOnlineId = categoria.CategoriaCursoOnlineId })">
+		                            <div class="row-xs-height ">
+			                            <div class="col-xs-height col-top relative">
+				                            <div class="row">
+					                            <div class="col-sm-12">
+						                            <div class="p-l-20">                                                    
+                                                        <h1 class="no-margin p-b-5 text-white">
+                                                                @categoria.Nombre
+                                                        </h1>
+							                            <p class="small hint-text m-t-5">								                 
+							                            </p>
+						                            </div>
+					                            </div>
+				                            </div>
+				                            <div class=" line-chart" data-line-color="black" data-points="true" data-point-color="success" data-stroke-width="2">
+				                            </div>
+			                            </div>
+		                            </div>
+                                </a>
+	                        </div>
+                        </div>
+                    
+                </div>
+
+                numCurso++;
+
+            }
+            </div>
+
+        </div>
+        </div>
+        @Html.PagedListPager(Model.LstCategoriaCursoOnline, page => Url.Action("ListCategoriaCursoOnline", new { p = page }), ConstantHelpers.Bootstrap3Pager)
+    </div>
+</div>*@

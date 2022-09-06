@@ -1,0 +1,100 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Home.LoginViewModel
+
+@{
+    Layout = null;
+    ViewBag.Title = "Login";
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>EVOL - @ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/Content/assets/img/favicon.ico")" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+
+
+    @RazorHelpers.Content("assets/plugins/pace/pace-theme-flash.css", Url)
+    @RazorHelpers.Content("assets/plugins/boostrapv3/css/bootstrap.min.css", Url)
+    @RazorHelpers.Content("assets/plugins/font-awesome/css/font-awesome.css", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-scrollbar/jquery.scrollbar.css", Url)
+    @RazorHelpers.Content("assets/plugins/bootstrap-select2/select2.css", Url)
+    @RazorHelpers.Content("assets/plugins/switchery/css/switchery.min.css", Url)
+    @RazorHelpers.Content("pages/css/pages-icons.css", Url)
+    @RazorHelpers.Content("pages/css/pages.css", Url)
+
+    <!--[if lte IE 9]>
+        @RazorHelpers.Content("pages/css/ie9.css", Url)
+    <![endif]-->
+    @*    <script type="text/javascript">
+            window.onload = function () {
+                // fix windows 8
+                if (navigator.appVersion.indexOf("Windows NT 6.2") != -1)
+                    document.head.innerHTML += "@RazorHelpers.Content("pages/css/windows.chrome.fix.css", Url)";
+            }
+        </script>*@
+</head>
+
+<body class="fixed-header">
+    <div class="login-wrapper ">
+        <div class="bg-pic">
+            <img src="@Url.Content("~/Content/assets/img/Login/architecture-books-building.jpg")" data-src="@Url.Content("~/Content/assets/img/Login/architecture-books-building.jpg")" data-src-retina="@Url.Content("~/Content/assets/img/Login/architecture-books-building.jpg")" alt="" class="lazy">
+            <div class="bg-caption pull-bottom sm-pull-bottom text-white p-l-20 m-b-20">
+                <h2 class="semi-bold text-white"></h2>
+                <p class="small">Copyright © 2015 <a href="http://bitperfect.pe/" style="color: white">Bit Perfect Solutions</a>.</p>
+            </div>
+        </div>
+        <div class="login-container bg-white">
+            <div style="text-align: center;padding-top: 7em;">
+                <img src="@Url.Content("~/Content/assets/img/logo.svg")" alt="logo" data-src="@Url.Content("~/Content/assets/img/logo.svg")" data-src-retina="@Url.Content("~/Content/assets/img/logo.svg")" width="145">
+            </div>
+            <div class="p-l-50 m-l-20 p-r-50 m-r-20 p-t-50 m-t-30 sm-p-l-15 sm-p-r-15 sm-p-t-40">
+                @MessageHelpers.ShowMessages(TempData)
+                <form id="form-login" class="p-t-15" role="form" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group form-group-default">
+                        <label>Usuario</label>
+                        <div class="controls">
+                            @Html.TextBoxFor(x => x.Codigo, new { placeholder = "Usuario", @class = "form-control", @autocomplete = "off" })
+                        </div>
+                    </div>
+                    <div class="form-group form-group-default">
+                        <label>Contraseña</label>
+                        <div class="controls">
+                            @Html.PasswordFor(x => x.Contrasena, new { placeholder = "Contraseña", @class = "form-control", @autocomplete = "off" })
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-block btn-lg btn-cons m-t-20" type="submit">Ingresar 2</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    @RazorHelpers.Content("assets/plugins/pace/pace.min.js", Url)
+
+    @RazorHelpers.Content("assets/plugins/modernizr.custom.js", Url)
+
+    @RazorHelpers.Content("assets/plugins/boostrapv3/js/bootstrap.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery/jquery-easy.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-unveil/jquery.unveil.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-bez/jquery.bez.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-ios-list/jquery.ioslist.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-actual/jquery.actual.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-scrollbar/jquery.scrollbar.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/bootstrap-select2/select2.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/classie/classie.js", Url)
+    @RazorHelpers.Content("assets/plugins/switchery/js/switchery.min.js", Url)
+    @RazorHelpers.Content("pages/js/pages.min.js", Url)
+    @RazorHelpers.Content("assets/js/scripts.js", Url)
+
+</body>
+
+</html>

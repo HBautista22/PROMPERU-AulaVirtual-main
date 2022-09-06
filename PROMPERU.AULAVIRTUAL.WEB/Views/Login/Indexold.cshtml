@@ -1,0 +1,136 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Home.LoginViewModel
+
+@{
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+
+<style>
+    .field-validation-error{
+        color:red;
+        text-align:center;
+    }
+</style>
+
+@*<nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-trans" id="mainNav">
+    <div class="container-fluid">        
+        <div class="row mw-none">
+            <div class="col-md-9"><a class="navbar-brand js-scroll-trigger mt-4" href="@ViewBag.URLPortal"><img src="@Url.Content("~/Content/landing/img/mincentur-logo.png")" alt=""></a></div>
+            <div class="col-md-0"><a class="navbar-brand js-scroll-trigger mt-4" href="https://www.facebook.com/promperu"><img src="@Url.Content("~/Content/landing/img/redes/facebook.svg")" alt=""></a></div>
+            <div class="col-md-0"> <a class="navbar-brand js-scroll-trigger mt-4" href="https://twitter.com/PromPeru"><img src="@Url.Content("~/Content/landing/img/redes/twitter.svg")" alt=""></a></div>
+            <div class="col-md-0">
+                <a class="navbar-brand js-scroll-trigger mt-4" href="https://www.linkedin.com/company/392025?trk=vsrp_companies_res_name&amp;trkInfo=VSRPsearchId%3A1485013621477865369025%2CVSRPtargetId%3A392025%2CVSRPcmpt%3Aprimary"><img src="@Url.Content("~/Content/landing/img/redes/linkedin.svg")" alt=""></a>
+            </div>
+            <div class="col-md-0"><a class="navbar-brand js-scroll-trigger mt-4" href="https://www.youtube.com/promperu"><img src="@Url.Content("~/Content/landing/img/redes/youtube.svg")" alt=""></a></div>
+            <div class="col-md-1 mt-2"><a href="@Url.Action("Register","Front")" class="btn button-register mt-4">Regístrate</a></div>
+
+        </div>
+    </div>
+</nav>*@
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <div class="container-fluid">
+        <a class="navbar-brand js-scroll-trigger" href="@ViewBag.URLPortal"><img style="width: 60%;" src="@Url.Content("~/Content/landing/img/mincentur-logo.svg")" alt="" /></a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a id="nosotros_header" class="nav-link js-scroll-trigger" href="@ViewBag.URLPortal/#nosotros">Nosotros</a>
+                </li>
+                <li class="nav-item">
+                    <a id="modulos_header" class="nav-link js-scroll-trigger" href="@ViewBag.URLPortal/#modulos">Módulos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="@ViewBag.URLPortal/Agenda">Agenda</a>
+                </li>
+                <li class="nav-item">
+                    <a id="certificate_header" class="nav-link js-scroll-trigger" href="@ViewBag.URLPortal#certificate">Certifícate</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="@ViewBag.URLPortal/preguntas-frecuentes">Preguntas Frecuentes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("Register","Front")" style="padding-top: 9px !important;" class="nav-link js-scroll-trigger btn btn-promperu-White">Regístrate</a>
+                </li>
+                <li class="nav-item">
+                    <a target="_blank" class="nav-link js-scroll-trigger" href="https://www.facebook.com/promperu"><img src="@Url.Content("~/Content/landing/img/redes/facebook.svg")" alt=""></a>
+                </li>
+                <li class="nav-item">
+                    <a target="_blank" class="nav-link js-scroll-trigger" href="https://twitter.com/PromPeru"><img src="@Url.Content("~/Content/landing/img/redes/twitter.svg")" alt=""></a>
+                </li>
+                <li class="nav-item">
+                    <a target="_blank" class="nav-link js-scroll-trigger" href="https://www.linkedin.com/company/392025?trk=vsrp_companies_res_name&amp;trkInfo=VSRPsearchId%3A1485013621477865369025%2CVSRPtargetId%3A392025%2CVSRPcmpt%3Aprimary"><img src="@Url.Content("~/Content/landing/img/redes/linkedin.svg")" alt=""></a>
+                </li>
+                <li class="nav-item">
+                    <a target="_blank" class="nav-link js-scroll-trigger text-left" href="https://www.youtube.com/promperu"><img src="@Url.Content("~/Content/landing/img/redes/youtube.svg")" alt=""></a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<!-- Header -->
+<header class="masthead masthead-login">
+    <div class="container">
+        <div class="intro-text" style="text-align: -webkit-center;">
+            <div class="form-group text-center"><div class="inicia-sesion">Inicia Sesión</div></div>
+            <div class="col-md-12" style="text-align: -moz-center;">
+                @MessageHelpers.ShowMessages(TempData)
+                <form action="@Url.Action("Index","Login")" class="form-login" role="form" method="post">
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(x => Model.ReturnUrl)
+                    <div class="form-group text-center">
+                        <label class="nombre-de-usuario mb-2 ml-3" for="">Nombre de usuario o Correo</label>
+                        @Html.TextBoxFor(x => Model.Codigo, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Nombre de usuario / Correo", @autocomplete = "off" })
+                        @Html.ValidationMessageFor(x => Model.Codigo)
+                    </div>
+                    <div class="form-group text-center">
+                        <label class="nombre-de-usuario mb-2 ml-3" for="">Contraseña</label>
+                        @Html.PasswordFor(x => Model.Contrasena, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Contraseña", @autocomplete = "off" })
+                        @Html.ValidationMessageFor(x => Model.Contrasena)
+                    </div>
+                    <div class="form-group">
+                        <div style="width:100%" class="row">
+                            <div>
+                                <div class="form-group chck-register chck3">
+                                    <label class="container">
+                                        <label class="mantener-abierta-mi" >Mantener abierta mi cuenta</label>
+                                        <input type="checkbox" checked/>
+                                        <span class="checkmark checkmark_new"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                    <div class="form-group">
+                        <div style="width:100%">
+                            <button type="submit" class="btn button-login">Iniciar Sesión 2</button>
+                        </div>
+                        <a href="@Url.Action("ForgotPassword")" class="olvidaste-tu-usuario">¿Olvidaste tu usuario o contraseña?</a>
+                    </div>
+                    <div class="form-group">
+                        <a href="@ViewBag.URLPortal" class="olvidaste-tu-usuario">Volver al inicio</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+@section Scripts{
+    
+    <script src="~/Client Scripts/mvcfoolproof.unobtrusive.min.js"></script>
+    @RazorHelpers.Script("validation/messages_es.js", Url)
+    @RazorHelpers.Script("validation/methods_es_CL.js", Url)
+    @RazorHelpers.Script("jquery.unobtrusive-ajax.js", Url)
+    @RazorHelpers.Script("jquery.fullscreen-min.js", Url)
+    @RazorHelpers.Script("numericInput.min.js", Url)
+    @RazorHelpers.Script("countid.min.js", Url)
+}

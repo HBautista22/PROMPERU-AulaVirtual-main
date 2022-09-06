@@ -1,0 +1,60 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "No Autorizado";
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>EVOL - @ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/Content/assets/img/favicon.ico")" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+
+    @RazorHelpers.Content("assets/plugins/pace/pace-theme-flash.css", Url)
+    @RazorHelpers.Content("assets/plugins/boostrapv3/css/bootstrap.min.css", Url)
+    @RazorHelpers.Content("pages/css/pages-icons.css", Url)
+    @RazorHelpers.Content("pages/css/pages.css", Url)
+    <!--[if lte IE 9]>
+        @RazorHelpers.Content("pages/css/ie9.css", Url)
+    <![endif]-->
+
+    <script type="text/javascript">
+        window.onload = function () {
+            // fix windows 8
+            if (navigator.appVersion.indexOf("Windows NT 6.2") != -1)
+                document.head.innerHTML += "@RazorHelpers.Content("pages/css/windows.chrome.fix.css", Url)";
+        }
+    </script>
+
+</head>
+
+<body class="fixed-header error-page">
+    <div style="text-align: center; position: absolute; text-align: center; width: 100%;">
+        <img src="@Url.Content("~/Content/assets/img/logo-real.png")" alt="logo" data-src="@Url.Content("~/Content/assets/img/logo-real.png")" data-src-retina="@Url.Content("~/Content/assets/img/logo-real.png")" width="174" style="margin: auto;">
+    </div>
+    <div class="container-xs-height full-height">
+        <div class="row-xs-height">
+            <div class="col-xs-height col-middle">
+                <div class="error-container text-center">
+                    <h1 class="error-number">401</h1>
+                    <h2 class="semi-bold">@ViewBag.Title</h2>
+                    <p>
+                        Usted no tiene permisos suficientes para ingresar a esta area<br>
+                            <a href="@Url.Action("Dashboard", "Home")">Regresar al Inicio</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

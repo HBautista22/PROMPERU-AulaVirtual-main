@@ -1,0 +1,51 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Report.SendRecordatorioViewModel
+@{
+    ViewBag.Title = "Enviar Recordatorio";
+    Layout = ConstantHelpers.Layout.MODAL_LAYOUT_PATH;
+    ViewBag.ModalSize = "lg";
+    ViewBag.Form = new ModalFormHelpers("_SendRecordatorio", "Report", FormMethod.Post);
+}
+@Html.HiddenFor(x => x.CursoOnlineId)
+<div class="alert alert-info">
+    <i class="fa fa-exclamation-triangle"></i>&nbsp;¿Está seguro de enviar el recordatorio a los <strong>@Model.LstMatriculaCursoOnlinePendienteAprobacion.Count()</strong> alumnos que aún no han finalizado el curso?
+</div>
+<div class="auto-overflow" style="height: 500px;">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="title-table">Nombres</th>
+                <th class="title-table">Apellidos</th>
+                <th class="title-table">Correo</th>
+                <th class="title-table">% Avance</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pendienteAprobacion in Model.LstMatriculaCursoOnlinePendienteAprobacion)
+            {
+                <tr>
+                    <td class="text-table">
+                        @pendienteAprobacion.Usuario.Nombre
+                    </td>
+                    <td class="text-table">
+                        @pendienteAprobacion.Usuario.Apellido
+                    </td>
+                    <td class="text-table">
+                        @pendienteAprobacion.Usuario.Email
+                    </td>
+                    <td class="text-table">
+                        @pendienteAprobacion.PorcentajeAvance
+                    </td>
+                    <td class="text-table">
+                        <div class="label label-danger">
+                            @(pendienteAprobacion.Estado == ConstantHelpers.ESTADO_MATRICULA.COMPLETADO ? "Falta dar examen" : pendienteAprobacion.Estado != ConstantHelpers.ESTADO_MATRICULA.COMPLETADO ? "Falta revisar las unidades" : "-")
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Footer{
+    <button class="btn btn-guardar-matricula text-btn-generico">Enviar recordatorio</button>
+}

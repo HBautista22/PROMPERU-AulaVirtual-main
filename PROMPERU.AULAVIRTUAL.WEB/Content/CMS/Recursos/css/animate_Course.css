@@ -1,0 +1,53 @@
+﻿
+/*
+flip card
+*/
+.card-flip > div {
+  backface-visibility: hidden;
+  transition: transform 300ms;
+  transition-timing-function: linear;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  display: flex;
+}
+
+.card-front {
+  transform: rotateY(0deg);
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  position: absolute;
+  top: 0;
+
+}
+
+.card-flip:hover .card-front {
+  transform: rotateY(-180deg);
+}
+  
+.card-flip:hover .card-back {
+  transform: rotateY(0deg);
+}
+
+.card {
+    background-color: transparent;
+}
+
+/*
+.card-back .card-body > div{
+  background-color: #E63528;
+  color: #fdfdfd !important;  
+  border-radius: 8px;
+      padding: 30% 40%;
+}*/
+
+.card-back .card-body > div p{
+  
+  color: #fdfdfd !important; 
+  background-color: #E63528;
+    border-radius: 8px;
+      padding: 0 10px 0 10px;
+  
+}

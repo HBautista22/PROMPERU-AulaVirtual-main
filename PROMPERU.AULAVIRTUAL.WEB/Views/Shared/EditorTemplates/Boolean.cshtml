@@ -1,0 +1,12 @@
+﻿@model Boolean?
+
+<div class="form-group">
+    @Html.LabelForModel(new { @class = "col-sm-3 control-label" })
+    <div class="col-sm-5">
+        <div class="checkbox check-info">
+            <input @(Model.HasValue && Model.Value ? "checked='checked'" : "") type='checkbox' name="@Html.NameForModel()" value="true" id="@Html.NameFor(x => x)">
+            <label for="@Html.NameFor(x=>x)">@Html.Raw(ViewData.ContainsKey("Texto") ? ViewData["Texto"] : "&nbsp;")</label>
+        </div>
+        @Html.ValidationMessageFor(x => x)
+    </div>
+</div>

@@ -1,0 +1,76 @@
+﻿@font-face {
+    font-family: 'breePeru_regular';
+    src: url('fonts/BreePeru_Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'breePeru_Bold';
+    src: url('fonts/BreePeru_Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'breePeru-Light';
+    src: url('fonts/BreePeru-Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.kb-page-mask{
+	z-index: 3 !important;
+}
+
+body,html{
+  	/*overflow-x: hidden;*/
+    font-family: 'breePeru_regular' !important;
+}
+
+h1, h2, h3, h4, h5{
+  	overflow-x: hidden;
+    font-family: 'breePeru_regular' !important;
+  	letter-spacing: 1px;
+}
+
+p, span, a, label {
+  	overflow-x: hidden;
+    font-family: 'breePeru-Light' !important;
+}
+
+::placeholder{
+    font-family: 'breePeru-Light' !important;
+}
+
+label{
+	cursor: unset;
+}
+
+
+/***/
+.zoom-section {  
+  transition: transform .2s; /* Animation */
+  margin: 0 auto;
+}
+
+.zoom-section:hover {
+  transform: scale(1.05); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+/*
+p {
+  animation-duration: 3s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 300%; 
+  }
+
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
+}*/

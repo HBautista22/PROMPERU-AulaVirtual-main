@@ -1,0 +1,237 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ViewCursoMaestroOnlineViewModelAdmin
+
+@{
+    ViewBag.Title = Model.CursoOnline.Nombre;
+    ViewBag.Seccion = "Cursos";
+    ViewBag.SubSeccion = "Cursos";
+    var estaDisponible = Model.EstaDisponible;
+    var i = 1;
+}
+
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListCursoOnlineAdmin", "Course")">Cursos</a></li>
+}
+
+@helper VerHijo(PROMPERU.AULAVIRTUAL.WEB.Models.DetalleCursoOnlineMaestro unidad, int index, int level = 0, string sufijo = "")
+{
+/*var contenidoId = unidad.UnidadCursoOnlineId;
+var parentId = unidad.UnidadCursoOnlinePadreId ?? 0;
+var indexHijo = 1;
+var sufijoActual = sufijo + index;
+var contenidosHijos = unidad.UnidadCursoOnline1.Where(x => !x.Estado.Equals(ConstantHelpers.ESTADO.ELIMINADO)).OrderBy(x => x.Orden).ToList();
+var inactive = unidad.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO) ? "danger c-white" : string.Empty;*/
+
+    <tr class="" data-id="" data-parent="" data-level="" data-status-id="@unidad.Estado.Equals(ConstantHelpers.ESTADO.ACTIVO)">
+        <td class="text-table"></td>
+        @*<td class="text-center">@(unidad.Estado.Equals(ConstantHelpers.ESTADO.ACTIVO) ? unidad.Orden.ToString() : "-")</td>*@
+        <td class="text-table"></td>
+        <td class="text-table"> </td>
+        <td class="text-center text-table"><span class="label @(unidad.Estado == ConstantHelpers.ESTADO.ACTIVO ? "label-success" : "label-important")">@(unidad.Estado == ConstantHelpers.ESTADO.ACTIVO ? "Activo" : "Inactivo")</span></td>
+
+        <td class="text-right text-table">
+            <div class='btn-group dropdown base'>
+
+                @*@if (ConstantHelpers.TIPO_UNIDAD.DB_CONTENIDO != unidad.TipoUnidadId)
+        {
+
+            <a class="base m-r-80" href="@Url.Action("ViewUnidadCursoOnline", "Course", new { CursoOnlineId = Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })">Ver</a>
+            <i class='fa fa-chevron-down dropdown-toggle m-r-10 p-t-5' data-toggle='dropdown' style="cursor:pointer"></i>
+        }
+        else
+        {*@
+                <a class='base m-r-60 dropdown-toggle' href="#" data-boundary="window"  data-toggle='dropdown'>Opciones</a>
+                <i class='fa fa-chevron-down dropdown-toggle m-r-10 p-t-5' data-toggle='dropdown' data-boundary="window" style="cursor:pointer"></i>
+                @*}*@
+
+
+                @*<ul class="dropdown-menu">
+                    <li>
+                        <a class="btn-xs" href="@Url.Action("EditUnidadCursoOnline", "Course", new { CursoOnlineId = Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })"><i class="fa fa-pencil-square-o"></i>&nbsp;Editar</a>
+                    </li>
+                    @if (ConstantHelpers.TIPO_UNIDAD.DB_CONTENIDO != unidad.TipoUnidadId)
+                    {
+                        <li>
+                            <a class="btn-xs" href="@Url.Action("ManagePreguntasCursoOnline","Question",new { unidadOnlineId = unidad.UnidadCursoOnlineId})"><i class="fa fa-check-square"></i>&nbsp;Editar preguntas</a>
+                        </li>
+                        <li>
+                            <a class="btn-xs" href="#" @Data.ModalLink("_OrderUnidad", "Course", new { CursoId = Model.CursoOnlineId, UnidadId = unidad.UnidadCursoOnlineId })><i class="fa fa-sort-amount-asc"></i> Ordenar unidades</a>
+                        </li>
+                        <li>
+                            <a class="btn-xs" href="@Url.Action("EditUnidadCursoOnline", "Course", new { CursoOnlineId = Model.CursoOnlineId, UnidadCursoOnlinePadreId = unidad.UnidadCursoOnlineId })"><i class="fa fa-plus"></i> Agregar subtema o contenido</a>
+                        </li>
+                    }
+                    <li>
+                        <a class="btn-xs" href="@Url.Action("ChangeStateUnidad", "Course", new { UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })">
+                            @if (unidad.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                            {
+                                <text><i class="fa fa-check fa-fw"></i>&nbsp;Activar a Unidad</text>
+                            }
+                            else
+                            {
+                                <text><i class="fa fa-times fa-fw"></i>&nbsp;Desactivar Unidad</text>
+                            }
+                        </a>
+                    </li>
+                    <li>
+                        <a class="btn-xs" href="@Url.Action("DeleteStateUnidad", "Course", new { UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })">
+                            @if (unidad.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                            {
+                                <text><i class="fa fa-times fa-fw"></i>&nbsp;Eliminar Unidad</text>
+                            }
+                        </a>
+                    </li>
+                </ul>*@
+            </div>
+        </td>
+    </tr>
+
+/*if (unidad.TipoUnidadId == ConstantHelpers.TIPO_UNIDAD.DB_CONTENIDO)
+{
+    return;
+}
+else if (contenidosHijos.Count() > 0)
+{
+    level++;
+    foreach (var item in contenidosHijos)
+    {
+            <text>@VerHijo(item, indexHijo++, level, $"{sufijoActual}.")</text>
+    }
+}*/
+}
+
+<div class="container-fluid container-fixed-lg">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="invoice padding-0 sm-padding-10">
+                @*<div class="banner">
+                    @if (string.IsNullOrEmpty(Model.CursoOnline.RutaBanner))
+                    {
+                        <img width="100%" height="100%" src="https://via.placeholder.com/728x180.png?text=Banner" />
+                    }
+                    else
+                    {
+                        <img style="max-height:220px" width="100%" height="100%" src="@Url.Content("~/Content/bannercursos/" + Model.CursoOnline.RutaBanner)" />
+                    }
+                </div>*@
+                <div>
+                    <div class="pull-left">
+                        <h2 class="usuarios m-b-20">@Model.CursoOnline.Nombre</h2>
+                    </div>
+                    <div class="pull-right">
+                        <a class="btn btn-course-enable" @Data.ModalLink("_SetDisponibilidadCursoOnline", "Enrollment", new { CursoOnlineId = Model.CursoOnlineId })>
+                            @(estaDisponible ? "Editar" : "Agregar") Disponibilidad
+                        </a>
+                        <a class="btn btn-course-enable" href="@Url.Action("EditCursoOnline", "Course", new { cursoOnlineID = Model.CursoOnlineId })">Editar Curso</a>
+                        <a class="btn btn-course-enable" data-type="modal-link" data-source-url="@Url.Action("_DeleteCursoOnline", "Course", new { cursoOnlineID = Model.CursoOnlineId })">Eliminar Curso</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="container-sm-height">
+                    <div class="row-sm-height">
+                        <div class="col-md-8 col-sm-height sm-no-padding">
+                            @*<p class="small no-margin text-course-enable">Categoria - @Model.CursoOnline...Nombre</p>-->*@
+                            <h5 class="semi-bold m-t-0 text-course-enable">Descripción:</h5>
+                            <p class="text-course-enable">@Html.Raw(Model.CursoOnline.Descripcion)</p>
+                            <div class="clearfix"></div>
+                            <br>
+                            <a class="btn btn-course-enable" href="@Url.Action("EditUnidadCursoOnline", "Course", new { CursoOnlineId = Model.CursoOnlineId })">Agregar Unidad</a>
+                        </div>
+                        <div class="col-md-4 col-sm-height sm-no-padding sm-p-b-20">
+                            <div>
+                                @*<p class="text-course-enable">Número Unidades del Curso: @Model.CursoOnline.UnidadCursoOnline.Where(a=> a.UnidadCursoOnlinePadreId == null).Count() Unidades</p>*@
+                                <div class="clearfix"></div>
+                            </div>
+                            @*<div>
+                                <p class="text-course-enable">Cantidad de SubUnidades : @Model.CursoOnline.TiempoEvaluacion minutos</p>
+                                <div class="clearfix"></div>
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="collaptable" class="table m-t-50">
+                        <thead>
+                            <tr>
+                                <th class="title-table">#</th>
+                                <th class="col-sm-6 title-table">Nombre</th>
+                                <th class="title-table">Estructura</th>
+                                <th class="title-table">Estado</th>
+                                <th class="text-center title-table" style="min-width: 9.3em">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody @*id="sortable"*@>
+                            @if (Model.LstUnidadCursoOnline.Count() > 0)
+                            {
+                                foreach (var item in Model.LstUnidadCursoOnline)
+                                {
+                                    if (item.Estado != ConstantHelpers.ESTADO.ELIMINADO)//agregado
+                                    {
+                                        <text>@VerHijo(item, i++)</text>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    @RazorHelpers.Content("assets/plugins/sortable/js/jquery-sortable.js", Url)
+    @RazorHelpers.Content("assets/plugins/aCollapTable/jquery.aCollapTable.min.js", Url)
+
+    <script>
+        var dataList = [];
+        var CursoOnlineId = @Model.CursoOnlineId;
+
+        $(document).ready(function () {
+            dataList = $(".table.m-t-50 tbody tr[data-id]").each(function(i,e){ dataList.push($(e).data('id'))});
+            /*$(function () {
+                $('#sortable').sortable({
+                    change: function () {
+                        dataList = [];
+                        $(".table.m-t-50 tbody tr[data-id]").each(function(i,e){ dataList.push($(e).data('id'))});
+                    }
+                });
+            });
+            $('#sortable').find('tr').each(function(e,i){console.log($(i).data('id'))})*/
+            //$('#sort').on('click', OrderValues);
+
+            $('#collaptable').aCollapTable({
+                startCollapsed: true,
+                addColumn: false,
+                plusButton: '<i class="fa fa-plus-circle "></i> ',
+                minusButton: '<i class="fa fa-minus-circle "></i> '
+            });
+        });
+
+        @*function OrderValues() {
+            dataList = [];
+            $(".table.m-t-50 tbody tr[data-id]").each(function(i,e){ dataList.push($(e).data('id'))});
+            var LstUnidad = JSON.stringify(dataList);
+
+            var req = $.ajax({
+                url: '@Url.Action("OrderUnidadCursoOnline", "Course")',
+                data: {
+                    LstUnidad: LstUnidad,
+                    CursoOnlineId: CursoOnlineId,
+                },
+                type: "POST",
+                async: false,
+                success: function(data) {
+                    window.location.reload(true);
+                }
+            });
+
+            var resp = "";
+            req.then(function (data) { resp = data }, function (data) { resp = "" });
+            return resp;
+        }*@
+
+    </script>
+}

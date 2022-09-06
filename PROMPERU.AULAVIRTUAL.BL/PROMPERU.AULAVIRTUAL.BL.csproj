@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{76532500-8C48-4DE5-9B64-CCDEC8E76A08}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PROMPERU.AULAVIRTUAL.BL</RootNamespace>
+    <AssemblyName>PROMPERU.AULAVIRTUAL.BL</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AlumnoBL.cs" />
+    <Compile Include="AsesorBL.cs" />
+    <Compile Include="AsesoriaAsesoradoBL.cs" />
+    <Compile Include="AsesoriaAsesorBL.cs" />
+    <Compile Include="CMSBL.cs" />
+    <Compile Include="CursoOnlineFavoritoBL.cs" />
+    <Compile Include="CursosBL.cs" />
+    <Compile Include="EnlacesInteresBL.cs" />
+    <Compile Include="TipoEmpresaBL.cs" />
+    <Compile Include="UsuarioMultiEmpresaBL.cs" />
+    <Compile Include="EmpresaBL.cs" />
+    <Compile Include="GrupoBL.cs" />
+    <Compile Include="JsonBL.cs" />
+    <Compile Include="NotificacionesBL.cs" />
+    <Compile Include="ParametroBL.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReporteBL.cs" />
+    <Compile Include="UsuarioBL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PROMPERU.AULAVIRTUAL.BE\PROMPERU.AULAVIRTUAL.BE.csproj">
+      <Project>{0b14065f-cb41-4b4f-b6d1-710a2493e6aa}</Project>
+      <Name>PROMPERU.AULAVIRTUAL.BE</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PROMPERU.AULAVIRTUAL.DA\PROMPERU.AULAVIRTUAL.DA.csproj">
+      <Project>{1f68b1a3-1af1-41dd-91a0-bb5bf361a4e0}</Project>
+      <Name>PROMPERU.AULAVIRTUAL.DA</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PROMPERU.AULAVIRTUAL.Helpers\PROMPERU.AULAVIRTUAL.Helpers.csproj">
+      <Project>{E1AC29D5-24F8-4759-87E1-23FD93A03F2C}</Project>
+      <Name>PROMPERU.AULAVIRTUAL.Helpers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

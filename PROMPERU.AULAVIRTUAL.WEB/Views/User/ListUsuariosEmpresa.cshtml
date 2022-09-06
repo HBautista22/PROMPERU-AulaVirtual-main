@@ -1,0 +1,82 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.ListUsuariosEmpresaViewModel
+
+@{
+    ViewBag.Title = "Usuarios";
+    ViewBag.Icon = "users";
+    ViewBag.Seccion = "Empresa";
+    ViewBag.SubSeccion = "UsuariosEmpresa";
+
+}
+
+@section Breadcrumbs{
+
+}
+
+
+@section Jumbotron{
+    <div class="container-fluid container-lg sm-p-l-20 sm-p-r-20 full-height">
+        <div class="inner full-height" style="transform: translateY(0px); opacity: 1;">
+
+            <form class="form row" method="post">
+
+                <div class="col-md-8 m-b-30">
+                    <div class="form-group form-group-default input-group transparent center-margin">
+                        @Html.LabelFor(x => x.CadenaBuscar)
+                        @Html.TextBoxFor(x => x.CadenaBuscar, new { @class = "form-control" })
+                        <span class="input-group-addon"><i class="pg-search"></i></span>
+                    </div>
+                </div>
+                <div class="col-md-4 m-b-30">
+                    <button type="submit" class="btn btn-block btn-lg btn-primary m-t-5"><i class="fa fa-search"></i>&nbsp;Buscar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+}
+
+<div class="container-fluid container-fixed-lg">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4 class="m-t-0 m-b-0"><i class="fa fa-@ViewBag.Icon"></i>&nbsp;@ViewBag.Title</h4>
+            </div>
+            <div class="btn-group pull-right m-b-10">
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline no-footer" id="basicTable_wrapper">
+                    <table role="grid" class="table table-hover dataTable no-footer" id="basicTable">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-10">Apellidos y Nombres</th>
+                                <th class="text-center">Estado</th>
+                                <th class="text-center" style="min-width: 9.3em">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var usuario in Model.LstUsuario)
+                            {            
+                                <tr>
+                                    <td>@usuario.Apellido, @usuario.Nombre</td>
+                                    <td class="text-center"><span class="label @(usuario.Estado == ConstantHelpers.ESTADO.ACTIVO ? "label-success" : "label-important")">@(usuario.Estado == ConstantHelpers.ESTADO.ACTIVO ? "Activo" : "Inactivo")</span></td>
+
+                                    <td class="text-right">
+                                        <div class='btn-group dropdown'>
+                                            <a class="btn btn-xs" href="@Url.Action("ListAlumnoCursoOnline", "Course", new { UsuarioId = usuario.UsuarioId })"><i class="fa fa-search"></i>&nbsp;Ver Cursos</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model.LstUsuario, page => Url.Action("ListUsuariosEmpresa", new { p = page, CadenaBuscar = Model.CadenaBuscar }), ConstantHelpers.Bootstrap3Pager)
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

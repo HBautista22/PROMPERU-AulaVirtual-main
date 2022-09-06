@@ -1,0 +1,306 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.ViewPerfilViewModel
+@using PROMPERU.AULAVIRTUAL.BE.USUARIO
+@using System.Configuration;
+@{ var esTurismo = Convert.ToBoolean(ConfigurationManager.AppSettings["EsTurismo"].ToString());
+    int TotalCursosMaestros = ViewBag.TotalCursosMaestros ?? 1;
+    int TotalCursosMaestrosInscritos = ViewBag.TotalCursosMaestrosInscritos ?? 0;
+    int TotalCursos = ViewBag.TotalCursos ?? 1;
+    int TotalCursosInscritos = ViewBag.TotalCursosInscritos ?? 0;
+
+    string AvatarNumber = "1";
+
+    switch (@Model.Usuario.Cargo)
+    {
+        case "Estudiante A":
+            {
+                AvatarNumber = "0";
+                break;
+            }
+        case "Estudiante B":
+            {
+                AvatarNumber = "1";
+                break;
+            }
+        case "Investigador A":
+            {
+                AvatarNumber = "2";
+                break;
+            }
+        case "Investigador B":
+            {
+                AvatarNumber = "3";
+                break;
+            }
+        case "Potencial exportador A":
+            {
+                AvatarNumber = "4";
+                break;
+            }
+        case "Potencial exportador B":
+            {
+                AvatarNumber = "5";
+                break;
+            }
+        case "Exportador esporádico A":
+            {
+                AvatarNumber = "6";
+                break;
+            }
+        case "Exportador esporádico B":
+            {
+                AvatarNumber = "7";
+                break;
+            }
+        case "Exportador regular A":
+            {
+                AvatarNumber = "8";
+                break;
+            }
+        case "Exportador regular B":
+            {
+                AvatarNumber = "9";
+                break;
+            }
+        default:
+            {
+                AvatarNumber = "0";
+                break;
+            }
+    } }
+@section Styles{
+    <style>
+        .SelectorCargo {
+            border-radius: 20px;
+            border: 1px solid #d3d4d3;
+            padding: 10px;
+            min-height: 275px;
+            height: auto;
+            display: flex;
+            float: left;
+        }
+    </style>
+
+
+}
+<div id="dialog-change-avatar" title="Elegir Avatar" style="display:none;">
+    <input type="hidden" id="Cargo" value="@Model.Usuario.Cargo" />
+
+    <div class="SelectorCargo">
+        <div>
+            Estudiante.
+        </div>
+        <div>
+            <div style="display:inline-block;">
+                <div class="cf-avatar-lg cf-avatar--0"></div>
+                <input type="radio" name="cargo" value="Estudiante A">
+            </div>
+
+            <div style="display:inline-block;">
+                <div class="cf-avatar-lg cf-avatar--1"></div>
+                <input type="radio" name="cargo" value="Estudiante B">
+            </div>
+        </div>
+        <div style="max-width:195px;">
+            Persona natural que viene desarrollando estudios en un colegio, instituto o universidad.
+        </div>
+    </div>
+
+    <div class="SelectorCargo">
+        <div>
+            Investigador.
+        </div>
+        <div>
+            <div style="display:inline-block;">
+                <div class="cf-avatar-lg cf-avatar--2"></div>
+                <input type="radio" name="cargo" value="Investigador A" />
+            </div>
+            <div style="display:inline-block;">
+                <div class="cf-avatar-lg cf-avatar--3"></div>
+                <input type="radio" name="cargo" value="Investigador B" />
+            </div>
+        </div>
+        <div style="max-width:195px;">
+            Persona natural que tiene interés en indagar u obtener mayor información sobre temas de comercio exterior.
+        </div>
+    </div>
+
+
+    <div class="SelectorCargo">
+        <div>
+            Potencial exportador.
+        </div>
+        <div>
+            <div style="display:inline-block;">
+                <div class="cf-avatar-lg cf-avatar--4"></div>
+                <input type="radio" name="cargo" value="Potencial exportador A" />
+            </div>
+            <div style="display:inline-block;">
+                <div class="cf-avatar-lg cf-avatar--5"></div>
+                <input type="radio" name="cargo" value="Potencial exportador B" />
+            </div>
+        </div>
+        <div style="max-width:195px;">
+            Aquella empresa que nunca ha exportado pero esta nuestra cartera de clientes, es decir, ha llevado servicios de parte de PROMPERÚ.
+        </div>
+    </div>
+
+    <div class="SelectorCargo">
+        <div>
+            Exportador esporádico.
+        </div>
+        <div>
+            <div style="display:inline-block;">
+                <div class="cf-avatar-lg cf-avatar--6"></div>
+                <input type="radio" name="cargo" value="Exportador esporádico A" />
+            </div>
+            <div style="display:inline-block;">
+                <div class="cf-avatar-lg cf-avatar--7"></div>
+                <input type="radio" name="cargo" value="Exportador esporádico B" />
+            </div>
+        </div>
+        <div style="max-width:195px;">
+            Es aquella empresa que ha exportado al menos una vez durante los últimos 5 años.
+        </div>
+    </div>
+
+    <div class="SelectorCargo">
+        <div>
+            Exportador regular.
+        </div>
+        <div>
+            <div style="display:inline-block;">
+                <div class="cf-avatar-lg cf-avatar--8"></div>
+                <input type="radio" name="cargo" value="Exportador regular A" />
+            </div>
+            <div style="display:inline-block;">
+                <div class="cf-avatar-lg cf-avatar--9"></div>
+                <input type="radio" name="cargo" value="Exportador regular B" />
+            </div>
+        </div>
+        <div style="max-width:195px;">
+            Es aquella empresa que ha exportado durante los últimos 5 años.
+        </div>
+    </div>
+</div>
+<input type="hidden" id="UsuarioId" />
+<div class="cf-user-profile-header">
+    <div class="cf-user-profile-header__top" data-toggle="collapse" data-target="#collapseUserProfileHeader" aria-expanded="false" aria-controls="collapseUserProfileHeader">
+        @*
+            cf-avatar--0
+            cf-avatar--1
+            cf-avatar--2
+            cf-avatar--3
+            cf-avatar--4
+            cf-avatar--5
+            cf-avatar--6
+            cf-avatar--7
+            cf-avatar--8
+            cf-avatar--9
+        *@
+        <div class="cf-avatar-lg cf-avatar--@AvatarNumber"></div>
+        @if (!esTurismo)
+        {
+            <a href="javascript:openChangeAvatar()" class="text text-sm-center"><span class="icon"><i class="fas fa-pencil-alt"></i></span> Cambiar foto de perfil</a>
+        }
+        <span class="cf-arrow"></span>
+    </div>
+    <div class="cf-user-profile-header__section-container">
+        <div class="cf-user-profile-header__section">
+            <div class="cf-user-profile-header__blocks">
+                <div class="cf-user-profile-header__block">
+                    <div class="cf-user-profile-header__block-left">
+                        <img src="/Content/pages/img/type-empresa.png" class="icon-library">
+                    </div>
+                    <div class="cf-user-profile-header__block-right">
+                        @if (Model.Usuario.Empresa != null)
+                        {
+            <span class="title">Empresa: <img data-toggle="tooltip" data-placement="right" title="Usuario Empresario" class="info" src="/Content/pages/img/icon-alert.png"></span>
+                            <span class="business">@(Model.Usuario.Empresa.RazonSocial)</span> }
+                        else
+                        {
+            <span class="title">Emprendedor <img data-toggle="tooltip" data-placement="right" title="Usuario Emprendedor" class="info" src="/Content/pages/img/icon-alert.png"></span>
+                            <span class="business"></span>}
+                    </div>
+                </div>
+
+                @if (!esTurismo)
+                {
+    <div class="cf-user-profile-header__block">
+        <div class="cf-user-profile-header__block-left">
+            <img src="/Content/pages/img/icon-libros.png" class="icon-library">
+            <span class="number">@TotalCursosMaestrosInscritos</span>
+        </div>
+        <div class="cf-user-profile-header__block-right">
+            <span class="title">Cursos maestros <img data-toggle="tooltip" data-placement="right" title="Cursos maestros inscritos" class="info" src="/Content/pages/img/icon-alert.png"></span>
+            <div class="cf-progress-box">
+                @*
+                    Cambiar el valor del value al porcentaje necesario
+                *@
+                <div class="cf-progress-bar" style="--value: @(100*(decimal)TotalCursosMaestrosInscritos/(decimal)TotalCursosMaestros)%"></div>
+                <span class="cf-indicator">@TotalCursosMaestrosInscritos/@TotalCursosMaestros</span>
+            </div>
+            @*
+                cf-medals--bronze   <-- Esta clase para la medalla de bronce
+                cf-medals--silver   <-- Esta clase para la medalla de plata
+                cf-medals--gold     <-- Esta clase para la medalla de oro
+
+                                        Usar aquí
+                                            v
+                                            v
+            *@
+            <div class="cf-medals cf-medals--gold">
+                @for (int i = 1; i == TotalCursosMaestrosInscritos; i++)
+                {
+<span class="cf-medals__medal"></span>
+                    <span class="cf-medals__medal"></span>
+                                        <span class="cf-medals__medal"></span>
+                                                            <span class="cf-medals__medal"></span>
+                                                                                <span class="cf-medals__medal"></span>
+                                                                                                    <span class="cf-medals__medal"></span>
+                                                                                                                        <span class="cf-medals__more">+</span>}
+            </div>
+        </div>
+    </div>}
+
+
+
+
+                <div class="cf-user-profile-header__block">
+                    <div class="cf-user-profile-header__block-left">
+                        <img src="/Content/pages/img/icon-library.png" class="icon-library">
+                        <span class="number">@TotalCursosInscritos</span>
+                    </div>
+                    <div class="cf-user-profile-header__block-right">
+                        <span class="title">Cursos <img data-toggle="tooltip" data-placement="right" title="Cursos inscritos" class="info" src="/Content/pages/img/icon-alert.png"></span>
+                        <div class="cf-progress-box">
+                            @*
+                                Cambiar el valor del value al porcentaje necesario
+                            *@
+                            <div class="cf-progress-bar" style="--value: @(100*(decimal)TotalCursosInscritos/(decimal)TotalCursos)%"></div>
+                            <span class="cf-indicator">@TotalCursosInscritos/@TotalCursos</span>
+                        </div>
+                        <div class="cf-medals cf-medals--silver">
+                            @for (int i = 1; i == TotalCursosInscritos; i++)
+                            {
+                <span class="cf-medals__medal"></span>
+                                <span class="cf-medals__medal"></span>
+                                                <span class="cf-medals__medal"></span>
+                                                                <span class="cf-medals__medal"></span>
+                                                                                <span class="cf-medals__medal"></span>
+                                                                                                <span class="cf-medals__medal"></span>
+                                                                                                                <span class="cf-medals__more">+</span>}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cf-user-profile-header__alert">
+                <div class="cf-left"><img src="/Content/pages/img/book.png"></div>
+                <div class="cf-right">
+                    <strong>¡Te falta terminar un curso!</strong>
+                    <span>Alcanza la excelencia lo antes posible</span>
+                    <a href="/Course/ListCursoOnlineAlumno">Clic aquí ></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

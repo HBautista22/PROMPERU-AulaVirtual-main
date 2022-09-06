@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_ModalLayout.cshtml";
+    int? UnidadCursoOnlineId = (dynamic)Model.UnidadCursoOnlineId;
+    int? CursoOnlineId = (dynamic)Model.CursoOnlineId;
+    string rutaWeb = (dynamic)Model.ExternalLink;
+    bool? hasFile = (dynamic)Model.hasFile;
+}
+
+@*if (hasFile == true)
+{
+    if (UnidadCursoOnlineId.HasValue)
+    {
+        <div id="frameWrap" class="frameWrap">
+            <span class="Centerer"></span>
+            <iframe data-target="imageLoader2" class="frameReport" src="@Url.Action("RenderAdditionalFile", new { UnidadCursoOnlineId = Model.UnidadCursoOnlineId })" width="100%" height="650" scrolling="auto" frameborder="1"></iframe>
+        </div>
+    }
+
+    if (CursoOnlineId.HasValue)
+    {
+        <div id="frameWrap" class="frameWrap">
+            <span class="Centerer"></span>
+            <iframe data-target="imageLoader2" class="frameReport" src="@Url.Action("RenderBanner", new { CursoOnlineId = Model.CursoOnlineId })" width="100%" height="650" scrolling="auto" frameborder="1"></iframe>
+        </div>
+    }
+}*@
+
+@if (!string.IsNullOrEmpty(rutaWeb))
+{
+<div>
+    <iframe src="@rutaWeb" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" frameborder="1" height="400" width="100%" id="curso"></iframe>
+    
+</div>
+}

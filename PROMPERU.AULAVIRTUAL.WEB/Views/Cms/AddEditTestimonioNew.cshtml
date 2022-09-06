@@ -1,0 +1,111 @@
+﻿@model PROMPERU.AULAVIRTUAL.BE.CMS.CMS_Testimonio
+@{
+    ViewBag.Title = "AddEditTestimonioNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Testimonio</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Testimonio</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row">
+    <div class="col-lg-12 box-grey-content">
+        <h2>Testimonio</h2>
+        <div class="content-form-grey">
+            @using (Html.BeginForm("AddEditTestimonio", "CMS", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Título</label>
+
+                            @Html.TextBoxFor(model => model.Titulo, new { @class = "form-control", required = "required", @placeholder = "Ingresar Titulo" })
+                            @Html.ValidationMessageFor(model => model.Titulo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Nombre</label>
+
+                            @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", required = "required", @placeholder = "Ingresar Descripción" })
+                            @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group file-avatar">
+                            <label for="">Imagen</label>
+                            <div class="type2">
+                                <label class="input-file">
+                                    Seleccionar
+                                    @Html.TextBox("FileImagen", null, new { @class = "", @type = "file" })
+                                    @Html.ValidationMessageFor(model => model.Imagen, "", new { @class = "text-danger" })
+                                    <span class="file-choose-btn">Examinar</span>
+                                </label>
+                            </div>
+                            <p class="note">Imagen .svg al 100%</p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Nombre</label>
+
+                            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", required = "required", @placeholder = "Ingresar Titulo" })
+                            @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Empresa</label>
+
+                            @Html.TextBoxFor(model => model.Empresa, new { @class = "form-control", required = "required", @placeholder = "Ingresar Empresa" })
+                            @Html.ValidationMessageFor(model => model.Empresa, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="icheck-primary activo-2">
+                                @Html.CheckBoxFor(m => m.EsPublicado, new { @checked = "checked" })
+                                <label for="EsPublicado">
+                                    ¿Está activo?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-btn">
+                        <input type="submit" class="btn btn-primary" value="Guardar">
+                        <a href="@Url.Action("ListTestimonio","CMS")" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+
+

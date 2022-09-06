@@ -1,0 +1,36 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+@{
+    Layout = PROMPERU.AULAVIRTUAL.WEB.Helpers.ConstantHelpers.Layout.MODAL_EMAIL_PATH;
+    dynamic model = ((dynamic)Model);
+}
+
+<table border='0' cellpadding='0' cellspacing='0' width='100%'>
+    <tr>
+        <td align='center' valign='top'>
+            <h2>Evaluación Online</h2>
+        </td>
+    </tr>
+    <tr>
+        <td align='center' valign='top'>
+            <h4 style='color: #E40F27 !important'>@model.Descripcion</h4>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p>Su cuenta es: @model.Cuenta</p>
+            <p>Su Contraseña es: @model.Password</p>
+            <p>El curso que se le ha matriculado es: @model.Curso</p>
+        </td>
+    </tr>
+    <tr>
+        <td align='center' valign='top'>
+            <p style='margin: 1em 0; text-align: justify;'>
+                <br />
+                Para mayor detalle sobre esta notificación sírvarse ingresar al <a href="@(System.Web.Configuration.WebConfigurationManager.AppSettings["PORTAL.AbsoluteUrl"])">@(System.Web.Configuration.WebConfigurationManager.AppSettings["PORTAL.NombreSistema"]).</a><br />
+                <br />
+                Muchos éxitos,<br />
+                Equipo PromPerú
+            </p>
+        </td>
+    </tr>
+</table>

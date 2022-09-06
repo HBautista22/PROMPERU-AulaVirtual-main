@@ -1,0 +1,61 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Cms.ViewPaginaViewModel
+@{
+
+    var model = Model;
+    var menu = Model.MapaSitio;
+    menu = menu.Where(x => x.ParentMenuItemId == null).ToList();
+
+    //var menu = Model.Datos.CMS_Menu.FirstOrDefault(x => x.Codigo == "MAPA_SITIO").CMS_MenuItem.Where(x => x.EsPublicado && x.ParentMenuItemId == null).OrderBy(x => x.Orden);
+
+
+}
+
+<!-- Jumbotron -->
+<div class="card card-image" style="background-image: url('@Url.GetCmsResourceUrl("img/banner-pf.jpg")'); background-repeat: no-repeat; background-size: cover;">
+    <div class="text-white text-center rgba-stylish-strong py-55 px-4">
+        <div class="py-55">
+            <h2 class="agenda">Mapa del Sitio</h2>
+        </div>
+    </div>
+</div>
+<!-- Jumbotron -->
+
+<section class="page-section" style="padding: 30px 0;">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb d-inline-flex pl-4 pt-0 ml-5">
+            <li class="breadcrumb-item pr-2"><a href="/">Inicio</a></li>
+            <li class="breadcrumb-item active"><a class="pl-2" href="#!">Mapa del Sitio</a></li>
+        </ol>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="section-heading mt-0 ml-5 text-center">Mapa del Sitio</h2>
+            </div>
+            <div class="offset-md-5 col-md-12">
+                <ul>
+                    @foreach (var item in menu)
+                    {
+                        var subItems = item.CMS_MenuItem1.Where(x => x.EsPublicado);
+
+                        <li class="list-Style-Mapa">
+                            <a class="MapaSitio" href="@Url.GetCmsMenuItemUrl(item)">@item.Titulo</a>
+
+                            @if (subItems.Count() > 0)
+                            {
+                                <ul>
+                                    @foreach (var subItem in subItems)
+                                    {
+                                        <li class="list-Style-Mapa">
+                                            <a class="MapaSitio" href="@Url.GetCmsMenuItemUrl(subItem)">@subItem.Titulo</a>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

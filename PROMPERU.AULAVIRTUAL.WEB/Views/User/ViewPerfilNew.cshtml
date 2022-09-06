@@ -1,0 +1,829 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.ViewPerfilViewModel
+@using PROMPERU.AULAVIRTUAL.BE.CURSOS
+@using System.Configuration;
+@{
+    ViewBag.Title = "ViewPerfilNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+
+    var esTurismo = Convert.ToBoolean(ConfigurationManager.AppSettings["EsTurismo"].ToString());
+}
+@section Styles{
+    @RazorHelpers.Content("pages/css/custom-styles.css", Url)
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        .ui-front {
+            z-index: 200;
+        }
+
+        .cf-user-profile-header {
+            background-color: rgb(165 172 176 / 16%);
+        }
+
+        .cf-user-profile-header__top .text:link {
+            text-decoration: underline;
+            pointer-events: all;
+            color: #07354F;
+            font-family: 'HelveticaNeueLT';
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 19px;
+            text-decoration-line: underline;
+            color: #07354F;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            background: #07354F;
+            color: #FFF;
+            display: inline-flex;
+            align-items: center;
+            align-content: center;
+            justify-content: center;
+            margin-right: 6px;
+            border-radius: 100%;
+            font-size: 12px;
+        }
+
+        .cf-user-profile-header__top .cf-avatar--0 {
+            width: 87px;
+            height: 87px;
+            /* background: #FAFAFA; */
+            box-shadow: 0px 2px 6px rgb(7 53 79 / 12%);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .cf-user-profile-header__block-right .title {
+            color: #07354F;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            white-space: nowrap;
+        }
+
+        .cf-user-profile-header__block-right .info {
+            background: #07354F;
+            padding: 2px;
+        }
+
+        .cf-user-profile-header__block-left .number {
+            color: #07354F;
+        }
+    </style>
+
+
+}
+<div class="row mb-2">
+    <!--<section class="col-lg-12">
+        <div class="card">
+            <div class="card-body info-alumno">
+                <div class="foto-perfil">
+                    <div class="foto">
+                        <img id="profile" src="@Url.GetCmsResourceUrl("assets/images/user.png")">
+                    </div>
+                </div>
+                <div class="datos-usuario">
+                    <a href="#"><span class="icon"><i class="fas fa-pencil-alt"></i></span> Cambiar foto de perfil</a>
+                </div>
+            </div>
+        </div>-->
+    <!-- /.card -->
+    <!--</section>-->
+
+
+
+
+
+    <section class="col-lg-12 perfil-usuario">
+        @if (!esTurismo)
+        {
+            @Html.Partial("~/Views/Shared/_UserProfileTopBar.cshtml", Model)
+        }
+        <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link datos-personales active" id="datos-personales-tab" data-toggle="pill" href="#datos-personales" role="tab" aria-controls="datos-personales" aria-selected="true">Datos personales</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link resumen-academico" id="resumen-academico-tab" data-toggle="pill" href="#resumen-academico" role="tab" aria-controls="resumen-academico" aria-selected="false">Resumen académico</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="custom-tabs-one-tabContent">
+            <div class="tab-pane fade active show" id="datos-personales" role="tabpanel" aria-labelledby="datos-personales-tab">
+                <div class="content-form">
+                    <form id="perfil" action="ViewPerfil" method="post">
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(x => x.UsuarioId)
+                        <h2>Nombre usuario</h2>
+                        <div class="form-group">
+                            <h3>Datos personales</h3>
+                            <div class="row">
+                                <div class="d-flex col-sm-4">
+                                    <div class="form-group col-5">
+                                        <select name="Usuario.TipoDocumento" class="tipoDoc form-control form-control-select form-select">
+                                            @if (Model.Usuario.TipoDocumento == null || Model.Usuario.TipoDocumento == 0)
+                                            {
+                                                <option value="" selected disabled>Documento</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="">Documento</option>
+                                            }
+                                            @if (Model.Usuario.TipoDocumento == 1)
+                                            {
+                                                <option value="1" selected>DNI</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="1">DNI</option>
+                                            }
+                                            @if (Model.Usuario.TipoDocumento == 2)
+                                            {
+                                                <option value="2" selected>CE</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="2">CE</option>
+                                            }
+                                            @if (Model.Usuario.TipoDocumento == 3)
+                                            {
+                                                <option value="3" selected>Pasaporte</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="3">Pasaporte</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-7">
+                                        <input type="text" class="form-control" name="dni" placeholder="Número de documento" value="@Model.Usuario.DNI" minlength="8" maxlength="9">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+
+                                        @Html.TextBoxFor(x => x.Usuario.Nombre, new { @class = "form-control", @placeholder = "Nombre(s)" })
+                                        @Html.ValidationMessageFor(x => x.Usuario.Nombre)
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+
+                                        @Html.TextBoxFor(x => x.Usuario.Apellido, new { @class = "form-control", @placeholder = "Apellidos" })
+                                        @Html.ValidationMessageFor(x => x.Usuario.Apellido)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+
+                                        @Html.TextBoxFor(x => x.Usuario.Email, new { @class = "form-control bg", @disabled = "disabled" })
+                                        @Html.ValidationMessageFor(x => x.Usuario.Email)
+                                    </div>
+                                </div>
+                                @*<div class="col-sm-4">
+                                    <div class="form-group">
+                                        <input type="email" class="form-control" name="emailConf" placeholder="Confirmar correo eletrónico">
+                                    </div>
+                                </div>*@
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        @*<input type="password" class="form-control" name="password" placeholder="Contraseña">*@
+                                        @Html.PasswordFor(x => x.Usuario.Password, new { @class = "form-control", @placeholder = "Contraseña" })
+                                        @Html.ValidationMessageFor(x => x.Usuario.Password)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        @*<select name="departamento" class="departamento form-control form-control-select form-select">
+                                            <option value="" selected disabled>Departamento</option>
+                                            <option value="1">Lima</option>
+                                            <option value="2">Arequipa</option>
+                                            <option value="3">Cusco</option>
+                                        </select>*@
+                                        @Html.DropDownListFor(x => x.DepartamentoId, new SelectList(Model.LstDepartamento, "DepartamentoId", "Nombre"), "Departamento", new { @class = "departamento form-control form-control-select form-select", data_type = "cascade-dropdown-list", data_source_url = Url.Action("GetProvinciasPorDepartamento", "Json"), data_filter = "DepartamentoId", data_update_target = "#ProvinciaId" })
+                                        @Html.ValidationMessageFor(x => x.DepartamentoId)
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        @*<select name="provincia" class="provincia form-control form-control-select form-select">
+                                            <option value="" selected disabled>Provincia</option>
+                                            <option value="1">Lima</option>
+                                            <option value="2">Arequipa</option>
+                                            <option value="3">Cusco</option>
+                                        </select>*@
+                                        @Html.DropDownListFor(x => x.ProvinciaId, new SelectList(Model.LstProvincia, "ProvinciaId", "Nombre"), "Provincia", new { @class = "provincia form-control form-control-select form-select", data_type = "cascade-dropdown-list", data_source_url = Url.Action("GetDistritoPorProvincia", "Json"), data_filter = "ProvinciaId", data_update_target = "#Usuario_DistritoId", data_value_member = "ProvinciaId", data_text_member = "Nombre" })
+                                        @Html.ValidationMessageFor(x => x.ProvinciaId)
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        @*<select name="distrito" class="distrito form-control form-control-select form-select">
+                                            <option value="" selected disabled>Distrito</option>
+                                            <option value="1">Lima</option>
+                                            <option value="2">Arequipa</option>
+                                            <option value="3">Cusco</option>
+                                        </select>*@
+                                        @Html.DropDownListFor(x => x.Usuario.DistritoId, new SelectList(Model.LstDistrito, "DistritoId", "Nombre"), "Distrito", new { @class = "distrito form-control form-control-select form-select", data_value_member = "DistritoId", data_text_member = "Nombre" })
+                                        @Html.ValidationMessageFor(x => x.Usuario.DistritoId)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="direccion" placeholder="Dirección" value="">
+                                        @*@Html.TextBoxFor(x => x.Usuario., new { @class = "form-control bg" })
+                                        @Html.ValidationMessageFor(x => x.Usuario.Nombre)*@
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="Usuario.Telefono" placeholder="Teléfono" value="@Model.Usuario.Telefono" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="9">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        @*<select name="nacionalidad" class="nacionalidad form-control form-control-select form-select">
+                                            <option value="" selected disabled>Nacionalidad</option>
+                                            <option value="1">Lima</option>
+                                            <option value="2">Arequipa</option>
+                                            <option value="3">Cusco</option>
+                                        </select>*@
+
+                                        @Html.DropDownListFor(x => x.Usuario.NacionalidadId, new SelectList(Model.LstNacionalidad, "ParametroId", "Descripcion"), "Nacionalidad", new { @class = "nacionalidad form-control form-control-select form-select" })
+                                        @Html.ValidationMessageFor(x => x.Usuario.NacionalidadId)
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        @*<select name="genero" class="genero form-control form-control-select form-select">
+                                            <option value="" selected disabled>Género</option>
+                                            <option value="1">Lima</option>
+                                            <option value="2">Arequipa</option>
+                                            <option value="3">Cusco</option>
+                                        </select>*@
+
+                                        @Html.DropDownListFor(x => x.Usuario.SexoId, new SelectList(Model.LstSexo, "ParametroId", "Descripcion"), "Género", new { @class = "genero form-control form-control-select form-select" })
+                                        @Html.ValidationMessageFor(x => x.Usuario.SexoId)
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        @*<select name="sector" class="sector form-control form-control-select form-select">
+                                            <option value="" selected disabled>Sector al que pertenece</option>
+                                            <option value="1">Lima</option>
+                                            <option value="2">Arequipa</option>
+                                            <option value="3">Cusco</option>
+                                        </select>*@
+                                        @Html.DropDownListFor(x => Model.Sector, new SelectList(Model.LstSector, "SectorId", "Descripcion"), "Sector a la que pertenece", new { @id = "cbosector", @class = "sector form-control form-control-select form-select" })
+                                        @Html.ValidationMessageFor(x => Model.Sector)
+
+                                    </div>
+                                </div>
+                                @if (esTurismo)
+                                {
+                                    <div class="col-md-4">
+
+                                        <div class="d-inline-block">
+                                            @if (Model.Usuario.Avatar != null && Model.Usuario.Avatar.Length > 0)
+                                            {
+                                                <a href="@Url.Content(Model.Usuario.Avatar)" target="_blank" class="btn btn-promperu-default btn-xs"><i class="fa fa-eye"></i> Ver archivo</a>
+                                            }
+                                        </div>
+                                        @Html.TextBoxFor(x => x.Usuario.Avatar, new { @class = "d-none" })
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="upload-2" style="display:block;" />
+                                            <label class="custom-file-label" for="upload">- Avatar -</label>
+                                        </div>
+                                        <div id="upload-message-2"></div>
+                                        <p style="margin: 10px 0 0 0;"><small>Tamaño recomendado: 500 x 500px (.png / .jpg)</small></p>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+
+                        @if (Model.Usuario.EmpresaId != null && Model.Usuario.EmpresaId != 0)
+                        {
+                            <div id="datosEmpresa" class="form-group">
+                                <h3>Datos de la empresa</h3>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            @*<input id="ruc" type="text" class="form-control" name="ruc" placeholder="RUC de la empresa">*@
+                                            @Html.TextBoxFor(x => x.Usuario.Empresa.RUC, new { @class = "form-control", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.Empresa.RUC)
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            @*<input id="razonSocial" type="text" class="form-control" name="razonSocial" placeholder="Razón social">*@
+                                            @Html.TextBoxFor(x => x.Usuario.Empresa.RazonSocial, new { @class = "form-control", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.Empresa.RazonSocial)
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            @*<input id="ciiu" type="text" class="form-control" name="ciiu" placeholder="Código (CIIU) de la empresa">*@
+                                            @Html.TextBoxFor(x => x.Usuario.Empresa.CIIU, new { @class = "form-control", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.Empresa.CIIU)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            @*<input type="text" class="form-control" name="tipoProducto" placeholder="Producto de la empresa">*@
+                                            @Html.TextBoxFor(x => x.Usuario.Empresa.Productos, new { @class = "form-control", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.Empresa.Productos)
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            @*<input type="email" class="form-control" name="emailEmp" placeholder="E-mail de la empresa">*@
+                                            @Html.TextBoxFor(x => x.Usuario.Empresa.Email, new { @class = "form-control", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.Empresa.Email)
+                                        </div>
+                                    </div>
+                                    <!--<div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="icheck-primary">-->
+                                    @*<input type="checkbox" id="tyc" name="tyc" data-bs-toggle="modal" data-bs-target="#modal-tyc">*@
+                                    <!--<input type="checkbox" name="Usuario.AutoMatriculaHabilitada" disabled="disabled" value="true" id="Usuario.AutoMatriculaHabilitada" data-bs-toggle="modal" data-bs-target="#modal-tyc">
+                                            <label for="tyc">
+                                                Auto matricula
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>-->
+                                </div>
+                            </div>
+                        }
+
+                        <div class="form-group last-group">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <div class="tab-pane fade" id="resumen-academico" role="tabpanel" aria-labelledby="resumen-academico-tab">
+                <div class="content-resumen">
+                    <h2>Resumen académico</h2>
+                    <div class="leyenda">
+                        <ul>
+                            <li><span class="icon aprobado"></span> Aprobado</li>
+                            <li><span class="icon completado"></span> Completado</li>
+                        </ul>
+                    </div>
+                    <section class="col-lg-12 detalle-evaluacion">
+                        <div class="row content-nav-evaluacion">
+                            <ul class="col-lg-3 col-sm-12 tabs-navigation nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+
+                                @foreach (var cursoOnline in Model.LstMatriculaCursoOnline.Select(x => x.CursoOnline))
+                                {
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link @(Model.LstMatriculaCursoOnline.Select(x => x.CursoOnline).First().CursoOnlineId == cursoOnline.CursoOnlineId ? "active" : String.Empty)" id="v-item-@(cursoOnline.CursoOnlineId)-tab" data-bs-toggle="pill" data-bs-target="#v-item-@(cursoOnline.CursoOnlineId)" type="button" role="tab" aria-controls="v-item-@(cursoOnline.CursoOnlineId)" aria-selected="true">
+                                            <span> @cursoOnline.Nombre</span> <i class="right fas fa-angle-right"></i>
+
+                                            @if (Model.LstMatriculaCursoOnline.OrderByDescending(x => x.MatriculaCursoOnlineId).FirstOrDefault(x => x.UsuarioId == Model.UsuarioId && x.CursoOnlineId == cursoOnline.CursoOnlineId).Estado == ConstantHelpers.ESTADO_MATRICULA.COMPLETADO)
+                                            {
+                                                <span class="icon completado"></span> <span> @cursoOnline.Nombre</span> <i class="right fas fa-angle-right"></i>
+
+                                            }
+                                            @if (Model.LstMatriculaCursoOnline.OrderByDescending(x => x.MatriculaCursoOnlineId).FirstOrDefault(x => x.UsuarioId == Model.UsuarioId && x.CursoOnlineId == cursoOnline.CursoOnlineId).Estado == ConstantHelpers.ESTADO_MATRICULA.APROBADO)
+                                            {
+
+                                                <span class="icon aprobado"></span> <span> @cursoOnline.Nombre</span> <i class="right fas fa-angle-right"></i>
+                                            }
+
+                                        </button>
+                                    </li>
+
+
+                                }
+
+
+                            </ul>
+                            <div class="select-nav-evaluacion">
+                                <select name="selectNavigation" id="selectNavigation" class="selectNavigation">
+                                    <option value="item-1">Comercio electrónico</option>
+                                    <option value="item-2">Contacto comercial</option>
+                                    <option value="item-3">Capacidad exportadora</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-9 col-sm-12 tab-content" id="v-pills-tabContent">
+
+
+                                @foreach (var cursoOnline in Model.LstMatriculaCursoOnline.Select(x => x.CursoOnline))
+                                {
+                                    Int32? matriculaAprobadaId = null;
+
+
+                                    <div class="tab-pane fade active @(Model.LstMatriculaCursoOnline.Select(x => x.CursoOnline).First().CursoOnlineId == cursoOnline.CursoOnlineId ? "show" : String.Empty)" id="v-item-@(cursoOnline.CursoOnlineId)" role="tabpanel" aria-labelledby="v-item-@(cursoOnline.CursoOnlineId)-tab">
+                                        <div class="card bg-gradient-info">
+                                            <div class="card-header border-0 ui-sortable-handle" style="cursor: move;">
+                                                <h2>Matriculas</h2>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body" style="display: block;">
+                                                <div class="row">
+                                                    <section class="col-lg-12 table-content">
+                                                        <div class="container-fluid container-table-responsive">
+                                                            <div class="row table-responsive">
+
+                                                                @{ List<MatriculaCursoOnline> matriculasCursoOnline = Model.LstMatriculaCursoOnline.Where(x => x.CursoOnlineId == cursoOnline.CursoOnlineId).ToList(); }
+
+                                                                @if (matriculasCursoOnline.Count() > 0)
+                                                                {
+                                                                    <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list text-nowrap">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th align="center">Número</th>
+                                                                                <th align="center">Fecha Matrícula</th>
+                                                                                <th align="center">Fecha Aprobado</th>
+                                                                                <th align="center">Porcentaje Avance</th>
+                                                                                <th align="center">Nota</th>
+                                                                                <th align="center">Estado</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+
+                                                                            @{var i = 0;}
+                                                                            @foreach (MatriculaCursoOnline matriculaCursoOnline in matriculasCursoOnline)
+                                                                            {
+                                                                                i++;
+                                                                                if (matriculaCursoOnline.FechaAprobado.HasValue)
+                                                                                {
+                                                                                    matriculaAprobadaId = matriculaCursoOnline.MatriculaCursoOnlineId;
+                                                                                }
+
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        @i
+                                                                                    </td>
+                                                                                    <td>@matriculaCursoOnline.FechaMatricula.ToShortDateString() </td>
+                                                                                    <td>@(matriculaCursoOnline.FechaAprobado.HasValue ? matriculaCursoOnline.FechaAprobado.Value.ToShortDateString() : "-")</td>
+                                                                                    <td><span>@matriculaCursoOnline.PorcentajeAvance</span></td>
+                                                                                    <td>@matriculaCursoOnline.Nota</td>
+                                                                                    <td align="center">
+                                                                                        <span class="label-estado @(ConstantHelpers.TextoColorEstado(matriculaCursoOnline.Estado))">
+                                                                                            @ConstantHelpers.TextoEstado(matriculaCursoOnline.Estado)
+                                                                                        </span>
+                                                                                    </td>
+                                                                                </tr>
+
+                                                                            }
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="alert alert-info">
+                                                                        <i class="fa fa-exclamation-triangle"></i>&nbsp;No se encontraron matrículas.
+                                                                    </div>}
+
+                                                            </div><!-- /.row -->
+                                                        </div><!-- /.container-fluid -->
+                                                    </section>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card bg-gradient-info">
+                                            <div class="card-header border-0 ui-sortable-handle" style="cursor: move;">
+                                                <h2>Evaluaciones</h2>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body" style="display: block;">
+                                                <div class="row">
+                                                    <section class="col-lg-12 table-content">
+                                                        <div class="container-fluid container-table-responsive">
+                                                            <div class="row table-responsive">
+
+                                                                @{ var evaluacionesCursoOnline = Model.LstEvaluacionCursoOnline.Where(x => x.MatriculaCursoOnline.CursoOnlineId == cursoOnline.CursoOnlineId).ToList(); }
+                                                                @if (evaluacionesCursoOnline.Count() > 0)
+                                                                {
+                                                                    <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list text-nowrap">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th align="center">Número</th>
+                                                                                <th align="center">Inicio</th>
+                                                                                <th align="center">Fin</th>
+                                                                                <th align="center">Puntaje obtenido/total</th>
+                                                                                <th align="center">Estado</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @{var i = 0;}
+                                                                            @foreach (var evaluacion in evaluacionesCursoOnline)
+                                                                            {
+                                                                                i++;
+                                                                                /*var porcentajeObtenido = ((evaluacion.PuntajeObtenido) / (evaluacion.PuntajeTotal)).ToDecimal();*/
+
+                                                                                decimal porcentajeObtenido = 0;
+
+                                                                                if (evaluacion.PuntajeObtenido > 0 && evaluacion.PuntajeObtenido != null)
+                                                                                {
+                                                                                    porcentajeObtenido = Decimal.Round((decimal)(evaluacion.PuntajeObtenido) / (evaluacion.PuntajeTotal) * 100, 2);
+                                                                                }
+
+                                                                                var Aprobado = porcentajeObtenido >= evaluacion.PorcentajeAprobacion;
+
+
+
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        @i
+                                                                                    </td>
+                                                                                    <td>@evaluacion.FechaInicio </td>
+                                                                                    <td>@(evaluacion.FechaFin != null ? evaluacion.FechaFin + "" : "--")</td>
+                                                                                    <td><span>@porcentajeObtenido</span></td>
+                                                                                    <td align="center">
+                                                                                        <span class="label-estado @( Aprobado ? "aprobado" : "desaprobado")">
+                                                                                            @( Aprobado ? "Aprobado" : "Desaprobado")
+                                                                                        </span>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+
+
+
+
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="alert alert-info">
+                                                                        <i class="fa fa-exclamation-triangle"></i>&nbsp;No se encontraron evaluaciones.
+                                                                    </div>}
+                                                            </div><!-- /.row -->
+                                                        </div><!-- /.container-fluid -->
+                                                    </section>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                }
+
+
+
+
+
+
+                                <!--<div class="tab-pane fade" id="v-item-2" role="tabpanel" aria-labelledby="v-item-2-tab">
+                                <div class="card bg-gradient-info">
+                                    <div class="card-header border-0 ui-sortable-handle" style="cursor: move;">
+                                        <h2>Matriculas</h2>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body" style="display: block;">
+                                        <div class="row">
+                                            <section class="col-lg-12 table-content">
+                                                <div class="container-fluid container-table-responsive">
+                                                    <div class="row table-responsive">
+                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list text-nowrap">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th align="center">Número</th>
+                                                                    <th align="center">Fecha Matrícula</th>
+                                                                    <th align="center">Fecha Aprobado</th>
+                                                                    <th align="center">Puntaje Avance</th>
+                                                                    <th align="center">Nota</th>
+                                                                    <th align="center">Estado</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        1
+                                                                    </td>
+                                                                    <td>10 Julio 2021</td>
+                                                                    <td>--</td>
+                                                                    <td><span>29.00</span></td>
+                                                                    <td>--</td>
+                                                                    <td align="center">
+                                                                        <span class="label-estado pendiente">
+                                                                            Pendiente
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>-->
+                                <!-- /.row -->
+                                <!--</div>--><!-- /.container-fluid -->
+                                <!--</section>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card bg-gradient-info">
+                                <div class="card-header border-0 ui-sortable-handle" style="cursor: move;">
+                                    <h2>Evaluaciones</h2>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body" style="display: block;">
+                                    <div class="row">
+                                        <section class="col-lg-12 table-content">
+                                            <div class="container-fluid container-table-responsive">
+                                                <div class="row table-responsive">
+                                                    <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list text-nowrap">
+                                                        <thead>
+                                                            <tr>
+                                                                <th align="center">Número</th>
+                                                                <th align="center">Inicio</th>
+                                                                <th align="center">Fin</th>
+                                                                <th align="center">Puntaje obtenido/total</th>
+                                                                <th align="center">Estado</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    1
+                                                                </td>
+                                                                <td>15 Octubre 2021 <br>05:25:45 p. m. </td>
+                                                                <td>--</td>
+                                                                <td><span>0</span></td>
+                                                                <td align="center">
+                                                                    <span class="label-estado desaprobado">
+                                                                        Desaprobado
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>-->
+                                <!-- /.row -->
+                                <!--</div>--><!-- /.container-fluid -->
+                                <!--</section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="v-item-3" role="tabpanel" aria-labelledby="v-item-3-tab">
+                                <div class="card bg-gradient-info">
+                                    <div class="card-header border-0 ui-sortable-handle" style="cursor: move;">
+                                        <h2>Matriculas</h2>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body" style="display: block;">
+                                        <div class="row">
+                                            <section class="col-lg-12 table-content">
+                                                <div class="container-fluid container-table-responsive">
+                                                    <div class="row table-responsive">
+                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list text-nowrap">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th align="center">Número</th>
+                                                                    <th align="center">Fecha Matrícula</th>
+                                                                    <th align="center">Fecha Aprobado</th>
+                                                                    <th align="center">Puntaje Avance</th>
+                                                                    <th align="center">Nota</th>
+                                                                    <th align="center">Estado</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        1
+                                                                    </td>
+                                                                    <td>10 Julio 2021</td>
+                                                                    <td>--</td>
+                                                                    <td><span>29.00</span></td>
+                                                                    <td>--</td>
+                                                                    <td align="center">
+                                                                        <span class="label-estado pendiente">
+                                                                            Pendiente
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>-->
+                                <!-- /.row -->
+                                <!--</div>--><!-- /.container-fluid -->
+                                <!--</section>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card bg-gradient-info">
+                                <div class="card-header border-0 ui-sortable-handle" style="cursor: move;">
+                                    <h2>Evaluaciones</h2>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body" style="display: block;">
+                                    <div class="row">
+                                        <section class="col-lg-12 table-content">
+                                            <div class="container-fluid container-table-responsive">
+                                                <div class="row table-responsive">
+                                                    <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list text-nowrap">
+                                                        <thead>
+                                                            <tr>
+                                                                <th align="center">Número</th>
+                                                                <th align="center">Inicio</th>
+                                                                <th align="center">Fin</th>
+                                                                <th align="center">Puntaje obtenido/total</th>
+                                                                <th align="center">Estado</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    1
+                                                                </td>
+                                                                <td>15 Octubre 2021 <br>05:25:45 p. m. </td>
+                                                                <td>--</td>
+                                                                <td><span>0</span></td>
+                                                                <td align="center">
+                                                                    <span class="label-estado desaprobado">
+                                                                        Desaprobado
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>-->
+                                <!-- /.row -->
+                                <!--</div>--><!-- /.container-fluid -->
+                                <!--</section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>-->
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+
+
+            </div>
+
+
+
+
+    </section>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/uploads.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#upload").on("change", function (e) {
+                upload_image($(this), "#Usuario_Empresa_Logo", "#upload-message")
+            });
+
+            $("#upload-2").on("change", function (e) {
+                upload_image($(this), "#Usuario_Avatar", "#upload-message-2")
+            });
+        })
+    </script>
+}

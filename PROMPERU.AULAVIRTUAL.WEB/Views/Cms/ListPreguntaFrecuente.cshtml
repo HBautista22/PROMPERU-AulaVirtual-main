@@ -1,0 +1,51 @@
+﻿@model IEnumerable<PROMPERU.AULAVIRTUAL.BE.CMS.CMS_PreguntaFrecuente>
+
+@{
+    ViewBag.Title = "Preguntas Frecuentes";
+}
+<div class="container-fluid container-fixed-lg">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2>Preguntas Frecuentes</h2>
+
+            <p>
+                @Html.ActionLink("Agregar", "AddEditPreguntaFrecuente")
+            </p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Pregunta
+                        </th>
+                        <th>
+                            Respuesta
+                        </th>
+                        <th>
+                            Publicado
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Pregunta)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Respuesta)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EsPublicado)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Editar", "AddEditPreguntaFrecuente", new { id = item.Id })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

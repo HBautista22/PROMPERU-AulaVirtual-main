@@ -1,0 +1,637 @@
+﻿/*Cursos disponibles*/
+
+.ar-1-1 {
+    position: relative;
+    width: 100%;
+    height: 245px;
+    overflow: hidden;
+}
+
+/**/
+
+/*AdministradorIndex*/
+.rectangle {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 0 20px 0 rgba(215, 222, 227, 0.39), 0 0 15px 0 rgba(51, 59, 69, 0.1);
+    width: auto;
+    max-width: 350px;
+    overflow: hidden;
+    max-height: 152px;
+}
+
+.alumnos {
+    color: #8493A8;
+    font-size: 30px;
+    font-weight: 300;
+    line-height: 36px;
+    text-transform: capitalize;
+    text-align: center;
+}
+
+.Cantidad {
+    color: #54617A;
+    font-size: 50px !important;
+    font-weight: 900 !important;
+    line-height: 60px !important;
+    text-align: center;
+}
+
+.fa-user:before {
+    color: #FB7C37;
+}
+
+
+.fa-graduation-cap:before {
+    color: #F55753 !important;
+}
+/*Fin*/
+
+/*SideBar*/
+
+.page-sidebar {
+    background-color: #E30614;
+}
+
+.page-sidebar .sidebar-menu .menu-items li .icon-thumbnail {
+    left: 23% !important;
+    background: none !important;
+    float: left !important;
+}
+
+.page-sidebar .sidebar-menu .menu-items > li ul.sub-menu > li .icon-thumbnail {
+    left: 5% !important;
+    background: none !important;
+    float: left !important;
+}
+
+.page-sidebar .sidebar-menu .menu-items li .icon-thumbnail > i {
+    font-size: 24px;
+}
+
+.page-sidebar .sidebar-menu .menu-items > li ul.sub-menu > li .icon-thumbnail > i{
+    font-size: 16px;
+}
+
+.page-sidebar .sidebar-menu .menu-items li.active > .icon-thumbnail{
+color: #fafafa !important;
+}
+
+    .page-sidebar .sidebar-menu .menu-items li.active > a {
+        color: #fafafa !important
+    }
+
+.page-sidebar .sidebar-header {
+    line-height: 57px;
+}
+
+/*body.fixed-header .header {
+    overflow: hidden;
+}*/
+
+.page-sidebar a:active, .page-sidebar a:hover, .page-sidebar button:active, .page-sidebar button:hover {
+    color: #fff;
+}
+
+.page-sidebar .sidebar-menu .menu-items > li > a > .title {
+    float: left;
+    white-space: nowrap;
+    font-family: 'breePeru_bold' !important;
+    text-overflow: ellipsis;
+    /*overflow: hidden;*/
+    width: 65%;
+}
+
+
+    .page-sidebar .sidebar-menu .menu-items > li.active {
+        color: #fafafa !important;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 19px;
+        opacity: 1 !important;
+    }
+
+    .page-sidebar .sidebar-menu .menu-items > li {
+        color: #fafafa !important;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 19px;
+        opacity: 0.5002092633928571;
+    }
+
+        .page-sidebar .sidebar-menu .menu-items > li:hover > a, .page-sidebar .sidebar-menu .menu-items li.open > a {
+            color: #fafafa !important;
+        }
+
+        .page-sidebar .sidebar-menu .menu-items > li ul.sub-menu {
+            background-color: #E30614 !important;
+        }
+
+    .page-sidebar .sidebar-menu .menu-items li:hover > .icon-thumbnail, .page-sidebar .sidebar-menu .menu-items li.open > .icon-thumbnail {
+        color: #fafafa !important;
+    }
+
+    .page-sidebar a:hover {
+        color: #fafafa !important;
+    }
+    .page-sidebar .sidebar-menu .menu-items li:hover > a {
+        color: #fafafa !important;
+    }
+    .page-sidebar .sidebar-menu .menu-items li > a {
+        color: #fafafa !important;
+    }
+
+    .page-sidebar [class*=bg-] {
+        color: #fafafa;
+    }
+
+.page-sidebar .sidebar-menu .menu-items > li ul.sub-menu {
+    padding: 0 0 10px;
+}
+
+    .page-sidebar .sidebar-menu .menu-items li.active:hover > a {
+        color: #fafafa !important;
+    }
+
+    .page-sidebar .sidebar-menu .menu-items li.active:hover > .icon-thumbnail {
+        color: #fafafa !important;
+    }
+
+    .page-sidebar .sidebar-menu .menu-items li > .icon-thumbnail {
+        color: #fafafa !important;
+    }
+
+.page-sidebar .sidebar-menu .menu-items > li ul.sub-menu {
+    padding: 0 27px 10px;
+}
+
+.fa-user_new:before {
+    content: "\f007";
+}
+
+/*Fin*/
+
+/*Bread Crums*/
+.breadcrumb > .active {
+    color: #E30614;
+}
+/*Fin*/
+
+/*Vista Usuarios Admin*/
+
+.usuarios {
+    color: #8493A8;
+    font-family: 'breePeru-Light' !important;
+    font-size: 35px !important;
+    font-weight: 300 !important;
+    line-height: 36px !important;
+    text-align: left;
+    text-transform: capitalize;
+}
+
+.rectangle-31 {
+    background-color: #FFFFFF;
+    border: 2px solid #EFF3F9;
+    border-radius: 8px;
+    width: auto;
+    height: 40px;
+}
+
+.buscar-usuario {
+    color: #54617A;
+    font-size: 14px !important;
+    font-weight: 300 !important;
+    line-height: 17px;
+    opacity: 0.50244140625 !important;
+}
+
+.btn-filtrar-usuario {
+    background-color: #E30614;
+    border-radius: 8px;
+    width: auto;
+    height: 40px;
+}
+
+.btn-filtrar-usuario:hover {
+    background-color: #E30614;
+    border-radius: 8px;
+    width: auto;
+    height: 40px;
+}
+
+.filtrar {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+}
+
+.filtrar:hover {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+}
+
+.panel.panel-default {
+    border: none !important;
+}
+
+.title-table {
+    color: #697B91 !important;
+    font-size: 12px !important;
+    font-family: 'breePeru_bold' !important;
+    font-weight: 500 !important;
+    line-height: 14px !important;
+}
+
+.text-table {
+    color: #54617A;
+    font-size: 14px !important;
+    font-weight: 400;
+    line-height: 17px !important;
+    text-align: left;
+}
+
+.text-table > a {
+    color: #54617A;
+    font-size: 14px !important;
+    font-weight: 400;
+    line-height: 17px !important;
+    text-align: left;
+}
+
+.base {
+    background-color: #ECEFF4;
+    border-radius: 8px;
+    width: 154px;
+    /*overflow: hidden;*/
+    height: 28px;
+}
+
+.base:hover {
+    background-color: #ECEFF4;
+    border-radius: 8px;
+    width: 154px;
+    height: 28px;
+}
+
+
+.estado-activo {
+    background-color: #10CFBD;
+    border-radius: 6px;
+    width: 75px;
+    height: 20px;
+}
+
+.estado-inactivo {
+    background-color: #F55753;
+    border-radius: 6px;
+    width: 75px;
+    height: 20px;
+}
+
+
+
+
+
+/*Fin*/
+
+/*Cursos Disponibles*/
+.label {
+    border-radius: 6px;
+}
+
+.Title-course-enable {
+    color: #FFFFFF;
+    font-size: 27px !important;
+    font-weight: 300 !important;
+    font-family: 'breePeru-Light' !important;
+}
+
+.text-course-enable {
+    color: #54617A;
+    font-size: 17px !important;
+    font-weight: 400 !important;
+    line-height: 17px !important;
+    text-align: left;
+}
+
+.btn-course-enable {
+    background-color: #E63528;
+    border-radius: 8px;
+    width: 154px;
+    height: 28px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 400;
+    overflow: hidden;
+    line-height: 17px;
+}
+
+.btn-course-enable:hover {
+    background-color: #E63528;
+    border-radius: 8px;
+    width: 154px;
+    height: 28px;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 400;
+    overflow: hidden;
+    line-height: 17px;
+}
+
+.text-btn-table {
+    color: #8493A8;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 18px;
+    text-align: left;
+}
+
+.text-btn-table-red {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 18px;
+    text-align: left;
+}
+
+.btn-search {
+    background-color: #FFFFFF;
+    border: 2px solid #EFF3F9;
+    border-radius: 5px;
+    width: 100%;
+    height: 40px;
+    color: #54617A;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 17px;
+}
+
+.icon-btn-search {
+    top: -28px;
+    position: relative;
+    left: 90%;
+}
+.text-btn-search {
+    color: #54617A;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 17px;
+    opacity: 0.4956752232142857;
+}
+
+.ck-r:before {
+    right: 0 !important;
+    left: auto !important;
+}
+
+.ck-r:after {
+    right: 8px !important;
+    color: #E30614 !important;
+    left: auto !important;
+}
+
+.checkbox.check-info input[type=checkbox]:checked + label:before {
+    border-color: #fff !important;
+}
+
+.checkbox.check-info input[type=checkbox]:checked + label:after {
+    color: #E30614 !important;
+    border-color: #fff !important;
+}
+
+.btn-guardar-matricula {
+    background-color: #10CFBD;
+    border-radius: 8px;
+    width: 154px;
+    height: 28px;
+}
+
+    .btn-guardar-matricula:hover {
+        background-color: #10CFBD;
+        border-radius: 8px;
+        width: 154px;
+        height: 28px;
+    }
+
+.btn-cancelar {
+    background-color: #E63528;
+    border-radius: 8px;
+    width: 154px;
+    height: 28px;
+}
+
+.btn-cancelar:hover {
+    background-color: #E63528;
+    border-radius: 8px;
+    width: 154px;
+    height: 28px;
+}
+
+.text-btn-generico {
+    color: #FFFFFF;
+    font-size: 14px;
+    overflow: hidden;
+    font-weight: 400;
+    line-height: 17px;
+}
+
+.text-btn-generico:hover {
+    color: #FFFFFF;
+    font-size: 14px;
+    overflow: hidden;
+    font-weight: 400;
+    line-height: 17px;
+}
+/*Fin*/
+
+/*REPORTE HISTORICO DE ALUMNOS*/
+.btn-report-descargar {
+    background-color: #10CFBD;
+    border-radius: 8px;
+    width: 156px;
+    height: 40px;
+}
+
+.text-btn-report-descargar {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 17px;
+}
+
+/*FIN*/
+
+/*Agrear Categoria*/
+
+.panel-add-categoria {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 0 25px 0 rgba(215, 222, 227, 0.39), 0 3px 15px 0 rgba(51, 59, 69, 0.1);
+    width: 788px;
+    height: auto;
+}
+
+.bg {
+    background-color: #FFFFFF;
+    border: 1px solid #EBEDF4;
+    border-radius: 5px;
+    max-width: 349px;
+    height: 51px;
+}
+
+.text-add-categoria {
+    color: #8493A8;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    line-height: 14px !important;
+    opacity: 1 !important;
+    text-transform: none !important;
+}
+
+/*Fin*/
+
+/*panel gris*/
+.jumbotron {
+    background-color: #eff2f7 !important;
+}
+
+.fondo-generico {
+    background-color: #FFFFFF !important;
+    border-radius: 8px;
+    box-shadow: 0 0 25px 0 rgba(215, 222, 227, 0.39), 0 3px 15px 0 rgba(51, 59, 69, 0.1);
+    width: 94%;
+    height: auto;
+}
+
+body {
+    background-color: #eff2f7 !important;
+}
+
+
+.breadcrumb {
+    background-color: #eff2f7 !important;
+}
+
+body.dashboard, body.dashboard .page-container {
+    background-color: #eff2f7 !important;
+}
+
+body.mobile .sidebar-menu {
+    overflow: auto !important;
+}
+/**/
+
+/*Responsive Table*/
+
+@media screen and (max-width: 1439px) {
+    .nav-tabs.nav-tabs-left {
+        float: none;
+    }
+}
+/*Fin*/
+@media screen and (max-width: 850px) {
+
+    .page-sidebar .sidebar-menu .menu-items li .icon-thumbnail {
+        left: 15% !important;
+        background: none !important;
+        float: left !important;
+    }
+
+    .Ocultar {
+        display: block !important;
+    }
+
+}
+    /*Reponsive Tabs*/
+
+    @media screen and (max-width: 1627px) {
+        .table-responsive {
+            width: 100%;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            -ms-overflow-style: -ms-autohiding-scrollbar;
+            border: 1px solid #ddd;
+        }
+    }
+    /*Fin*/
+    /*Iconos Page*/
+
+    .fa-cursosdisponiblesDashbord:before {
+        content: url(../img/icons/cursosdisponiblesDashbord.svg);
+    }
+
+
+    .fa-CheckDashbord:before {
+        content: url(../img/icons/CheckDashbord.svg);
+    }
+
+    .fa-MisCursosDashbord:before {
+        content: url(../img/icons/MisCursosDashbord.svg);
+    }
+
+    .fa-UsuariosActivosDashbord:before {
+        content: url(../img/icons/UsuariosActivosDashbord.svg);
+    }
+
+
+    .fa-MatriculasDashbord:before {
+        content: url(../img/icons/MatriculasDashbord.svg);
+    }
+
+
+    /*Fin*/
+
+    /*Button*/
+
+
+    /*.btn-promperu-White {
+        border: 3px solid #FFFFFF !important;
+        border-radius: 5px !important;
+        width: 120px !important;
+        height: 41px !important;
+        color: #FFFFFF !important;
+        padding-top: 8px !important;
+        font-size: 16px !important;
+        background-color: transparent;
+        overflow: inherit;
+        font-weight: 400 !important;
+        letter-spacing: 1px !important;
+        line-height: 19px !important;
+        text-align: center !important;
+    }*/
+
+.btn-promperu-White {
+    border-radius: 5px !important;
+    border: 3px solid #E63528 !important;
+    background-color: #E63528;
+    width: 120px !important;
+    height: 41px !important;
+    color: #FFFFFF !important;
+    padding-top: 8px !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    letter-spacing: 1px !important;
+    line-height: 19px !important;
+    text-align: center !important;
+}
+
+        .btn-promperu-White:hover {
+            border-radius: 5px !important;
+            border: 3px solid #E63528 !important;
+            background-color: #E63528;
+            width: 120px !important;
+            height: 41px !important;
+            color: #FFFFFF !important;
+            padding-top: 8px !important;
+            font-size: 16px !important;
+            font-weight: 400 !important;
+            letter-spacing: 1px !important;
+            line-height: 19px !important;
+            text-align: center !important;
+        }
+    /*Fin*/

@@ -1,0 +1,112 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ViewCertificadoViewModel
+@using System.Configuration;
+
+@{
+    ViewBag.Title = "ViewCertificadoOnlineNew";
+    var esTursmo = Convert.ToBoolean(ConfigurationManager.AppSettings["EsTurismo"].ToString());
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+    ViewBag.SubSeccion = "ViewCertificadoOnline"; }
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+            <li class="breadcrumb-item active">Mis constancias</li>
+        </ol>
+    </div>
+    <div class="col-sm-6">
+        <h2 class="m-0">Mis constancias</h2>
+    </div>
+}
+<div class="row mb-2">
+    <section class="col-lg-12">
+        <div class="card">
+            <div class="card-body card-gris">
+                <form id="form-filtros" action="" class="form-filtros">
+                    <div class="form-group">
+                        @Html.HiddenFor(x => x.UsuarioId)
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="search">Buscar Curso</label>
+                                    @*<input id="search" type="search" class="form-control" name="search" placeholder="Buscar...">*@
+                                    @Html.TextBoxFor(x => x.CadenaBuscar, new { @class = "form-control", @placeholder = "Buscar..", @autocomplete = "off" })
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+
+                                <input type="submit" class="btn btn-primary" style="margin-top: 30px" value="Filtrar">
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.card -->
+    </section>
+    <section class="col-lg-12 table-content">
+        <div class="container-fluid">
+            <div class="row">
+                <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list">
+                    <thead>
+                        <tr>
+                            <th align="center" width="20%">Estado</th>
+                            <th align="center" width="40%">Curso </th>
+                            <th align="center" width="20%"></th>
+                            <th align="center" width="20%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.LstMatriculaCursoOnline)
+                        {
+
+                            Boolean puedeDescargarCertificado = false;
+                            String Estado = ConstantHelpers.ESTADO_MATRICULA.PENDIENTE;
+
+                            if (item.PorcentajeAvance == 100)
+                            {
+                                Estado = ConstantHelpers.ESTADO_MATRICULA.COMPLETADO;
+                            }
+
+                            if (item.PorcentajeObtenido >= 70)
+                            {
+                                puedeDescargarCertificado = true;
+                            }
+
+
+                            <tr>
+                                <td align="center">
+                                    <span class="label-estado @ConstantHelpers.TextoColorEstado(Estado)">
+                                        @ConstantHelpers.TextoEstado(Estado)
+                                    </span>
+                                </td>
+                                <td colspan="3">
+                                    <div class="content-constancia">
+                                        <div class="title-curso">
+                                            <p>@item.Nombre</p>
+                                        </div>
+                                        <div class="opciones-constancias">
+                                            @*<a href="#" target="_blank" class="accion ver"><span class="icon"></span> Ver</a>*@
+                                            @if (puedeDescargarCertificado)
+                                            {
+                                                if (esTursmo)
+                                                {
+                                                    <a href="@(puedeDescargarCertificado ? Url.Action("DownloadCertificadoTurismoAlumno", "Document", new { CursoOnlineId = item.CursoOnlineId, UsuarioId = Model.UsuarioId }) : "#")" target="_blank" dowload class="accion descargar"><span class="icon"></span> Descargar</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@(puedeDescargarCertificado ? Url.Action("DownloadCertificadoAlumno", "Document", new { CursoOnlineMaestroId = item.CursoOnlineMaestroId, UsuarioId = Model.UsuarioId }) : "#")" target="_blank" dowload class="accion descargar"><span class="icon"></span> Descargar</a>
+                                                }                                          
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+</div>

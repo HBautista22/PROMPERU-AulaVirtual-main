@@ -1,0 +1,108 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ViewCertificadoViewModel
+
+@{
+    ViewBag.Title = "Mis Certificados";
+    ViewBag.Icon = "certificate";
+    ViewBag.Seccion = "MisCertificaciones";
+}
+
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListUsuario", "User")">Usuarios</a></li>
+}
+
+@section Jumbotron{
+    <div class="container-fluid container-lg sm-p-l-20 sm-p-r-20 full-height">
+        <h4 class="m-t-20 m-b-20 usuarios">@ViewBag.Title</h4>
+        <div class="inner full-height" style="transform: translateY(0px); opacity: 1;">
+
+            <form class="form row" method="post">
+
+                <div class="col-md-8 m-b-30">
+                    @Html.HiddenFor(x => x.UsuarioId)
+                    <div class="form-group form-group-default input-group transparent center-margin rectangle-31">
+                        @*@Html.LabelFor(x => x.CadenaBuscar, new { @class = "buscar-usuario" })*@
+                        @Html.TextBoxFor(x => x.CadenaBuscar, new { @class = "form-control input-group-addon text-left", @placeholder = "Buscar Curso", @autocomplete="off" })
+                        <span class="input-group-addon"><i class="pg-search"></i></span>
+                    </div>
+                </div>
+                <div class="col-md-4 m-b-30">
+                    <button type="submit" class="btn btn-filtrar-usuario  btn-lg m-t-5 filtrar">&nbsp;FILTRAR</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+}
+
+<div class="container-fluid container-fixed-lg fondo-generico">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline no-footer" id="basicTable_wrapper">
+                    <table role="grid" class="table table-hover dataTable no-footer" id="basicTable">
+                        <thead>
+                            <tr>
+                                <th class="text-center title-table">Estado</th>
+                                <th class="text-center title-table">Curso Maestro</th>
+                                <th class="text-center title-table">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.LstMatriculaCursoOnline)
+                            {
+
+                                Boolean puedeDescargarCertificado = false;
+                                String Estado = ConstantHelpers.ESTADO_MATRICULA.PENDIENTE;
+
+                                if (item.PorcentajeAvance == 100)
+                                {
+                                    Estado = ConstantHelpers.ESTADO_MATRICULA.COMPLETADO;
+                                }
+
+                                if (item.PorcentajeObtenido >= 70)
+                                {
+                                    puedeDescargarCertificado = true;
+                                }
+
+                                //puedeDescargarCertificado = true;
+
+                                <tr>
+                                    <td class="text-center text-table"><span class="label label-@ConstantHelpers.TextoColorEstado(Estado)">@ConstantHelpers.TextoEstado(Estado)</span></td>
+                                    <td class="text-table"><a href="@Url.Action("ListCursoOnlineDetalleAlumno","Course",new {CursoOnlineId = item.CursoOnlineMaestroId })">@item.Nombre</a></td>
+                                    <td class="text-right text-table" style="width: 177px;">
+                                        <div class='base dropdown p-t-5 p-b-5 p-l-30 p-r-30'>
+                                            <a class="base dropdown-toggle m-r-10" data-toggle='dropdown' href="#!">Opciones</a>
+                                            <i class='fa fa-chevron-down dropdown-toggle' data-toggle='dropdown' style="cursor:pointer"></i>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    @if (puedeDescargarCertificado)
+                                                    {
+                                                        <a class="btn-xs" href="@(puedeDescargarCertificado ? Url.Action("DownloadCertificadoAlumno", "Document", new { CursoOnlineMaestroId = item.CursoOnlineMaestroId, UsuarioId = Model.UsuarioId }) : "#")"><i class="fa fa-download"></i>&nbsp;Descargar Certificado</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn-xs" @Data.ModalDialog(ConstantHelpers.MENSAJE_CURSO.CARTIFICADO, "Regresar", String.Empty)><i class="fa fa-lock"></i>&nbsp;Descargar Certificado</a>
+                                                    }
+                                                    @*@if (Session.GetRol() == AppRol.Administrador && item.Estado.Equals(ConstantHelpers.ESTADO_MATRICULA.PENDIENTE))
+                                                    {
+                                                        <a class="btn-xs" href="@Url.Action("DisableMatricula", new { MatriculaCursoOnlineId = item.MatriculaCursoOnlineId })"><i class="fa fa-times"></i>&nbsp;Desactivar Matrícula</a>
+                                                    }*@
+                                                </li>
+                                                 @*<li>
+                                                    <a class="m-l-10 btn-xs" href="@Url.Action("ViewHistorialEvaluacion", "Evaluation", new { MatriculaCursoOnlineId = item.MatriculaCursoOnlineId })"><i class="fa fa-search"></i>&nbsp;Ver Evaluaciones</a>
+                                                </li>*@
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model.LstMatriculaCursoOnline, page => Url.Action("HistoryMatriculaCursoOnline", new { p = page, CadenaBuscar = Model.CadenaBuscar, UsuarioId = Model.UsuarioId }), ConstantHelpers.Bootstrap3Pager)
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

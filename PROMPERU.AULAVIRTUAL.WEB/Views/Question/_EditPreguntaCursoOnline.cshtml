@@ -1,0 +1,391 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Question._EditPreguntaCursoOnlineViewModel
+
+@{
+    Layout = ConstantHelpers.Layout.MODAL_LAYOUT_PATH;
+    ViewBag.ModalClass = "slide-right";
+    ViewBag.ModalDialogClass = "modal-lg";
+    ViewBag.Form = new ModalFormHelpers("_EditPreguntaCursoOnline", "Question", FormMethod.Post);
+    var esPreguntaNueva = !Model.PreguntaCursoOnlineId.HasValue;
+    var tipoPregunta = esPreguntaNueva ? ConstantHelpers.TIPO_PREGUNTA.VERDADERO_FALSO : Model.Tipo;
+    ViewBag.GUID = ViewBag.GUID ?? Guid.NewGuid().ToString();
+    var numRespuestas = Model.NumRespuestas;
+}
+
+<style>
+    .checkbox label:before {
+        top: 9.5px;
+    }
+
+    .radio label:before {
+        bottom: 8.5px;
+    }
+
+    .radio label {
+        width: 100%;
+    }
+
+    .checkbox.check-complete input[type=checkbox]:checked + label::after, .checkbox.check-danger input[type=checkbox]:checked + label::after, .checkbox.check-info input[type=checkbox]:checked + label::after, .checkbox.check-primary input[type=checkbox]:checked + label::after, .checkbox.check-success input[type=checkbox]:checked + label::after, .checkbox.check-warning input[type=checkbox]:checked + label::after {
+        margin-top: 9.5px;
+    }
+
+    span.input-group-addon.primary {
+        cursor: pointer;
+    }
+</style>
+
+<div class="panel panel-transparent">
+
+    <ul class="nav nav-tabs nav-tabs-linetriangle">
+
+        @if (esPreguntaNueva || tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.VERDADERO_FALSO)
+        {
+            <li class="@(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.VERDADERO_FALSO ? "active" : String.Empty)">
+                <a data-toggle="tab" href="#pnl-VOF"><span>Verdadero/falso</span></a>
+            </li>
+        }
+
+        @if (esPreguntaNueva || tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.SIMPLE)
+        {
+            <li class="@(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.SIMPLE ? "active" : String.Empty)">
+                <a data-toggle="tab" href="#pnl-SIM"><span>Respuesta única</span></a>
+            </li>
+        }
+        @if (esPreguntaNueva || tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.MULTIPLE)
+        {
+            <li class="@(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.MULTIPLE ? "active" : String.Empty)">
+                <a data-toggle="tab" href="#pnl-MUL"><span>Selección múltiple</span></a>
+            </li>
+        }
+        @if (esPreguntaNueva || tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.COMPLETAR)
+        {
+            <li class="@(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.COMPLETAR ? "active" : String.Empty)">
+                <a data-toggle="tab" href="#pnl-COM"><span>Completar espacios</span></a>
+            </li>
+        }
+        @if (esPreguntaNueva || tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.RELACIONAR)
+        {
+            <li class="@(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.RELACIONAR ? "active" : String.Empty)">
+                <a data-toggle="tab" href="#pnl-REL"><span>Relacionar</span></a>
+            </li>
+        }
+    </ul>
+
+
+    <div class="tab-content">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.PreguntaCursoOnlineId)
+        @Html.HiddenFor(x => x.UnidadOnlineId)
+        @Html.HiddenFor(x => x.Tipo)
+        @Html.HiddenFor(x => x.NumRespuestas)
+        @Html.HiddenFor(x => x.Estado)
+
+        @{
+            var orden = 0;
+            var codigoPregunta = "";
+            var codigoRespuesta = "";
+            var codigoPreguntaId = "0";
+        }
+        @if (Model.PreguntaCursoOnlineId.HasValue)
+        {
+            codigoPreguntaId = Model.PreguntaCursoOnlineId + "";
+
+        }
+
+        @if (esPreguntaNueva || tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.VERDADERO_FALSO)
+        {
+            codigoPregunta = "PRE-VOF-" + codigoPreguntaId;
+            <div class="tab-pane fade @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.VERDADERO_FALSO ? "in active" : String.Empty)" id="pnl-VOF">
+                <div class="row column-seperation">
+                    <div class="col-md-6">
+                        <h5>Pregunta: </h5>
+                        @Html.TextAreaFor(x => x.Texto, new { @Class = "form-control", rows = "15", @Name = "TXT-PRE-VOF-" + Model.PreguntaCursoOnlineId, id = "TXT-PRE-VOF-" + Model.PreguntaCursoOnlineId })
+                        @Html.ValidationMessageFor(x => x.Texto)
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Respuestas:</h5>
+                
+
+
+
+                        <div class="radio radio-primary row" data-pregunta="@codigoPregunta">
+                            @if (Model.PreguntaCursoOnlineId.HasValue)
+                            {
+                                foreach (var respuesta in Model.LstRespuestaCursoOnline)
+                                {
+                                    codigoRespuesta = "RES-VOF-" + codigoPreguntaId + "-" + respuesta.RespuestaCursoOnlineId;
+                    <input type="radio" name="@codigoPregunta" id="@codigoRespuesta" @(respuesta.EsSolucion ? "checked" : "") value="@respuesta.Texto" required>
+                                            <label for="@codigoRespuesta">
+                                                <input type="text" class="form-control" value="@respuesta.Texto" style="border: 0;background-color: transparent;color: #2C2C2C;cursor: auto;" disabled />
+                                            </label>
+                                                                    <br /> }
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        codigoRespuesta = "RES-VOF-";
+                                                                    <input type="radio" name="@(codigoPregunta)" id="@(codigoRespuesta + "0")" value="Verdadero">
+                                                                                        <label for="@(codigoRespuesta + "0")">
+                                                                                            <input type="text" class="form-control" value="Verdadero" style="border: 0; background-color: transparent; color: #2C2C2C; cursor: auto;" disabled />
+                                                                                        </label>
+                                                                                                            <br />
+                                                                                                                                <input type="radio" name="@(codigoPregunta)" id="@(codigoRespuesta + "1")" value="Falso">
+                                                                                                                                                    <label for="@(codigoRespuesta + "1")">
+                                                                                                                                                        <input type="text" class="form-control" value="Falso" style="border: 0; background-color: transparent; color: #2C2C2C; cursor: auto;" disabled />
+                                                                                                                                                    </label>
+                                                                                                                                                                        <br />}
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        }
+
+        @if (esPreguntaNueva || tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.SIMPLE)
+        {
+            codigoPregunta = "PRE-SIM-" + codigoPreguntaId;
+            <div class="tab-pane fade @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.SIMPLE ? "in active" : String.Empty)" id="pnl-SIM">
+                <div class="row column-seperation">
+                    <div class="col-md-6">
+                        <div class="pull-right" style="margin-top: 3px;">
+                            <a class="btn btn-course-enable btn-sm" data-button-add-respuesta="@codigoPregunta"><i class="fa fa-plus"></i>&nbsp;Añadir Respuesta</a>
+                        </div>
+                        <h5>Pregunta:</h5>
+                        @Html.TextAreaFor(x => x.Texto, new { @Class = "form-control", rows = "15", @Name = "TXT-PRE-SIM-" + Model.PreguntaCursoOnlineId, id = "TXT-PRE-SIM-" + Model.PreguntaCursoOnlineId })
+                        @Html.ValidationMessageFor(x => x.Texto)
+                        <br />
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Respuestas:</h5>
+                        <div class="radio radio-primary row" data-pregunta="@codigoPregunta">
+                            @if (Model.PreguntaCursoOnlineId.HasValue)
+                            {
+                                foreach (var respuesta in Model.LstRespuestaCursoOnline)
+                                {
+                                    orden++;
+                                    codigoRespuesta = "RES-SIM-" + codigoPreguntaId + "-" + respuesta.RespuestaCursoOnlineId;
+                                    <input type="radio" name="@codigoPregunta" id="@codigoRespuesta" value="@respuesta.RespuestaCursoOnlineId" @(respuesta.EsSolucion ? "checked" : "") required />
+                                    <label for="@codigoRespuesta">
+                                        &nbsp;
+                                        <input type="text" class="form-control" name="@("TXT-" + codigoRespuesta)" id="@( "TXT-" + codigoRespuesta)" value="@respuesta.Texto" required />
+                                    </label>
+                                    <br />
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (esPreguntaNueva || tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.MULTIPLE)
+        {
+            codigoPregunta = "PRE-MUL-" + codigoPreguntaId;
+            <div class="tab-pane fade @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.MULTIPLE ? "in active" : String.Empty)" id="pnl-MUL">
+                <div class="row column-seperation">
+                    <div class="col-md-6">
+                        <div class="pull-right" style="margin-top: 3px;">
+                            <a class="btn btn-course-enable btn-sm" data-button-add-respuesta="@codigoPregunta"><i class="fa fa-plus"></i>&nbsp;Añadir Respuesta</a>
+                        </div>
+                        <h5>Pregunta:</h5>
+                        @Html.TextAreaFor(x => x.Texto, new { @Class = "form-control", rows = "15", @Name = "TXT-PRE-MUL-" + Model.PreguntaCursoOnlineId, id = "TXT-PRE-MUL-" + Model.PreguntaCursoOnlineId })
+                        @Html.ValidationMessageFor(x => x.Texto)
+                        <br />
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Respuestas:</h5>
+                        <div class="checkbox check-primary" data-pregunta="@codigoPregunta">
+                            @if (Model.PreguntaCursoOnlineId.HasValue)
+                            {
+                                foreach (var respuesta in Model.LstRespuestaCursoOnline)
+                                {
+                                    orden++;
+                                    codigoRespuesta = "RES-MUL-" + codigoPreguntaId + "-" + respuesta.RespuestaCursoOnlineId;
+                                    <input type="checkbox" name="@codigoPregunta" id="@codigoRespuesta" value="@respuesta.RespuestaCursoOnlineId" @(respuesta.EsSolucion ? "checked" : "") required />
+                                    <label for="@codigoRespuesta" style="display: flex;">
+                                        &nbsp;
+                                        <input type="text" class="form-control" name="@("TXT-" + codigoRespuesta)" id="@( "TXT-" + codigoRespuesta)" value="@respuesta.Texto" required />
+                                    </label>
+                                    <br />
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (esPreguntaNueva || tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.COMPLETAR)
+        {
+            codigoPregunta = "PRE-COM-" + codigoPreguntaId;
+            <div class="tab-pane fade @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.COMPLETAR ? "in active" : String.Empty)" id="pnl-COM">
+                <div class="row column-seperation">
+                    <div class="col-md-6">
+                        <div class="pull-right" style="margin-top: 3px; min-height: 300px;">
+                            <a class="btn btn-course-enable btn-sm" data-button-add-respuesta="@codigoPregunta"><i class="fa fa-plus"></i>&nbsp;Añadir Respuesta</a>
+                        </div>
+                        <h5>Pregunta:</h5>
+                        @Html.TextAreaFor(x => x.Texto, new { @Class = "form-control complete", rows = "15", @Name = "TXT-PRE-COM-" + Model.PreguntaCursoOnlineId, id = "PRE-COM" + Model.PreguntaCursoOnlineId })
+                        @Html.ValidationMessageFor(x => x.Texto)
+                        <br />
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Respuestas:</h5>
+                        <div class="checkbox check-primary" data-pregunta="@codigoPregunta">
+                            @foreach (var respuesta in Model.LstRespuestaCursoOnline)
+                            {
+                                orden++;
+                                codigoRespuesta = "RES-COM-" + codigoPreguntaId + "-" + respuesta.RespuestaCursoOnlineId;
+                                <input type="text" class="form-control" name="@("TXT-" + codigoRespuesta)" id="@( "TXT-" + codigoRespuesta)" value="@respuesta.Texto" required />
+                                <br />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (esPreguntaNueva || tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.RELACIONAR)
+        {
+            codigoPregunta = "PRE-REL-" + codigoPreguntaId;
+            var Respuestas = Model.LstRespuestaCursoOnline.OrderBy(x => x.OrdenSolucion == null).ThenBy(x => x.OrdenSolucion);
+            <div class="tab-pane fade @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.RELACIONAR ? "in active" : String.Empty)" id="pnl-REL">
+                <div class="row column-seperation">
+                    <div class="col-md-12">
+                        <h5>Pregunta:</h5>
+                        @Html.TextAreaFor(x => x.Texto, new { @Class = "form-control", rows = "4", cols = "50", @Name = "TXT-PRE-REL-" + Model.PreguntaCursoOnlineId, id = "PRE-REL" + Model.PreguntaCursoOnlineId })
+                        @Html.ValidationMessageFor(x => x.Texto)
+                        <br />
+                        <div class="pull-left" style="margin-top: 7px;">
+                            <h5>Respuestas:</h5>
+                        </div>
+                        <div class="pull-right" style="margin-top: 7px;">
+                            <a class="btn btn-course-enable btn-sm" data-button-add-relacion="@codigoPregunta"><i class="fa fa-arrows-h"></i>&nbsp;Añadir Relación</a>
+                            <a class="btn btn-course-enable btn-sm" data-button-add-respuesta="@codigoPregunta"><i class="fa fa-plus"></i>&nbsp;Añadir Respuesta</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6" data-pregunta="@("TXT-" + codigoPregunta)">
+                        @foreach (var respuesta in Respuestas)
+                        {
+                            codigoRespuesta = "RES-REL-" + codigoPreguntaId + "-" + respuesta.RespuestaCursoOnlineId;
+                            <input type="text" class="form-control" name="@("TXT-ENU-" + codigoRespuesta)" value="@respuesta.Texto.Split(new[] { "###" }, StringSplitOptions.None)[0]" @(!respuesta.EsSolucion ? "disabled" : "") /> <br />
+                        }
+                    </div>
+                    <div class="col-sm-6 col-md-6" data-pregunta="@(codigoPregunta)">
+                        @foreach (var respuesta in Respuestas)
+                        {
+                            codigoRespuesta = "RES-REL-" + codigoPreguntaId + "-" + respuesta.RespuestaCursoOnlineId;
+                            <input type="text" class="form-control" name="@("TXT-" + codigoRespuesta)" id="@("TXT-" + codigoRespuesta)" value="@respuesta.Texto.Split(new[] { "###" }, StringSplitOptions.None)[1]" /><br />
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+        @*        <div class="form-group">
+                <br />
+                @Html.CheckBoxFor(x => x.Estado, new { @class = "switchery", @data_init_plugin = "switchery" })&nbsp; @Html.LabelFor(x => x.Estado)
+            </div>*@
+
+    </div>
+
+</div>
+
+
+
+@section Footer{
+    <button type="submit" class="btn btn-course-enable pull-left"><i class="fa fa-check"></i>&nbsp;Guardar Pregunta</button>
+}
+@section Scripts
+{
+
+    <script>
+        var elem = document.querySelector('.switchery');
+        var init = new Switchery(elem);
+        var esNueva = "@esPreguntaNueva" == "True";
+        var numRespuestas = $('#@ViewBag.GUID #NumRespuestas').val();
+        var preguntaId = ($('#@ViewBag.GUID #PreguntaCursoOnlineId').val() != "" ? $('#@ViewBag.GUID #PreguntaCursoOnlineId').val() : 0);
+        var Orden = @(numRespuestas != 0 ? numRespuestas - 1 : 0);
+        @if (esPreguntaNueva)
+        {<text> $('#@ViewBag.GUID #Tipo').val('VOF');</text>}
+        var tipoPregunta = $('#@ViewBag.GUID #Tipo').val();
+        $('.modal-content').css('overflow-y','scroll');
+
+        $('textarea.complete').highlightTextarea({
+            color: '#F55753',
+            words: ['###'],
+            id: 'CustomHighlight'
+        });
+
+        function guid() {
+            function _p8(s) {
+                var p = (Math.random().toString(16) + "000000000").substr(2, 8);
+                return s ? "0" + p.substr(0, 4) + "0" + p.substr(4, 4) : p;
+            }
+            return _p8() + _p8(true) + _p8(true) + _p8();
+        }
+
+        function InputGenerico(preguntaId, GUID, tipo) {
+            var nombrePregunta = "PRE-" + tipoPregunta + "-" + preguntaId;
+            var id = "RES-" + tipoPregunta + "-" + preguntaId + "-" + GUID;
+            switch (tipo){
+                case "PRE":
+                    return '<div class="input-group"><input type="text" class="form-control" name="TXT-ENU-RES-' + tipoPregunta + "-" + preguntaId + '-' + GUID + '"  id="TXT-' + nombrePregunta + '-' + GUID + '" placeholder="Relación '+ Orden +'" required/><span class="input-group-addon primary" data-button-delete="'+ GUID +'" id="DEL-' + id + '"><i class="fa fa-trash-o"></i></span></div><br id="BR-' + id + '">';
+                    break;
+                default:
+                    switch (tipoPregunta) {
+                        case "SIM":
+                            return '<input type="radio" name="' + nombrePregunta + '" id="' + id + '" value="' + GUID + '" required><label for="' + id + '" id="LBL' + GUID + '" required>&nbsp;<div class="input-group"><input type="text" class="form-control" name="TXT-' + id + '" id="TXT-' + id + '" required/><span class="input-group-addon primary" data-button-delete="'+ GUID +'" id="DEL-' + id + '"><i class="fa fa-trash-o"></i></span></div></label><br id="BR-' + id + '">';
+                            break;
+                        case "MUL":
+                            return '<input type="checkbox" name="' + nombrePregunta + '" id="' + id + '" value="' + GUID + '" required><label for="' + id + '" id="LBL' + GUID + '" style="display: flex;" required>&nbsp;<div class="input-group"><input type="text" class="form-control" name="TXT-' + id + '" id="TXT-' + id + '" required/><span class="input-group-addon primary" data-button-delete="'+ GUID +'" id="DEL-' + id + '"><i class="fa fa-trash-o"></i></span></div></label><br id="BR-' + id + '">';
+                            break;
+                        case "REL":
+                            return '<div class="input-group"><input type="text" class="form-control" name="TXT-' + id + '"  id="TXT-' + id + '" placeholder="Respuesta relación '+ Orden +'"/ required><span class="input-group-addon primary" data-button-delete="'+ GUID +'" id="DEL-' + id + '"><i class="fa fa-trash-o"></i></span></div><br id="BR-' + id + '">';
+                            break;
+                        case "COM":
+                            return '<div class="input-group"><input type="text" class="form-control" name="TXT-' + id + '" id="TXT-' + id + '" required/><span class="input-group-addon primary" data-button-delete="'+ GUID +'" id="DEL-' + id + '" required><i class="fa fa-trash-o"></i></span></div><br id="BR-' + id + '">';
+                            break;
+                    }
+                    break;
+            }
+            return "";
+        }
+
+        $('#@ViewBag.GUID [data-button-add-respuesta]').on('click', function () {
+            Orden++;
+            $('#@ViewBag.GUID #NumRespuestas').val(++numRespuestas);
+            $('#@ViewBag.GUID [data-pregunta^="PRE-' + tipoPregunta + '"]').append(InputGenerico(preguntaId,guid()));
+            console.log(Orden);
+        });
+
+        $('#@ViewBag.GUID [data-button-add-relacion]').on('click', function () {
+            var GUID = guid();
+            Orden++;
+            $('#@ViewBag.GUID #NumRespuestas').val(++numRespuestas);
+            $('#@ViewBag.GUID [data-pregunta*="TXT-PRE-' + tipoPregunta + '"]').append(InputGenerico(preguntaId, GUID,"PRE"));
+            $('#@ViewBag.GUID [data-pregunta^="PRE-' + tipoPregunta + '"]').append(InputGenerico(preguntaId,GUID));
+            console.log(Orden);
+        });
+
+        $(document).on('click','#@ViewBag.GUID [data-button-delete]', function(event){
+            event.stopPropagation();
+            var id = $(this).attr('id');
+            var LstIdGUID = id.split('-');
+            var GUID = LstIdGUID[LstIdGUID.length -1];
+            $('#@ViewBag.GUID #NumRespuestas').val(--numRespuestas);
+            $('#@ViewBag.GUID [id*="' + GUID + '"]').remove();
+        });
+
+        $('#@ViewBag.GUID .nav.nav-tabs.nav-tabs-linetriangle li a').click(function () {
+            if (esNueva) {
+                if (tipoPregunta != "VOF"){
+                    var data = $('[data-pregunta*="' + tipoPregunta + '"]').empty();
+                    Orden = @(numRespuestas != 0 ? numRespuestas - 1 : 0);
+                    $('#@ViewBag.GUID #NumRespuestas').val(Orden);
+                }
+                var tipo = $(this).attr('href').split('-');
+                tipoPregunta = tipo[tipo.length - 1];
+                $('#@ViewBag.GUID #Tipo').val(tipoPregunta);
+            }
+        });
+
+    </script>
+}

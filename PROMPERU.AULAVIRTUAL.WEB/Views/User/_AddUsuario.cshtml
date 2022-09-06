@@ -1,0 +1,486 @@
+﻿@*
+
+    @model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User._AddUsuarioViewModel
+    @{
+        Layout = ConstantHelpers.Layout.MODAL_LAYOUT_PATH;
+        ViewBag.ModalClass = "";
+        //ViewBag.ModalClass = "stick-up";
+        ViewBag.ModalDialogClass = "modal-md";
+        ViewBag.Form = new ModalFormHelpers("_AddUsuario", "User", FormMethod.Post);
+        //ViewBag.Icon = "fa fa-circle";
+        //ViewBag.Title = Model.CursoOnlineId;
+        ViewBag.DeshabilitarCerrarFooter = true;
+
+    }
+
+    <style>
+
+        #enablesCourse, #disabledCourse {
+            list-style-type: none;
+            background: #eee;
+            padding: 5px;
+        }
+
+            #enablesCourse li, #disabledCourse li {
+                margin: 5px;
+                padding: 5px;
+            }
+
+
+        .connectedSortable {
+            height: 400px;
+            overflow: auto;
+        }
+
+
+        .loader-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            margin: -4rem;
+            display: none;
+            z-index: 20;
+        }
+
+        .loader-background {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+            opacity: 0.3;
+        }
+
+        .loader-button {
+            position: absolute;
+            top: 60%;
+            width: 100%;
+        }
+
+        .loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 1;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid red;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+            opacity: 1;
+        }
+
+
+        #paging {
+            padding: 0 20px 20px 20px;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+
+            #paging a {
+                color: #000;
+                background: #e0e0e0;
+                padding: 8px 12px;
+                margin-right: 5px;
+                text-decoration: none;
+            }
+
+                #paging a.aktif {
+                    background: #000 !important;
+                    color: #fff;
+                }
+
+                #paging a:hover {
+                    border: 1px solid #000;
+                }
+
+        .hidden {
+            display: none;
+        }
+
+
+
+    </style>
+
+    <div class="form-group-attached text-center">
+        <br />
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.GrupoId)
+        @Html.HiddenFor(x => x.ListItems, new { @id = "hitems" })
+
+
+        <h2>Agregar y/o Retirar Usuarios</h2>
+
+    </div>
+
+    @section Footer{
+        <!--<button class="btn btn-info pull-left" type="submit"><i class="fa fa-floppy-o"></i>&nbsp;Guardar Disponibilidad</button>-->
+
+    <div class="row">
+
+        <div class="loader-container">
+            <div class="loader-background"></div>
+            <div class="loader"></div>
+            <div class="loader-button">
+                <!--<button type="button" class="btn btn-primary" onclick="cancelRequest()">Cancelar</button>-->
+            </div>
+        </div>
+
+        <div class="col-lg-6 overflow-auto">
+            <h5 class="text-center">
+                Usuarios Agregados <i class="fa fa-list-alt" aria-hidden="true"></i>
+            </h5>
+            <!--<label for="txtbusqueda1">Filtrar</label>-->
+
+            <select class="form-control" id="cbofiltro1" name="cbofiltro1">
+                <option>[-Seleccionar-]</option>
+                <option value="ALU">Emprendedores</option>
+                <option value="EMP">Empresas</option>
+                <option value="ALL">Todos</option>
+            </select>
+
+            <div class="input-group">
+                <input type="text" class="form-control" id="txtbusqueda1" name="txtbusqueda1" placeholder="Email, Ruc, Etc">
+                <span class="input-group-btn">
+                    <button class="form-control" type="button" id="btnadelante"><i class="fa fa-forward"></i></button>
+                </span>
+            </div><!-- /input-group -->
+
+            <ul id="enablesCourse" class="list-group connectedSortable text-left">
+
+                @{
+                    foreach (var detalle in Model.LstCursoGrupo)
+                    {
+                        <li class="list-group-item" id="@detalle.UsuarioId">@detalle.Nombre</li>
+                    }
+
+                }
+                <!--<li class="emptyMessage">Sin elementos</li>-->
+            </ul>
+
+        </div>
+
+        <div class="col-lg-6 overflow-auto">
+            <h5 class="text-center">
+                Usuarios Disponibles <i class="fa fa-filter" aria-hidden="true"></i>
+            </h5>
+
+            <!--<input type="text" class="form-control" id="buscar" width="100%" />-->
+
+            <select class="form-control" id="cbofiltro2" name="cbofiltro2">
+                <option>[-Seleccionar-]</option>
+                <option value="ALU">Emprendedores</option>
+                <option value="EMP">Empresas</option>
+                <option value="ALL">Todos</option>
+            </select>
+
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <button class="form-control" id="btnatras" type="button"><i class="fa fa-backward"></i></button>
+                </span>
+                <input type="text" class="form-control" id="txtbusqueda2" name="txtbusqueda2" placeholder="filtrar">
+            </div><!-- /input-group -->
+
+
+            <ul id="disabledCourse" class="list-group connectedSortable text-left">
+
+                @{
+
+                    foreach (var usuario in Model.LstCursoOnlineMaestro)
+                    {
+                        <li class="list-group-item" data-rol="@usuario.Rol" id="@usuario.UsuarioId">@usuario.Apellido @usuario.Nombre</li>
+                    }
+
+                }
+
+            </ul>
+
+
+
+        </div>
+
+    </div>
+
+
+
+        <div class="row">
+            <div class="col-sm-5 col-sm-offset-1 align-self-center">
+                <div class="form-group form-group-default input-group">
+                    <button class="btn btn-guardar-matricula pull-center text-btn-generico" type="submit">Guardar</button>
+                </div>
+            </div>
+            <div class="col-sm-5 col-sm-offset-1 align-self-center">
+                <div class="form-group form-group-default input-group">
+                    <a class="btn btn-cancelar pull-center text-btn-generico" data-dismiss="modal" href="#">Cancelar</a>
+                </div>
+            </div>
+        </div>
+
+    }
+
+    <script language="text/javascript">
+
+
+
+        $(function () {
+
+            $(".connectedSortable").sortable({
+                connectWith: ".connectedSortable",
+                items: ':not(.col-lg-6):not(.emptyMessage)',
+                opacity: 0.6,
+                create: function (event, ui) {
+                    //hide empty message on receiver
+                    //$('li.emptyMessage', this).hide();
+
+                    //show empty message on sender if applicable
+                    /*if ($('li:not(.emptyMessage)', ui.sender).length == 0) {
+                        $('li.emptyMessage', ui.sender).show();
+                    } else {
+                        $('li.emptyMessage', ui.sender).hide();
+                    }*/
+                }
+                ,
+                cursor: 'move',
+                'dropOnEmpty': true,
+                'scroll': true,
+
+                receive: function (event, ui) {
+                    //hide empty message on receiver
+                    //$('li.emptyMessage', this).hide();
+
+                    //show empty message on sender if applicable
+                    /*if ($('li:not(.emptyMessage)', ui.sender).length == 0) {
+                        $('li.emptyMessage', ui.sender).show();
+                    } else {
+                        $('li.emptyMessage', ui.sender).hide();
+                    }*/
+
+                    //var items = $(this).sortable("toArray");
+                    var items = $("#enablesCourse").sortable("toArray");
+                    var jitems = JSON.stringify(items);
+                    $("#hitems").val(jitems);
+                }
+                /*,
+                stop: function (event, ui) {
+
+                    var items = $(this).sortable("toArray");
+                    var jitems = JSON.stringify(items);
+                    $("#hitems").val(jitems);
+
+                }*/
+
+            }).disableSelection();
+        });
+
+
+
+        $(document).ready(function () {
+
+            $('#txtbusqueda2').bind('keyup', function () {
+
+                var searchString = $(this).val();
+
+                $("#disabledCourse li").each(function (index, value) {
+
+                    var currentName = $(value).text();
+                    if (currentName.toUpperCase().indexOf(searchString.toUpperCase()) > -1) {
+                        $(value).show();
+                    } else {
+                        $(value).hide();
+                    }
+
+                });
+
+            });
+
+            $("#btnatras").on("click", function () {
+
+               // $('.loader-container').show();
+
+                var html_li = "";
+                var arr_li = []
+
+                $("#disabledCourse li").each(function (index, value) {
+
+                    arr_li.push($(value).prop("id"));
+                    if ($(value).is(":visible")) {
+                        html_li += "<li class='list-group-item ui-sortable-handle' data-rol='" + $(value).data("rol") + "' id='" + $(value).prop("id") + "'>" + $(value).text() + "</li>";
+                    }
+
+
+                });
+
+                $("#disabledCourse li").remove(":visible");
+
+                $("#enablesCourse").append(html_li);
+
+                var items = $("#enablesCourse").sortable("toArray");
+                var jitems = JSON.stringify(items);
+                $("#hitems").val(jitems);
+
+                $('.loader-container').hide();
+
+                //console.log(html_li);
+
+            });
+
+
+            $("#btnadelante").on("click", function () {
+
+                var html_li = "";
+                var arr_li = [];
+
+                $("#enablesCourse li").each(function (index, value) {
+
+                    arr_li.push($(value).prop("id"));
+                    if ($(value).is(":visible")) {
+                        html_li += "<li class='list-group-item ui-sortable-handle' data-rol='" + $(value).data("rol") + "' id='" + $(value).prop("id") + "'>" + $(value).text() + "</li>";
+                    }
+                });
+
+                $("#enablesCourse li").remove(":visible");
+
+                $("#disabledCourse").append(html_li);
+
+                var items = $("#enablesCourse").sortable("toArray");
+                var jitems = JSON.stringify(items);
+                $("#hitems").val(jitems);
+
+            });
+
+
+            $("#cbofiltro2").on("change", function () {
+
+               // $('.loader-container').show();
+
+                var seleccion = $(this).children("option:selected").val();
+
+
+                $("#disabledCourse").children().hide()
+                    .filter(function () {
+                        return $(this).data('rol') === seleccion;
+                    })
+                    .show();
+
+               // $('.loader-container').hide();
+
+                /*$("#disabledCourse li").each(function (index, value) {
+
+                    var currentName = $(value).data("rol");
+                    if (currentName.toUpperCase().indexOf(seleccion.toUpperCase()) > -1) {
+                        $(value).show();
+                    } else {
+                        $(value).hide();
+                    }
+
+                });*/
+
+                //$('.loader-container').hide();
+
+            });
+
+
+            $("#cbofiltro1").on("change", function () {
+
+               // $('.loader-container').show();
+
+                var seleccion = $(this).children("option:selected").val();
+
+                 $("#enablesCourse").children().hide()
+                    .filter(function () {
+                        return $(this).data('rol') === seleccion;
+                    })
+                    .show();
+
+               /* $("#enablesCourse li").each(function (index, value) {
+
+                    var currentName = $(value).data("rol");
+                    if (currentName.toUpperCase().indexOf(seleccion.toUpperCase()) > -1) {
+                        $(value).show();
+                    } else {
+                        $(value).hide();
+                    }
+
+                });*/
+
+               // $('.loader-container').hide();
+
+            });
+
+
+            $('#txtbusqueda1').bind('keyup', function () {
+
+                var searchString = $(this).val();
+
+                $("#enablesCourse li").each(function (index, value) {
+
+                    var currentName = $(value).text();
+                    if (currentName.toUpperCase().indexOf(searchString.toUpperCase()) > -1) {
+                        $(value).show();
+                    } else {
+                        $(value).hide();
+                    }
+
+                });
+
+            });
+
+        });
+
+
+    </script>*@
+
+
+
+
+@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User._AddUsuarioViewModel
+@{
+    Layout = ConstantHelpers.Layout.MODAL_LAYOUT_PATH;
+    ViewBag.ModalClass = "";
+    //ViewBag.ModalClass = "stick-up";
+    ViewBag.ModalDialogClass = "modal-md";
+    ViewBag.Form = new ModalFormHelpers("_AddUsuario", "User", FormMethod.Post);
+    //ViewBag.Icon = "fa fa-circle";
+    //ViewBag.Title = Model.CursoOnlineId;
+    ViewBag.DeshabilitarCerrarFooter = true;
+
+}
+<div class="form-group-attached text-center">
+    <br />
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.GrupoId)
+    @Html.HiddenFor(x => x.Estado)
+
+
+    @if (Model.Estado == 0)
+    {
+        <h2>¿Desea Activar el Registro Automático?</h2>
+    }
+    else
+    {
+        <h2>¿Desea Desactivar el Registro Automático?</h2>
+    }
+
+
+</div>
+
+@section Footer{
+    
+
+    <div class="row">
+        <div class="col-sm-5 col-sm-offset-1 align-self-center">
+            <div class="form-group form-group-default input-group">
+                <button class="btn btn-guardar-matricula pull-center text-btn-generico" type="submit">SI</button>
+            </div>
+        </div>
+        <div class="col-sm-5 col-sm-offset-1 align-self-center">
+            <div class="form-group form-group-default input-group">
+                <a class="btn btn-cancelar pull-center text-btn-generico" data-dismiss="modal" href="#">NO</a>
+            </div>
+        </div>
+    </div>
+
+}

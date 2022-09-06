@@ -1,0 +1,296 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.EditCursoOnlineEncuestaViewModel
+
+@{
+    ViewBag.Title = "CursoOnlineAdminEncuesta";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Encuesta</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Encuesta</h2>
+        </div>
+    </div><!-- /.row -->
+}
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#TipoPregunta').change(function () {
+                var tipo = $(this).val();
+                if (tipo == 2)
+                    $('#divOpciones').show()
+                else
+                    $('#divOpciones').hide()
+
+            })
+            $(".js-example-tokenizer").select2({
+                tags: true,
+                tokenSeparators: [',']
+            })
+            $('.js-example-tokenizer').on('change', function (e) {
+                $('#Opciones').val($('#opciones2').val());
+            });
+
+            $('.editarPregunta').click(function () {
+
+                var id = $(this).attr('id').replace('lnk-', '');
+
+
+                $('#CursoOnlineEncuestaDetalleId').val(id)
+                $('#TipoPregunta').val($('#tipopregunta-' + id).val());
+
+                if ($('#tipopregunta-' + id).val() == 2)
+                    $('#divOpciones').show()
+                else
+                    $('#divOpciones').hide()
+
+
+                $('#Pregunta').val($('#pregunta-' + id).html());
+
+                var OpcionesSeleccionadasOriginal = $('#opciones-' + id).html();
+                console.log(OpcionesSeleccionadasOriginal)
+                $('#Opciones').val(OpcionesSeleccionadasOriginal);
+                var opcionesseleccionados = $('#Opciones').val().split(",");
+                //$('#Opciones').val('opcion1,opcion3,opcion4');
+                $('.js-example-tokenizer').select2({ tags: opcionesseleccionados });
+                $('.js-example-tokenizer').val(opcionesseleccionados);
+                $('.js-example-tokenizer').trigger('change.select2');
+
+
+                $('#Activo').val($('#Activo-' + id).val());
+                $("#editGroup").modal("show");
+            })
+
+        });
+    </script>
+}
+<form method="post" id="searchUser">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.CursoOnlineEncuestaId)
+
+    @Html.HiddenFor(x => x.CursoOnlineId)
+
+    <div class="row">
+        <div class="col-lg-12 box-grey-content">
+            <h2>Encuesta</h2>
+            <div class="content-form-grey">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Título *</label>
+                            @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Ingresar Nombre" })
+                            @Html.ValidationMessageFor(x => x.Nombre)
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Subtítulo *</label>
+                            @Html.TextBoxFor(x => x.Descripcion, new { @class = "form-control", @placeholder = "Ingresar Descripcion" })
+                            @Html.ValidationMessageFor(x => x.Descripcion)
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="icheck-primary activo-2">
+                                @Html.CheckBoxFor(m => m.Activo, new { @checked = "checked" })
+                                <label for="Activo">
+                                    ¿Está activo?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-btn">
+                        <input type="submit" class="btn btn-primary" value="Guardar">
+
+                        <a class="btn btn-secondary" href="@Url.Action("ListCursoOnlineAdmin", "Course")">Cancelar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+@if (Model.CursoOnlineEncuestaId > 0)
+{
+    <div class="row table-acciones table-content list-empresa">
+        <div class="col-sm-6">
+            <h2>Lista de preguntas</h2>
+        </div>
+        <div class="col-sm-6 btns-table">
+            <a class="btn btn-primary" href="" data-bs-toggle="modal" data-bs-target="#editGroup">Agregar Pregunta</a>
+        </div>
+    </div>
+}
+
+
+@if (Model.CursoOnlineEncuestaId > 0)
+{
+    <div class="row mis-solicitudes table-content">
+        <div class="col-sm-12 table-responsive altomin">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list tipo-empresa" align="center">
+                <thead>
+                    <tr>
+                        <th>
+                            Pregunta
+                        </th>
+
+                        <th>
+                            Tipo Pregunta
+                        </th>
+                        <th>
+                            Opciones
+                        </th>
+                        <th>
+                            Activo
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Preguntas != null && Model.Preguntas.Count > 0)
+                    {
+                        foreach (var item in Model.Preguntas)
+                        {
+                            <tr>
+                                <td>
+                                    <span id="pregunta-@item.CursoOnlineEncuestaDetalleId">@item.Pregunta</span>
+                                </td>
+
+                                <td>
+                                    <input type="hidden" id="tipopregunta-@item.CursoOnlineEncuestaDetalleId" value="@item.TipoPregunta">
+                                    @if (item.TipoPregunta == 1)
+                                    {
+                                        <text>Opcion 0 a 10 </text>
+                                    }
+                                    @if (item.TipoPregunta == 2)
+                                    {
+                                        <text>Lista de selección </text>
+                                    }
+                                    @if (item.TipoPregunta == 3)
+                                    {
+                                        <text>Texto libre </text>
+                                    }
+
+
+                                </td>
+                                <td>
+                                    <span id="opciones-@item.CursoOnlineEncuestaDetalleId">@item.Opciones</span>
+                                </td>
+                                <td>
+                                    <input type="hidden" id="activo-@item.CursoOnlineEncuestaDetalleId" value="@item.Activo">
+                                    @if (item.Activo == true)
+                                    {
+                                        <text>SI </text>
+                                    }
+                                    else
+                                    {
+                                        <text> NO</text>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="dropdown">
+                                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Acciones
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
+                                            <li><a class="dropdown-item editarPregunta" href="#" id="lnk-@item.CursoOnlineEncuestaDetalleId">Editar Pregunta</a></li>
+
+                                        </ul>
+                                    </div>
+
+
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+}
+
+
+
+<div class="modal modal-2 fade" id="editGroup" tabindex="-1" aria-labelledby="editGroupLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            @using (Html.BeginForm("CursoOnlineAdminEncuestaAdd", "Course", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+
+
+                @Html.HiddenFor(x => x.CursoOnlineEncuestaId)
+                @Html.HiddenFor(x => x.CursoOnlineId)
+                <input type="hidden" id="CursoOnlineEncuestaDetalleId" name="CursoOnlineEncuestaDetalleId" value="0" />
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Pregunta</h5>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="">Pregunta</label>
+                                <input type="text" class="form-control" name="Pregunta" id="Pregunta" placeholder="Ingrese pregunta">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="">Tipo de Pregunta</label>
+                                <select name="TipoPregunta" id="TipoPregunta" class="tipo-grupo form-control form-control-select form-select">
+                                    <option value="" selected>Seleccione</option>
+                                    <option value="1">Opcion 0 a 10</option>
+                                    <option value="2">Lista de selección</option>
+                                    <option value="3">Texto libre</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" id="divOpciones" style="display:none">
+                            <div class="form-group">
+                                <label for="">Opciones</label>
+
+                                <select class="form-control js-example-tokenizer" multiple="multiple" style="width: 100%" id="opciones2">
+                                </select>
+                                <input type="hidden" id="Opciones" name="Opciones" />
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="icheck-primary activo-2">
+
+                                    <input checked="checked" data-val="true" data-val-required="El campo EsPublicado es obligatorio." id="Activo" name="Activo" type="checkbox" value="true">
+                                    <input name="Activo" type="hidden" value="false">;
+                                    <label for="activo">
+                                        ¿Está activo?
+                                    </label>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

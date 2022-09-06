@@ -1,0 +1,147 @@
+﻿@model PROMPERU.AULAVIRTUAL.BE.CURSOS.EnlacesInteres
+
+@{
+    ViewBag.Title = "AddEditLink";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Enlaces de Interés</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Enlaces de Interés</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row">
+    <div class="col-lg-12 box-grey-content">
+        <h2>Agregar Enlace de Interés</h2>
+        <div class="content-form-grey">
+            @MessageHelpers.ShowMessages(TempData)
+            @using (Html.BeginForm("AddEditEnlacesInteres", "Link", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+            {
+                @Html.HiddenFor(x => x.EnlaceInteresId)
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Titulo</label>
+
+                            @Html.TextBoxFor(x => x.Titulo, new { @class = "form-control", @placeholder = "Ingresar Titulo" })
+                            @Html.ValidationMessageFor(x => x.Titulo)
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Tipo</label>
+
+                            <select class="custom-select" name="Tipo" id="TypeLink" required>
+                                <option value="">- Seleccione -</option>
+                                <option value="ART" @(Model.Tipo == "ART" ? "selected" : String.Empty)>Artículo</option>
+                                <option value="VID" @(Model.Tipo == "VID" ? "selected" : String.Empty)>Video</option>
+                                <option value="PDF" @(Model.Tipo == "PDF" ? "selected" : String.Empty)>Pdf</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Link</label>
+
+                            @Html.TextBoxFor(x => x.Url, new { @class = "form-control", @placeholder = "Ingresar Link" })
+                            @Html.ValidationMessageFor(x => x.Url)
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group file-avatar">
+                            <label for="">Imagen Relacionada</label>
+                            <div class="type2">
+                                <label class="input-file">
+                                    Seleccionar
+                                    @Html.TextBox("fileImagen", null, new { @class = "", @type = "file" })
+                                    @Html.ValidationMessageFor(model => model.Imagen, "", new { @class = "text-danger" })
+                                    <span class="file-choose-btn">Examinar</span>
+                                </label>
+                            </div>
+                            <p class="note">Tamaño recomendado: 400 px por 200 px (.png / .jpg)</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="">Descripción</label>
+
+                            @Html.TextAreaFor(x => x.Descripcion, new { @class = "form-control", @required = "required", @rows = 7 })
+                            @Html.ValidationMessageFor(x => x.Descripcion)
+                        </div>
+                    </div>
+                    @*<div class="col-sm-12">
+                    <div class="form-group">
+                        <div class="icheck-primary activo-2">
+                            <input type="checkbox" id="activo" name="activo">
+                            <label for="activo">
+                                ¿Está activo?
+                            </label>
+                        </div>
+                    </div>
+                </div>*@
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-btn">
+                        <input type="submit" class="btn btn-primary" value="Guardar">
+                        <a class="btn btn-secondary" href="@Url.Action("ListLinkAdmin", "Link")">Cancelar</a>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Scripts/uploads.js"></script>
+
+    <script>$(document).ready(function () {
+            $("#TypeLink").on("change", function (e) {
+                const val = $(this).val();
+
+                switch (val) {
+                    case "PDF":
+                        $("#isPDF").removeClass("d-none");
+                        $("#isYoutube").addClass("d-none");
+                        $("#isArticle").addClass("d-none");
+                        break;
+                    case "VID":
+                        $("#isYoutube").removeClass("d-none");
+                        $("#isPDF").addClass("d-none");
+                        $("#isArticle").addClass("d-none");
+                        break;
+                    case "ART":
+                        $("#isArticle").removeClass("d-none");
+                        $("#isPDF").addClass("d-none");
+                        $("#isYoutube").addClass("d-none");
+                        break;
+                    default:
+                        $("#isPDF").addClass("d-none");
+                        $("#isYoutube").addClass("d-none");
+                        $("#isArticle").addClass("d-none");
+                        break;
+                }
+            });
+
+            $("#FileImagen").on("change", function (e) {
+                upload_image_path($(this), "#Imagen", "#upload-message-1", "uploads/image");
+            });
+
+            $("#FilePdf").on("change", function (e) {
+                upload_file_path($(this), "#Pdf", "#upload-message-2", "uploads/pdf");
+            });
+        })</script>
+}

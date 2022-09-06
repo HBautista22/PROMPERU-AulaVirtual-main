@@ -1,0 +1,19 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Enrollment.DeleteMatriculaViewModel
+@{
+    ViewBag.Title = "Eliminar Matrícula";
+    Layout = ConstantHelpers.Layout.MODAL_LAYOUT_PATH;
+    ViewBag.Form = new ModalFormHelpers("_DeleteMatricula", "Enrollment", FormMethod.Post);
+}
+@Html.AntiForgeryToken()
+@Html.HiddenFor(x => x.MatriculaCursoOnlineId)
+@Html.HiddenFor(x => x.UrlRefferer)
+
+<div class="alert alert-danger">
+    <i class="fa fa-exclamation-triangle"></i>&nbsp;<strong>Esta acción eliminará la matrícula así como las evaluaciones realizadas por el usuario.</strong>
+</div>
+    ¿Está seguro de eliminar la matrícula de este usuario?
+
+@section Footer{
+    <button type="submit" class="btn btn-success"><i class="fa fa-check"></i>&nbsp;Confirmar</button>
+}
+

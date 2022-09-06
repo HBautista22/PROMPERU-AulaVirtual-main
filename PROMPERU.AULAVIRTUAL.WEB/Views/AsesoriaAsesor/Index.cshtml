@@ -1,0 +1,289 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Asesoria.AsesoriaAsesorViewModel
+@using PROMPERU.AULAVIRTUAL.BE.Aesorias
+@{
+    ViewBag.Title = "Asesoria";
+    ViewBag.Seccion = "MisAsesoriasAsesor";
+
+    Dictionary<string, string> Estados = new Dictionary<string, string>()
+{
+{ "SOL", "Solicitado" },
+{ "ACE", "Aceptado" },
+{ "REC", "Rechazado" },
+{ "ATE", "Atendido" },
+{ "CAN", "Cancelado" }
+};
+
+}
+@section Scripts
+{
+    <link href='~/Scripts/fullcalendar-5.4.0/lib/main.css' rel='stylesheet' />
+    <script src='~/Scripts/fullcalendar-5.4.0/lib/main.js'></script>
+    <link rel="stylesheet" href="~/Content/assets/plugins/jquery-ui/css/jquery-ui.css" />
+    <script src='~/Content/assets/js/Asesoria/AsesoriaAsesor.js'></script>
+
+    <script>
+        var initialLocaleCode = 'es';
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl,
+        {
+            initialView: 'timeGridWeek',
+            slotMinTime: '09:00:00',
+            slotMaxTime: '19:00:00',
+            firstDay: @((int)DateTime.Now.AddDays(1).DayOfWeek),
+            weekends:false,
+            height: 'auto',
+            width:'auto',
+            allDaySlot: false,
+            slotLabelFormat: [
+                {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                }
+            ],
+            headerToolbar:
+            {
+                left: 'prev,next',
+                center: 'title',
+                right: '' //'dayGridMonth,dayGridWeek,dayGridDay'
+            },
+            initialDate: '@(DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"))',
+            locale: initialLocaleCode,
+            navLinks: false, // can click day/week names to navigate views
+            editable: false,
+            dayMaxEvents: true, // allow "more" link when too many events
+            eventSources: [
+                {
+                    url: '/AsesoriaAsesor/AsesoriasRemotasListar',
+                    method: 'GET',
+                    //extraParams: {
+                    //    custom_param1: 'something',
+                    //    custom_param2: 'somethingelse'
+                    //},
+                    failure: function ()
+                    {
+                        alert('there was an error while fetching events!');
+                    }
+                }
+
+            ]
+        });
+
+        document.addEventListener('DOMContentLoaded', function ()
+        {
+
+            calendar.render();
+        });
+
+    </script>
+}
+@section Styles{
+    <style>
+
+        .widget-11 .widget-11-table tr td:first-child {
+            width: 55% !important;
+        }
+        .ui-dialog-titlebar-close {
+            background-image: url(/content/assets/img/ui-icons_777777_256x240.png);
+        }
+
+        .ui-dialog-titlebar-close {
+            background-position: -96px -128px;
+        }
+
+        .ui-icon-closethick {
+            background-position: -96px -128px;
+        }
+
+        .aceptar:hover {
+            background-color: green;
+        }
+
+        .rechazar:hover {
+            background-color: sandybrown;
+        }
+    </style>
+}
+
+<div class="container-fluid padding-25 sm-padding-10">
+    <div class="row full-height">
+        <div class="col-xs-12">
+            <h3 class="usuarios m-b-20 text-black">&nbsp;Asesorias Programadas </h3>
+        </div>
+        <div class="col-xs-12">
+            <div id="calendar"></div>
+        </div>
+    </div>
+    <div id="dialog-confirm" title="Anular Entrevista?" style="display:none;">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Desea eliminar el Agendamiento?</p>
+    </div>
+    <div class="row full-height">
+        <div class="col-xs-12">
+            <h2 class="usuarios m-b-20 text-black">&nbsp;Programar Asesoria</h2>
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active text-black" id="individual-tab" data-toggle="tab" href="#individual" role="tab" aria-controls="individual" aria-selected="false">Individual</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-black" id="bloque-tab" data-toggle="tab" href="#bloque" role="tab" aria-controls="bloque" aria-selected="false">En Bloque</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade " id="individual" role="tabpanel" aria-labelledby="individual-tab">
+
+            <div class="row full-height">
+                <div class="col-xs-12 col-sm-3 m-b-20">
+                    <form>
+                        <div class="form-group">
+                            <label for="titleScheduled">Titulo</label>
+                            <input type="text" class="form-control" id="titleScheduled" maxlength="50">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dateScheduled">Fecha</label>
+                            <input onkeydown="return false" type="date" class="form-control" id="dateScheduled" maxlength="10" value="@DateTime.Now.ToString("MM/dd/yyyy")" min="@DateTime.Now.ToString("MM/dd/yyyy")" max="@DateTime.Now.AddDays(30).ToString("MM/dd/yyyy")" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="timeScheduled">Hora</label>
+                            <input onkeydown="return false" type="time" class="form-control" id="timeScheduled" value="09:00" min="09:00" max="18:00" pattern="[0-9]{2}:[0-9]{2}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="durationScheduled">Duración</label>
+                            <select class="form-control" id="durationScheduled">
+                                <option value="15">15</option>
+                                <option value="30">30</option>
+                                <option value="45">45</option>
+                                <option value="60" selected>60</option>
+                            </select>
+
+                        </div>
+
+                        <button type="button" onclick="AddAsesoriaDetallado()" class="btn btn-primary pull-left">Crear Asesoria</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <div class="tab-pane fade" id="bloque" role="tabpanel" aria-labelledby="bloque-tab">
+
+            <div class="row full-height">
+                <div class="col-xs-12 col-sm-3 m-b-20">
+                    <form>
+                        <div class="form-group">
+                            <label for="titleScheduledBloque">Titulo</label>
+                            <input type="text" class="form-control" id="titleScheduledBloque" maxlength="50">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dateScheduledBloque">Fecha Inicial</label>
+                            <input type="date" class="form-control" id="dateScheduledInicioBloque" maxlength="10">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dateScheduledBloque">Fecha Final (incluida)</label>
+                            <input type="date" class="form-control" id="dateScheduledFinBloque" maxlength="10">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="durationScheduled">Duración</label>
+                            <select class="form-control" id="durationScheduledBloque">
+                                <option value="15">15</option>
+                                <option value="30">30</option>
+                                <option value="45">45</option>
+                                <option value="60" selected>60</option>
+                            </select>
+
+                        </div>
+
+                        <button type="button" onclick="AddAsesoriaBloque()" class="btn btn-primary pull-left">Crear Asesorias</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div class="row full-height">
+        <div class="col-xs-12">
+            <h2 class="usuarios m-b-20 text-black">&nbsp;Solicitudes Recibidas</h2>
+        </div>
+        <div class="col-xs-12">
+            <table class="table table-condensed table-hover table-bordered bg-white">
+                <thead>
+                <th class="text-center text-black" style="width:15%">Asesoria</th>
+                <th class="text-center text-black" style="width:20%">Solicitante</th>
+                <th class="text-center text-black" style="width:15%">Fecha</th>
+                <th class="text-center text-black" style="width:30%">Enlace</th>
+                <th class="text-center text-black" style="width:10%">Estado</th>
+                <th class="text-center text-black" style="width:15%"></th>
+                </thead>
+                <tbody>
+                    @foreach (AsesoriaAsesorSolicitud asre in Model.AsesoriasSolicitadas)
+                    {
+                        <tr>
+                            <td class="text-table ">
+                                @asre.Asre_Nombre
+                            </td>
+                            <td class="text-table">
+                                <a href="javascript:ShowDetalle('@asre.NombreAsesorado @asre.ApellidoAsesorado','@asre.Consulta','@asre.Telefono','@asre.Cargo')"> <i class="fa fa-info-circle"> @asre.Email </i></a>
+                            </td>
+                            <td class="text-table">
+                                <span class="hint-text small">@asre.Asre_Inicio</span>
+                            </td>
+                            <td class="text-center text-table">
+                                <span class="">
+                                    @if (asre.Sola_Estado == "ACE")
+                                    {
+                                        <a href="/conferencia/?RoomName=@asre.Asre_ConferenciaId">Ingresar a la Videoconferencia</a>
+                                    }
+                                </span>
+                            </td>
+                            <td class="text-center text-table">
+                                <span class="cf-advisory-table__hint rejected">@Estados[asre.Sola_Estado]</span>
+
+                            </td>
+                            <td class="text-center text-table">
+                                @if (asre.Sola_Estado == "SOL")
+                                {
+                                    <div class="padding-10" style="float:left;"><a href="javascript:AceptarSolicitud(@asre.Sola_Id)" class="btn btn-sm btn-complete aceptar">Aceptar</a></div>
+                                    <div class="padding-10" style="float:left;"><a href="javascript:MostrarRechazar(@asre.Sola_Id)" class="btn btn-sm btn-primary rechazar">Rechazar</a></div>
+                                }
+                                @if (asre.Sola_Estado == "ACE")
+                                {
+                                    <a href="javascript:TerminarSolicitud(@asre.Sola_Id)" class="btn atendido">Atendido</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="dialog-detalle-solicitud" title="Detalle de Solicitud" style="display:none;">
+        <p><strong>Solicitante: <span id="solicitud-nombres"></span></strong></p>
+        <p>Solicitud: <span id="solicitud-solicitud"></span></p>
+        <p>Telefono: <span id="solicitud-telefono"></span></p>
+        <p>Cargo: <span id="solicitud-cargo"></span></p>
+    </div>
+    <div id="dialog-rechazar" title="Rechazar Entrevista?" class="form-group" style="display:none;">
+        <input type="hidden" id="SolicitudId" value="" />
+        <p>
+            Escriba un comentario:
+        </p>
+        <p>
+            <textarea class="form-control" id="Comentario" name="Comentario"></textarea>
+        </p>
+    </div>
+
+</div>
+

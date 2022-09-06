@@ -1,0 +1,153 @@
+﻿
+@{
+    ViewBag.Title = "ManagePreguntasCursoOnlineNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+@section Styles{
+    @RazorHelpers.Content("assets/plugins/jquery-datatable/media/css/jquery.dataTables.css", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-datatable/extensions/FixedColumns/css/dataTables.fixedColumns.min.css", Url)
+    @RazorHelpers.Content("assets/plugins/datatables-responsive/css/datatables.responsive.css", Url)
+    @RazorHelpers.Content("assets/plugins/switchery/css/switchery.min.css", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-highlighttextarea/jquery.highlighttextarea.min.css", Url)
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Preguntas</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Lista de Preguntas</h2>
+        </div>
+    </div><!-- /.row -->
+}
+
+@MessageHelpers.ShowMessages(TempData)
+
+<div class="row table-acciones table-content list-empresa">
+    <div class="col-sm-6">
+        <h2>Lista de Preguntas</h2>
+    </div>
+    <div class="col-sm-6 btns-table">
+        <a class="btn btn-primary" href="@Url.Action("EditarPreguntaCursoOnlime", "Question", new { unidadCursoOnlineId = Model.UnidadCursoOnlineId })">Agregar Pregunta</a>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-12 m-b-30">
+            @*<input type="text" id="search-table" class="form-control pull-right rectangle-31" placeholder="Buscar Pregunta">*@
+            <div class="form-group form-group-default input-group transparent center-margin rectangle-31">
+                @Html.Label("Buscar pregunta", new { @class = "buscar-usuario" })
+                @Html.TextBox("search-table", "", new { @class = "form-control", @id = "search-table" })
+                <span class="input-group-addon"><i class="pg-search"></i></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mis-solicitudes table-content">
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list tipo-empresa" align="center">
+            <thead>
+                <tr>
+                    <th class="title-table" style="max-width: 2em; width: 1%;"></th>
+                    <th class="title-table" style="max-width: 2em; width: 1%;">Tipo</th>
+                    <th class="col-md-11 title-table">Texto</th>
+                    <th class="text-center title-table" style="min-width: 8.4em">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ var np = 1;}
+                @foreach (var pregunta in Model.LstPreguntaCursoOnline)
+                {
+                    if (pregunta.Estado != ConstantHelpers.ESTADO.ELIMINADO)
+                    {
+                        <tr class="v-align-middle">
+                            <td class="v-align-middle semi-bold text-right text-table">
+                                @np
+                            </td>
+                            <td class="v-align-middle text-table">
+                                <span class="label @(pregunta.Estado == ConstantHelpers.ESTADO.ACTIVO ? "label-success" : "label-danger") ">@ConstantHelpers.TextoTipoPregunta(pregunta.Tipo)</span>
+                            </td>
+                            <td class="v-align-middle text-table">
+                                @pregunta.Texto
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Acciones
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <li>
+                                            <a class="dropdown-item" href="@Url.Action("EditarPreguntaCursoOnlime", "Question", new { unidadCursoOnlineId = pregunta.UnidadOnlineId, PreguntaCursoOnlineId = pregunta.PreguntaCursoOnlineId })">Editar</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="@Url.Action("ChangeStatePregunta", "Question", new { PreguntaCursoOnlineId = pregunta.PreguntaCursoOnlineId })">
+                                                @if (pregunta.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                                                {
+                                                    <text><i class="fa fa-check fa-fw"></i>&nbsp;Activar Pregunta</text>
+                                                }
+                                                else
+                                                {
+                                                    <text><i class="fa fa-ban fa-fw"></i>&nbsp;Desactivar Pregunta</text>
+                                                }
+                                            </a>
+                                        </li>
+                                        @if (pregunta.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" href="@Url.Action("DeleteStatePregunta", "Question", new { preguntaCursoOnlineId = pregunta.PreguntaCursoOnlineId })">
+                                                    @if (pregunta.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                                                    {
+                                                        <text><i class="fa fa-times fa-fw"></i>&nbsp;Eliminar Pregunta</text>
+                                                    }
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </td>
+
+                        </tr>
+                        np++;
+                    }
+
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+@section Scripts{
+    @RazorHelpers.Content("assets/plugins/switchery/js/switchery.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-highlighttextarea/jquery.highlighttextarea.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-datatable/media/js/jquery.dataTables.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-datatable/extensions/TableTools/js/dataTables.tableTools.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-datatable/extensions/Bootstrap/jquery-datatable-bootstrap.js", Url)
+    @RazorHelpers.Content("assets/plugins/datatables-responsive/js/datatables.responsive.js", Url)
+    @RazorHelpers.Content("assets/plugins/datatables-responsive/js/lodash.min.js", Url)
+    @RazorHelpers.Content("assets/js/datatables.js", Url)
+    <script>
+        $(document).ready(function () {
+            var initTableWithSearch = function () {
+                var table = $('#table-search');
+                var settings = {
+                    "sDom": "<'table-responsive't><'row'<p i>>",
+                    "destroy": true,
+                    "info": false,
+                    "ordering": false,
+                    "oLanguage": {
+                        "zeroRecords": "No encontrado",
+                        "infoFiltered": "(filtered from _MAX_ total records)",
+                        "sEmptyTable": "No existen exámenes"
+                    },
+                    "iDisplayLength": 25
+                };
+                table.dataTable(settings);
+                $('#search-table').keyup(function () { table.fnFilter($(this).val()); });
+            }
+            initTableWithSearch();
+        });
+    </script>
+}

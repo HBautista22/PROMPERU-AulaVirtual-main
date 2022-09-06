@@ -1,0 +1,55 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course._OrderUnidadViewModel
+@{
+    ViewBag.GUID = Guid.NewGuid().ToString();
+    ViewBag.Title = "Ordenar " + (Model.UnidadPadre == null ? Model.CursoOnline.Nombre : Model.UnidadPadre.Nombre);
+    Layout = ConstantHelpers.Layout.MODAL_LAYOUT_PATH;
+    ViewBag.Form = new ModalAjaxFormHelpers("_OrderUnidad","Course", new AjaxOptions() { UpdateTargetId = ViewBag.GUID, HttpMethod = "POST", OnSuccess = "reload", OnFailure = "handleAjaxError" });
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.UnidadId)
+        @Html.HiddenFor(x => x.CursoId)
+        @Html.HiddenFor(x => x.Orden)
+        <ul class="list-group sortable_group">
+            @foreach (var item in Model.LstUnidad)
+            {
+                <li class="list-group-item" data-content-id="@item.UnidadCursoOnlineId">@item.Nombre</li>
+            }
+        </ul>
+    </div>
+</div>
+
+<script>
+    function getOrderList() {
+        let listado = []
+        document.querySelectorAll('[data-content-id]').forEach(x => { listado.push(parseInt(x.getAttribute('data-content-id'))) })
+        document.getElementById('Orden').value = listado.join()
+    }
+    function sortable() {
+        let $group = $(document).find('#@ViewBag.GUID .sortable_group');
+        $group.sortable({
+            isValidTarget: function ($item, container) {
+                if ($item.is(".list-group-item"))
+                    return true;
+                else
+                    return $item.parent("ul")[0] == container.el[0];
+            },
+            onDrop: function ($item, container, _super) {
+                getOrderList()
+                _super($item, container);
+            },
+            serialize: function (parent, children, isContainer) {
+                return isContainer ? children.join() : parent.text();
+            },
+        });
+    }
+    sortable()
+    getOrderList()
+</script>
+
+@section Footer{
+    <button type="submit" class="btn btn-success"><i class="fa fa-check"></i>&nbsp;Confirmar</button>
+}

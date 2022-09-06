@@ -1,0 +1,201 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ViewCursoOnlineViewModelAdmin
+
+@{
+    ViewBag.Title = Model.CursoOnline.Nombre;
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+    ViewBag.Seccion = "Cursos";
+    ViewBag.SubSeccion = "Cursos";
+    var estaDisponible = Model.EstaDisponible;
+    var i = 1;
+}
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("ListCursoOnlineAdmin", "Course")">Administrar Cursos</a></li>
+                <li class="breadcrumb-item active">@Model.CursoOnline.Nombre</li>
+            </ol>
+        </div>
+    </div><!-- /.row -->
+}
+
+@helper VerHijo(PROMPERU.AULAVIRTUAL.BE.CURSOS.UnidadCursoOnline unidad, int index, int level = 0, string sufijo = "")
+{var contenidoId = unidad.UnidadCursoOnlineId;
+    var parentId = unidad.UnidadCursoOnlinePadreId ?? 0;
+    var indexHijo = 1;
+    var sufijoActual = sufijo + index;
+    var contenidosHijos = unidad.UnidadCursoOnline1.Where(x => !x.Estado.Equals(ConstantHelpers.ESTADO.ELIMINADO)).OrderBy(x => x.Orden).ToList();
+    var inactive = unidad.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO) ? "danger c-white" : string.Empty;
+
+    <tr class="@inactive" data-id="@contenidoId" data-parent="@parentId" data-level="@level" data-status-id="@unidad.Estado.Equals(ConstantHelpers.ESTADO.ACTIVO)">
+        <td class="text-table">@sufijoActual</td>
+        @*<td class="text-center">@(unidad.Estado.Equals(ConstantHelpers.ESTADO.ACTIVO) ? unidad.Orden.ToString() : "-")</td>*@
+        <td class="text-table">@unidad.Nombre</td>
+        <td class="text-table"> @(unidad.TipoUnidad1?.Nombre)</td>
+        <td class="text-center text-table"><span class="label @(unidad.Estado == ConstantHelpers.ESTADO.ACTIVO ? "label-success" : "label-important")">@(unidad.Estado == ConstantHelpers.ESTADO.ACTIVO ? "Activo" : "Inactivo")</span></td>
+
+        <td class="text-right text-table">
+            <div class='dropdown'>
+
+
+                <a class='btn btn-secondary dropdown-toggle' href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    Opciones
+                </a>
+
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li>
+                        <a class="dropdown-item" href="@Url.Action("EditUnidadCursoOnline", "Course", new { CursoOnlineId = Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })">Editar</a>
+                    </li>
+                    @if (unidad.TipoUnidadId == 1)
+                    {
+                        <li>
+                            <a class="dropdown-item" href="@Url.Action("VideoUnidadCursoOnline", "Course", new { unidadCursoOnlineId = unidad.UnidadCursoOnlineId})">Agregar Videos</a>
+                        </li>
+                    }
+
+
+                    @if (ConstantHelpers.TIPO_UNIDAD.DB_CONTENIDO != unidad.TipoUnidadId)
+                    {
+                        <li>
+                            <a class="dropdown-item" href="@Url.Action("ManagePreguntasCursoOnline","Question",new { unidadOnlineId = unidad.UnidadCursoOnlineId})">Editar preguntas</a>
+                        </li>
+                        @*<li>
+                                <a class="dropdown-item" href="#" @Data.ModalLink("_OrderUnidad", "Course", new { CursoId = Model.CursoOnlineId, UnidadId = unidad.UnidadCursoOnlineId })>Ordenar unidades</a>
+                            </li>*@
+                        <li>
+                            <a class="dropdown-item" href="@Url.Action("EditUnidadCursoOnline", "Course", new { CursoOnlineId = Model.CursoOnlineId, UnidadCursoOnlinePadreId = unidad.UnidadCursoOnlineId })">Agregar subtema o contenido</a>
+                        </li>
+                    }
+                    <li>
+                        <a class="dropdown-item" href="@Url.Action("ChangeStateUnidad", "Course", new { UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })">
+                            @if (unidad.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                            {
+                                <text>Activar a Unidad</text> }
+                            else
+                            {
+                                <text>Desactivar Unidad</text>}
+                        </a>
+                    </li>
+                    @if (unidad.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                    {
+                        <li>
+                            <a class="dropdown-item" href="@Url.Action("DeleteStateUnidad", "Course", new { UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })">
+                                <text>Eliminar Unidad</text>
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+        </td>
+    </tr> if (unidad.TipoUnidadId == ConstantHelpers.TIPO_UNIDAD.DB_CONTENIDO)
+    {
+        return;
+    }
+    else if (contenidosHijos.Count() > 0)
+    {
+        level++;
+        foreach (var item in contenidosHijos)
+        {
+            <text>@VerHijo(item, indexHijo++, level, $"{sufijoActual}.")</text>}
+    }
+}
+
+<div class="row">
+    <!-- Left col -->
+    <section class="col-sm-6">
+        <div class="info-content">
+            <h2>@Model.CursoOnline.Nombre</h2>
+
+            <div class="descripcion">
+                <span>Descripción</span>
+                <p>@Html.Raw(Model.CursoOnline.Descripcion)</p>
+            </div>
+
+
+        </div>
+    </section>
+    <section class="col-sm-6 solo-desktop">
+
+        <a class="btn btn-primary" href="@Url.Action("DisponibilidadCursoOnline", "Enrollment", new { CursoOnlineId = Model.CursoOnlineId })">
+            @(estaDisponible ? "Editar" : "Agregar") Disponibilidad
+        </a>
+
+
+        <a href="@Url.Action("EditCursoOnline", "Course", new { cursoOnlineID = Model.CursoOnlineId })" class="btn btn-primary"> Editar Curso </a>
+
+        <a href="@Url.Action("CursoOnlineAdminEncuesta", "Course", new { id = Model.CursoOnlineId })" class="btn btn-primary"> Editar Encuesta </a>
+
+        <a href="@Url.Action("CursoOnlineAdminResultadoEncuesta", "Course", new { id = Model.CursoOnlineId })" class="btn btn-primary"> Resultado Encuesta </a>
+
+        <br />
+
+        <div>
+            <p class="text-course-enable">Número Unidades del Curso: @Model.CursoOnline.UnidadCursoOnline.Where(a => a.UnidadCursoOnlinePadreId == null).Count() Unidades</p>
+            <div class="clearfix"></div>
+        </div>
+
+    </section>
+</div>
+
+@MessageHelpers.ShowMessages(TempData)
+
+<div class="row table-acciones table-content list-empresa">
+    <div class="col-sm-6">
+        <h2>Lista Unidades</h2>
+    </div>
+    <div class="col-sm-6 btns-table">
+        <a class="btn btn-primary" href="@Url.Action("EditUnidadCursoOnline", "Course", new { CursoOnlineId = Model.CursoOnlineId })">Agregar Unidad</a>
+    </div>
+</div>
+<div class="row mis-solicitudes table-content">
+    <div class="col-sm-12 table-responsive altomin" style="min-height: 400px !important;">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list tipo-empresa" align="center">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Estructura</th>
+                    <th>Estado</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.LstUnidadCursoOnline.Count() > 0)
+                {
+                    foreach (var item in Model.LstUnidadCursoOnline)
+                    {
+                        if (item.Estado != ConstantHelpers.ESTADO.ELIMINADO)//agregado
+                        {
+                            <text>@VerHijo(item, i++)</text>}
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

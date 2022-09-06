@@ -1,0 +1,136 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ListAlumnoCursoOnlineViewModel
+
+@{
+    var usuario = Model.Usuario;
+    ViewBag.Title = "Historial de Cursos de " + usuario.Apellido + ", " + usuario.Nombre;
+    ViewBag.Seccion = "Empresa";
+    ViewBag.SubSeccion = "UsuariosEmpresa";
+}
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListUsuario", "User")">Usuarios</a></li>
+    
+    }
+
+@section Jumbotron{
+    <div class="container-fluid container-lg sm-p-l-20 sm-p-r-20 full-height" style="display:none">
+        <div class="inner full-height" style="transform: translateY(0px); opacity: 1;">
+
+            <form class="form row" method="post">
+
+                <div class="col-md-8 m-b-30">
+                    @Html.HiddenFor(x => x.UsuarioId)
+                    <div class="form-group form-group-default input-group transparent center-margin rectangle-31">
+                        @Html.LabelFor(x => x.CadenaBuscar, new { @class = "buscar-usuario" })
+                        @Html.TextBoxFor(x => x.CadenaBuscar, new { @class = "form-control" })
+                        <span class="input-group-addon"><i class="pg-search"></i></span>
+                    </div>
+                </div>
+                <div class="col-md-4 m-b-30">
+                    <button type="submit" class="btn btn-filtrar-usuario  btn-lg m-t-5 filtrar">&nbsp;FILTRAR</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+}
+
+<div class="container-fluid container-fixed-lg">
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4 class="m-t-0 m-b-0 usuarios"><i class="fa fa-@ViewBag.Icon"></i>&nbsp;Historial de Cursos de <strong>@usuario.Apellido, @usuario.Nombre</strong></h4>
+            </div>
+            <div class="btn-group pull-right m-b-10">
+                @*@if (Session.GetRol() == AppRol.Administrador)
+                {
+                    <a class="btn btn-primary" href="@Url.Action("EditCursoOnline", "Course")"><i class="fa fa-plus"></i>&nbsp;Agregar Curso</a>
+                }*@
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="panel-body">
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline no-footer" id="basicTable_wrapper">
+                    <table role="grid" class="table table-hover dataTable no-footer" id="basicTable">
+                        <thead>
+                            <tr>
+                                <th class="text-center title-table">Estado</th>
+                                <th class="col-sm-4 title-table">Curso</th>
+                                <th class="text-center title-table">Nota</th>
+                                <th class="text-center title-table">% Obtenido</th>
+                                <th class="text-center title-table">Fecha Inicio</th>
+                                <th class="text-center title-table">Fecha Aprobado</th>
+                                <th class="text-right title-table" style="min-width: 180px;">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var matricula in Model.LstMatriculaCursoOnline)
+                            {
+                                var curso = matricula.CursoOnline;
+                                var caterogria = matricula.CursoOnline.CategoriaCursoOnline;
+                                var puedeDescargarCertificado = (matricula.Nota.HasValue && matricula.Estado == ConstantHelpers.ESTADO_MATRICULA.APROBADO);
+                                <tr>
+                                    <td class="text-center text-table"><span class="label label-@ConstantHelpers.TextoColorEstado(matricula.Estado)">@ConstantHelpers.TextoEstado(matricula.Estado)</span></td>
+                                    <td class="text-table">@curso.Nombre</td>
+                                    <td class="text-center text-table">@(matricula.Nota == null ? "--" : matricula.Nota.ToString() )</td>
+                                    <td class="text-center text-table">@(matricula.PorcentajeObtenido != null ? "" + matricula.PorcentajeObtenido + " %" : "--")</td>
+                                    <td class="text-center text-table">@matricula.FechaMatricula.ToString("dd MMMM, yyyy")</td>
+                                    <td class="text-center text-table">@(matricula.FechaAprobado != null ? String.Format("{0:d MMMM, yyyy}", matricula.FechaAprobado) : "--")</td>
+                                    <td class="text-right text-table" style="width: 174px;">
+                                        <div class='base dropdown p-t-5 p-b-5'>
+                                            <a class="base m-r-20" href="@Url.Action("ViewHistorialEvaluacionAlumno", "Evaluation", new { MatriculaCursoOnlineId = matricula.MatriculaCursoOnlineId, UsuarioId = matricula.UsuarioId })">Ver Evaluaciones</a>
+                                            <i class='fa fa-chevron-down dropdown-toggle m-r-10' data-toggle='dropdown' style="cursor:pointer"></i>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    @if (puedeDescargarCertificado)
+                                                    {
+                                                        <!--<a class="btn-xs" href="@(puedeDescargarCertificado ? Url.Action("DownloadCertificadoAlumno", "Document", new { MatriculaCursoOnlineId = matricula.MatriculaCursoOnlineId,CursoOnlineId = curso.CursoOnlineId, UsuarioId = Model.UsuarioId }) : "#")"><i class="fa fa-download"></i>&nbsp;Descargar Certificado</a>-->
+                                                    }
+                                                    else
+                                                    {
+                                                        <!--<a class="btn-xs" @Data.ModalDialog(ConstantHelpers.MENSAJE_CURSO.CARTIFICADO, "Regresar", "")><i class="fa fa-lock"></i>&nbsp;Descargar Constancia</a>-->
+                                                    }
+                                                </li>
+                                                @if (matricula.Estado == ConstantHelpers.ESTADO_MATRICULA.PENDIENTE && matricula.FechaMatricula >= ConstantHelpers.GET_FECHA_INICIO_MATRICULA_VIGENTE())
+                                                {
+                                                    <li>
+                                                        <a class="btn-xs" href="@Url.Action("EnableEvaluacion","Enrollment", new { MatriculaCursoOnlineId= matricula.MatriculaCursoOnlineId })"><i class="fa fa-file-code-o"></i>&nbsp;Activar Examen</a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model.LstMatriculaCursoOnline, page => Url.Action("ListAlumnoCursoOnline", new { p = page, UsuarioId = Model.UsuarioId }), ConstantHelpers.Bootstrap3Pager)
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+@section Scripts{
+    
+    <div class="modal fade fill-in" id="generic-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close"></i></button>
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 no-padding sm-m-t-10 text-center">
+                            <h5 data-container="titulo"></h5>
+                            <a class="btn btn-primary btn-lg btn-large fs-15" href="#" data-element="boton"><i class="fa" data-element="icono"></i>&nbsp;<span data-container="texto-boton"></span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+}

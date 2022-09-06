@@ -1,0 +1,383 @@
+﻿@{
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+
+@{ Html.RenderPartial("~/Views/Shared/_FrontHeader.cshtml"); }
+
+<section class="page-section" id="nosotros">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2 class="section-heading">Nosotros</h2>
+                <p>
+                    El Aula Virtual es una herramienta de PROMPERÚ dirigida a la comunidad exportadora, la cual permite acceder, desde cualquier dispositivo conectado a Internet, a información sobre el proceso exportador mediante animaciones, ponencias de expertos nacionales e internacionales, bibliografía especializada y una videoteca virtual disponible las 24 horas del día.
+                </p>
+            </div>
+            <div class="col-md-6">
+                <img src="@Url.Content("~/Content/landing/img/reu-min.jpg")" class="img-fluid" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section" id="modulos">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">Cursos Destacados</h2>
+                <div class="row rw">
+                    <div class="col-md-4"><label for="" class="lbl">Recomendamos</label></div>
+                    <div class="col-md-4"><label for="" class="lbl">Más valorados</label></div>
+                    <div class="col-md-4"><label for="" class="lbl">Novedades</label></div>
+                </div>
+            </div>
+        </div>
+        </br>
+        <div class="row text-center">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <img src="@Url.Content("~/Content/landing/img/cursos/influencing.png")" alt="">
+                </div>
+                <h4 class="service-heading">INFLUENCING THE INFLUENCER</h4>
+                <div class="row">
+                    <div class="col-md-2">
+                        <img class="mx-auto rounded-circle" src="@Url.Content("~/Content/landing/img/cursos/Oval1.svg")" alt="">
+                    </div>
+                    <div class="col-md-6"><p>Dennis Reynolds</p></div>
+                    <a class="btn btn-primary" href="@Url.Action("Index","Login", new { returnUrl = "Course/ViewCursoOnline?CursoOnlineId=8"})"> entrar</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <img src="@Url.Content("~/Content/landing/img/cursos/seo.jpg")" alt="">
+                </div>
+                <h4 class="service-heading">SEO TECHNOLOGY</h4>
+                <div class="row">
+                    <div class="col-md-2">
+                        <img class="mx-auto rounded-circle" src="@Url.Content("~/Content/landing/img/cursos/Oval2.svg")" alt="">
+                    </div>
+                    <div class="col-md-6"><p>Virginia Maxwell</p></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <img src="@Url.Content("~/Content/landing/img/cursos/wordpress.jpg")" alt="">
+                </div>
+                <h4 class="service-heading">WORDPRESS VERSION 2 O 3 REVIEW</h4>
+                <div class="row">
+                    <div class="col-md-2">
+                        <img class="mx-auto rounded-circle" src="@Url.Content("~/Content/landing/img/cursos/Oval3.svg")" alt="">
+                    </div>
+                    <div class="col-md-6"><p>Douglas Jefferson</p></div>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <img src="@Url.Content("~/Content/landing/img/cursos/write.jpg")" alt="">
+                </div>
+                <h4 class="service-heading">WRITE ON YOUR BUSINESS CARD</h4>
+                <div class="row">
+                    <div class="col-md-2">
+                        <img class="mx-auto rounded-circle" src="@Url.Content("~/Content/landing/img/cursos/Oval4.svg")" alt="">
+                    </div>
+                    <div class="col-md-6"><p>Isabella Horton</p></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <img src="@Url.Content("~/Content/landing/img/cursos/how-build.jpg")" alt="">
+                </div>
+                <h4 class="service-heading">HOW TO BUILD A PC</h4>
+                <div class="row">
+                    <div class="col-md-2">
+                        <img class="mx-auto rounded-circle" src="@Url.Content("~/Content/landing/img/cursos/Oval5.svg")" alt="">
+                    </div>
+                    <div class="col-md-6"><p>Donald Martin</p></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <img src="@Url.Content("~/Content/landing/img/cursos/buy.jpg")" alt="">
+                </div>
+                <h4 class="service-heading">BUY YOUTUBE VIEWS</h4>
+                <div class="row">
+                    <div class="col-md-2">
+                        <img class="mx-auto rounded-circle" src="@Url.Content("~/Content/landing/img/cursos/Oval6.svg")" alt="">
+                    </div>
+                    <div class="col-md-6"><p>Don Barker</p></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group" style="text-align: center;margin-top: 3em;">
+            <a href="@Url.Action("Index","Login", new { actionRedirect = "ListCursoOnline", controllerRedirect = "Course"})" class="btn btn-primary">Ver más cursos</a>
+        </div>
+
+    </div>
+</section>
+
+
+@*<section class="page-section" id="agenda">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">Ellos confian en PROMPERÚ</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="team-member">
+                    <img class="" src="@Url.Content("~/Content/landing/img/confia/Fill.svg")" alt="">
+                    <h4>143</h4>
+                    <p class="text-muted">Cursos </br> Homologados</p>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="team-member">
+                    <img class="" src="@Url.Content("~/Content/landing/img/confia/user.svg")" alt="">
+                    <h4>823</h4>
+                    <p class="text-muted">Alumnos ya se han </br> formado con nosotros </p>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="team-member">
+                    <img class="" src="@Url.Content("~/Content/landing/img/confia/medalla.svg")" alt="">
+                    <h4>10</h4>
+                    <p class="text-muted">Años de </br> experiencia</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="large-12 columns">
+                <div class="owl-carousel owl-theme">
+                    <div class="item">
+                        <div class="team-meember">
+                            <div class="form-group">
+                                <label>PROMPERÚ  nos ha permitido capacitarnos constantemente.</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 col-2">
+                                    <div class="form-group"><img class="mx-auto rounded-circle" src="@Url.Content("~/Content/landing/img/confia/img-circle.svg")" alt=""></div>
+                                </div>
+                                <div class="col-md-5 col-5"><div class="form-group"><p>Dennis Reynolds</p></div></div>
+                                <div class="col-md-5 col-5"><div class="form-group"><p class="text-muted">Joyería Cordoba</p></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="team-meember">
+                            <div class="form-group">
+                                <label>Me ayudo a formar mi emprendimiento para luego participar en los programas especializados ADOC.</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 col-2">
+                                    <div class="form-group"><img class="mx-auto rounded-circle" src="@Url.Content("~/Content/landing/img/confia/img-circle2.png")" alt=""></div>
+                                </div>
+                                <div class="col-md-5 col-5"><div class="form-group"><p>Angel Meza</p></div></div>
+                                <div class="col-md-5 col-5"><div class="form-group"><p class="text-muted">NATUREFOODS PERÚ</p></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="team-meember">
+                            <div class="form-group">
+                                <label>Hemos entrado al difícil mercado exterior con mejores herramientas.</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 col-2">
+                                    <div class="form-group"><img class="mx-auto rounded-circle" src="@Url.Content("~/Content/landing/img/confia/img-circle3.png")" alt=""></div>
+                                </div>
+                                <div class="col-md-5 col-5"><div class="form-group"><p>Fernando Pérez</p></div></div>
+                                <div class="col-md-5 col-5"><div class="form-group"><p class="text-muted">SIAGRO EXPORT SRL</p></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="team-meember">
+                            <div class="form-group">
+                                <label>Hemos entrado al difícil mercado exterior con mejores herramientas.</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 col-2">
+                                    <div class="form-group"><img class="mx-auto rounded-circle" src="@Url.Content("~/Content/landing/img/confia/img-circle3.png")" alt=""></div>
+                                </div>
+                                <div class="col-md-5 col-5"><div class="form-group"><p>Fernando Pérez</p></div></div>
+                                <div class="col-md-5 col-5"><div class="form-group"><p class="text-muted">SIAGRO EXPORT SRL</p></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>*@
+
+
+<section class="page-section sec-certif" id="certificate">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="section-heading text-center">Certifícate</h2>
+                <ol class="remove-dot">
+                    <li>
+                        ¿Quiénes podrán certificarse? <br />
+                        <span>Solo a las empresas con potencial exportador que hayan culminado de manera satisfactoria los módulos correspondientes a la “Ruta Básica Exportadora”.</span>
+                    </li>
+                    <li>
+                        ¿Quién es una empresa con potencial exportador? <br />
+                        <span><i class="fa fa-check"></i> Empresas que estén constituidas un tiempo igual o mayor a un año.</span> <br />
+                        <span><i class="fa fa-check"></i> Empresas con ventas iguales o superiores a los 150 000 soles anuales; o</span><br />
+                        <span><i class="fa fa-check"></i>Empresas que hayan mostrado registro de exportación en los últimos tres años.</span>
+                    </li>
+                    <li>
+                        ¿Qué es la “Ruta Básica Exportadora”? <br />
+                        <span>Es el proceso de inducción en terminología y conceptos básicos sobre el proceso exportador, por el cual una empresa con potencial exportador deberá pasar en caso desee ser partícipe de un siguiente estadio de capacitación a través del Programa Ruta Exportadora.</span>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <p>Recibe nuestras últimas novedades</p>
+                <label for="">Boletín inteligencia de mercado</label>
+            </div>
+            <div class="col-md-6 col-sm-6">
+                <div class="input-group md-form form-sm form-2 pl-0" style="padding-top: 3em;">
+                    <input class="form-control my-0 py-1 red-border" type="text" placeholder="wilfred_swift@hotmail.com" aria-label="Search">
+                    <div class="input-group-append">
+                        <span class="input-group-text red lighten-3" id="basic-text1">Suscribete<i class="fas fa-search text-grey" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Contact -->
+<section class="page-section" id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <form id="contactForm" name="sentMessage" novalidate="novalidate">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h3>Contáctanos</h3>
+                                <label for="">DIRECCIÓN</label>
+                                <label for="">San Isidro, Lima</label>
+                                <label for="">Av Jorge Basadre 610, 15073</label>
+                                <label for="+51 6167300"></label>
+                            </div>
+                            <div class="form-group">
+                                <label for="">TU CORREO</label>
+                                <input id="mymail" type="text" class="form-control frm-event" placeholder="jennifer_doyle@gmail.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="">TU NOMBRE</label>
+                                <input id="myname" type="text" class="form-control frm-event" placeholder="Jennifer">
+                            </div>
+                            <div class=""><label for="">TU MENSAJE</label></div>
+                            <div class="form-group">
+
+                                <!-- <input type="text" class="form-control txtMensaje" placeholder=""> -->
+                                <textarea name="" id="mymessage" cols="30" rows="10" class="frm-event-textarea"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" onclick="contactUs()" class="btn btn-primary">Enviar</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" style="padding-top: 6em;"><img src="@Url.Content("~/Content/landing/img/mapa.jpg")" alt=""></div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+@{ Html.RenderPartial("~/Views/Shared/_FrontFooter.cshtml"); }
+
+@section Scripts{
+
+    <script>
+
+        function contactUs() {
+
+            var name = $('#myname').val();
+            var email = $('#mymail').val();
+            var message = $('#mymessage').val();
+
+            $.ajax({
+                success: function (data) {
+                    if (data)
+                        alert('Gracias por contactarnos');
+                },
+                data: { name: name, mail: email, message: message },
+                url: '@Url.Action("Contact")',
+                method: 'post'
+            });
+
+        }
+
+        $(function () {
+            var owl = $('.owl-carousel');
+            owl.owlCarousel({
+                items: 3,
+                loop: true,
+                margin: 10,
+                autoplay: false,
+                autoplayTimeout: 1000,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    576: {
+                        items: 1,
+                        margin: 20
+                    },
+                    992: {
+                        items: 2,
+                        margin: 20
+                    },
+                    1200: {
+                        margin: 40
+                    }
+
+                }
+            });
+            $('.play').on('click', function () {
+                owl.trigger('play.owl.autoplay', [1000])
+            });
+            $('.stop').on('click', function () {
+                owl.trigger('stop.owl.autoplay')
+            });
+
+            /*----------------------------*/
+            $('#aviso').hide(0);
+            //$(window).scroll(function () {
+            //    var windowHeight = $(window).scrollTop();
+            //    var section2 = $("#services").offset();
+            //    section2 = section2.top;
+            //    if (windowHeight >= section2) {
+            //        $('#aviso').fadeIn(500);
+            //    }
+            //});
+        });
+    </script>
+
+}

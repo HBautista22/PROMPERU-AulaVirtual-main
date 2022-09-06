@@ -1,0 +1,593 @@
+﻿@{
+    var analytics = ConvertHelpers.GetAppSeting("EVOL.Analytics");
+    
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>EVOL - @ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#E63528">
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/Content/assets/img/favicon.png")" />
+    <link rel="icon" sizes="192x192" href="@Url.Content("~/Content/assets/img/logo-nice-highres.png")" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    @RazorHelpers.Content("assets/plugins/pace/pace-theme-flash.css", Url)
+    @RazorHelpers.Content("assets/plugins/boostrapv3/css/bootstrap.min.css", Url)
+    @RazorHelpers.Content("assets/plugins/font-awesome/css/font-awesome.css", Url)
+    @RazorHelpers.Content("assets/plugins/material-design-webfont/css/materialdesignicons.min.css", Url)
+    @RazorHelpers.Content("assets/plugins/Animate/Animacion.css", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-scrollbar/jquery.scrollbar.css", Url)
+    @*@RazorHelpers.Content("assets/plugins/bootstrap-select2/select2.css", Url)*@
+    @RazorHelpers.Content("assets/plugins/switchery/css/switchery.min.css", Url)
+    @RazorHelpers.Content("assets/plugins/bootstrap-datepicker/css/datepicker3.css", Url)
+    @RazorHelpers.Content("assets/plugins/bootstrap3-wysihtml5/bootstrap3-wysihtml5.min.css", Url)
+    @*@RazorHelpers.Content("assets/plugins/bootstrap-select2/select2.css", Url)*@
+    @RazorHelpers.Content("assets/plugins/dropzone/css/dropzone.css", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-dynatree/skin/ui.dynatree.css", Url)
+    @RenderSection("Styles", false)
+    @RazorHelpers.Content("pages/css/pages-icons.css", Url)
+    @RazorHelpers.Content("font/fonts.css", Url)
+    @RazorHelpers.Content("pages/css/pages.css", Url)
+    @RazorHelpers.Content("pages/css/Design_New.css", Url)
+    @RazorHelpers.Content("pages/css/animate_Course.css", Url)
+    @RazorHelpers.Content("pages/css/animate.css", Url)
+    @RazorHelpers.Content("pages/css/custom-styles.css", Url)
+    <!--[if lte IE 9]>
+        @RazorHelpers.Content("pages/css/ie9.css", Url)
+    <![endif]-->
+    @*    <script type="text/javascript">
+            window.onload = function () {
+                // fix windows 8
+                if (navigator.appVersion.indexOf("Windows NT 6.2") != -1)
+                    document.head.innerHTML += "@Url.Content("~/Content/pages/css/windows.chrome.fix.css")";
+            }
+        </script>*@
+
+
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/pages/css/select2.css")" />
+
+
+    <style>
+
+        .dropdown-menu > li:last-child {
+            padding-bottom: 1px;
+        }
+
+        .dropdown-menu > li:first-child {
+            padding-top: 1px;
+        }
+
+        .dropdown-menu-New {
+            min-width: 400px;
+            min-height: 236px;
+            background-color: #FFFFFF;
+            border-radius: 5px;
+            box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.2), 0 0 5px 2px rgba(0, 0, 0, 0.12), 0 3px 5px 1px rgba(0, 0, 0, 0.14);
+        }
+
+            .dropdown-menu-New > li > div {
+                height: 48px;
+            }
+
+        .notificaciones {
+            background-color: #E63528;
+            color: #FFFFFF;
+            font-size: 14px;
+            border-radius: 5px 5px 0px 0px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            line-height: 17px;
+            text-align: left;
+        }
+
+        .ver-mas {
+            color: #E63528 !important;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            opacity: 5 !important;
+            font-family: 'breePeru_regular' !important;
+            line-height: 17px !important;
+            text-decoration: underline !important;
+        }
+
+        .rectangle-34-copy-11 {
+            background-color: #FFFFFF;
+            height: 36px;
+            border: 1px solid #E4E4E4;
+            border-radius: 5px;
+        }
+
+        .contacto-comercial {
+            color: #4A4A4A !important;
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 17px;
+            text-align: left;
+        }
+
+            .contacto-comercial:hover {
+                color: #4A4A4A !important;
+                font-size: 14px;
+                font-weight: 300;
+                line-height: 17px;
+                text-align: left;
+            }
+
+        .nuevo-curso {
+            color: #E63528;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 17px;
+            text-align: left;
+        }
+
+        [data-type="modal-link"] {
+            cursor: pointer;
+        }
+    </style>
+
+
+    <style>
+        @@media (max-width: 767px) {
+            .table-responsive .dropdown-menu {
+                position: static !important;
+            }
+        }
+
+        @@media (min-width: 768px) {
+            .table-responsive {
+                overflow: visible;
+            }
+        }
+    </style>
+
+
+
+    <!-- Google Tag Manager -->
+    <script>
+    (function (w, d, s, l, i) {
+        w[l] = w[l] || []; w[l].push({
+            'gtm.start':
+                new Date().getTime(), event: 'gtm.js'
+        }); var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', '@analytics');</script>
+    <!-- End Google Tag Manager -->
+
+
+  
+
+
+</head>
+<body class="fixed-header menu-pin @ViewBag.BodyStyle">
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=@analytics"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <nav class="page-sidebar" data-pages="sidebar">
+        <div class="sidebar-header hidden-xs">
+            <img src="@Url.Content("~/Content/assets/img/logo.svg")" alt="logo" class="brand" data-src="@Url.Content("~/Content/assets/img/logo.svg")" data-src-retina="@Url.Content("~/Content/assets/img/logo.svg")" width="145">
+            @*<div class="sidebar-header-controls">
+                    <button id="togglesidebar" type="button" class="btn btn-link visible-lg-inline" data-toggle-pin="sidebar">
+                        <span class="icon-set mdi-menu-left"></span>
+                    </button>
+                </div>*@
+        </div>
+
+        <div class="sidebar-menu">
+            @{Html.RenderPartial("_Sidebar");}
+            <div class="clearfix"></div>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div class="header">
+            <div class="pull-left full-height visible-sm visible-xs">
+                <div class="sm-action-bar">
+                    <a href="#" class="btn-link toggle-sidebar" data-toggle="sidebar">
+                        <span class="icon-set menu-hambuger"></span>
+                    </a>
+                </div>
+            </div>
+            <div class=" pull-left sm-table">
+                <div class="header-inner">
+                    <div class="brand inline">
+                        <a href="@Url.Action("Dashboard", "Home")">
+                            <img src="@Url.Content("~/Content/assets/img/logo.svg")" alt="logo" width="100" style="position: relative;">
+                        </a>
+                    </div>
+                    @*<a href="#" class="search-link" data-toggle="search"><i class="pg-search"></i>Buscar <span class="bold">curso</span></a>*@
+                </div>
+            </div>
+            <div class="pull-right">
+                <div class="visible-lg visible-md m-t-10">
+                    @if (Session.GetRazonSocial() != null && Session.GetEmpresasUsuario() != null && Session.GetEmpresasUsuario().Count > 0)
+                    {
+                        <div class="dropdown pull-right">
+                            <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="inline p-r-20 p-t-10 ">
+                                    <i class="fa fa-building"></i> @Session.GetRazonSocial()
+                                </span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                @foreach (var empresa in Session.GetEmpresasUsuario())
+                                {
+                                   
+                                    <li>
+                                        <a href="@Url.Action("CambiarEmpresa", "Home", new { EmpresaId = empresa.Item1 })">
+                                            @empresa.Item2 <i class="@(Session.GetEmpresaId() == empresa.Item1 ? "fa fa-check" : String.Empty)"></i>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                    <div class="dropdown pull-right">
+                        <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="thumbnail-wrapper d32 circular inline m-t-5">
+                                <img src="@Url.Content("~/Content/assets/img/user.png")" alt="" width="32" height="32">
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu profile-dropdown" role="menu">
+                            <li><a href="@Url.Action("ViewPerfil","User",new {UsuarioId = Session.GetUsuarioId() })"><i class="fa fa-eye"></i>&nbsp;Ver Perfil</a></li>
+                            <li class="bg-master-lighter">
+                                <a href="@Url.Action("Logout", "Home")" class="clearfix">
+                                    <span class="pull-left">Salir</span>
+                                    <span class="pull-right"><i class="pg-power"></i></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pull-right p-r-10 p-t-10 fs-16 font-heading">
+                        @Session.GetNombreCompleto()
+                    </div>
+                    <div class="dropdown pull-right">
+                        <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="thumbnail-wrapper d32 circular inline m-t-5">
+                                @if (Session.GetNotificaionesCursosUsuario() != null && Session.GetNotificaionesCursosUsuario().Count > 0)
+                                {
+                                    <i class="fa fa-bell-o slide-in-fwd-center"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-bell-o" style="color: #CFD9DF;"></i>
+                                }
+
+
+
+                            </span>
+
+                        </button>
+                        <button class="profile-dropdown-toggle" type="button">
+                            <span class="thumbnail-wrapper d32 circular inline m-t-5">
+
+                                @if ((Boolean)Session.Get(SessionKey.PrimerIngreso))
+                                {
+                                    <i class="fa fa-user" style="color: #E30614;" onclick="window.location.href = '/User/ViewPerfil?UsuarioId=@Session.GetUsuarioId()'"></i>
+                                }
+
+
+                            </span>
+
+                        </button>
+                        @*<ul class="dropdown-menu profile-dropdown dropdown-menu-New" role="menu">
+                                @if (Session.GetNotificaionesCursosUsuario() != null && Session.GetNotificaionesCursosUsuario().Count > 0)
+                                {
+                                    foreach (var cursos in Session.GetNotificaionesCursosUsuario())
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("ViewCursoOnline", "Course",new {CursoOnlineId = cursos.Item1 })">
+                                                @cursos.Item2
+                                            </a>
+                                        </li>
+                                    }
+                                    <li class="bg-master-lighter">
+                                        <a href="@Url.Action("ListCursoOnline", "Course")" class="clearfix">
+                                            <span class="pull-left">Ver mas</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>*@
+                        <ul class="dropdown-menu profile-dropdown dropdown-menu-New" role="menu">
+                            @if (Session.GetNotificaionesCursosUsuario() != null && Session.GetNotificaionesCursosUsuario().Count > 0)
+                            {
+                                <li>
+                                    <div class="bg-master-lighter notificaciones col-md-12 m-b-10">
+                                        <span class="clearfix pull-left m-t-15">NOTIFICACIONES</span>
+                                    </div>
+                                </li>
+                                foreach (var cursos in Session.GetNotificaionesCursosUsuario())
+                                {
+                                    <li>
+                                        <div class="col-md-12 p-t-10 ">
+                                            <a href="@Url.Action("ViewCursoOnline", "Course",new {CursoOnlineId = cursos.Item1 })" class="contacto-comercial col-md-12 p-t-10 rectangle-34-copy-11">
+                                                @cursos.Item2
+                                                <span class="nuevo-curso">(Nuevo Curso Disponible)</span>
+                                            </a>
+                                        </div>
+                                    </li>
+                                }
+
+                                <li class="text-center">
+                                    <a href="@Url.Action("ListCursoOnline", "Course")" class="clearfix text-center ver-mas p-t-10 m-b-10">
+                                        <span class="pull-center ver-mas">Ver mas</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content-wrapper">
+            <div class="content">
+                <div class="jumbotron" data-pages="parallax">
+                    <div class="container-fluid container-fixed-lg">
+                        <div class="inner">
+                            @if (IsSectionDefined("Breadcrumbs"))
+                            {
+                                <ul class="breadcrumb">
+                                    <li><a href="@Url.Action("Dashboard", "Home")"><i class="fa fa-home"></i></a></li>
+                                    @RenderSection("Breadcrumbs", false)
+                                    <li class="active">@ViewBag.Title</li>
+                                </ul>
+                            }
+                            @RenderSection("Jumbotron", false)
+                        </div>
+                    </div>
+                </div>
+                @RenderBody()
+            </div>
+            <div class="container-fluid container-fixed-lg footer">
+                <div class="copyright sm-text-center">
+                    <p class="small no-margin pull-left sm-pull-reset">
+                        <span class="hint-text">Copyright © @DateTime.Today.Year </span>
+                        <span class="font-montserrat"><a href="http://www.promperu.gob.pe/">PROMPERU</a></span>.
+                        <span class="hint-text">Todos los Derechos Reservados. </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    @*@RazorHelpers.Content("assets/plugins/pace/pace.min.js", Url)*@
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    @RazorHelpers.Content("assets/plugins/modernizr.custom.js", Url)
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    @RazorHelpers.Content("assets/plugins/boostrapv3/js/bootstrap.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery/jquery-easy.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-unveil/jquery.unveil.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-bez/jquery.bez.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-ios-list/jquery.ioslist.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-actual/jquery.actual.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-scrollbar/jquery.scrollbar.min.js", Url)
+    @*@RazorHelpers.Content("assets/plugins/bootstrap-select2/select2.min.js", Url)*@
+    @RazorHelpers.Content("assets/plugins/classie/classie.js", Url)
+    @RazorHelpers.Content("assets/plugins/switchery/js/switchery.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/bootstrap3-wysihtml5/wysihtml5.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/bootstrap3-wysihtml5/bootstrap3-wysihtml5.all.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/bootstrap3-wysihtml5/bootstrap3-wysihtml5.all.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/dropzone/dropzone.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-dynatree/jquery.dynatree.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js", Url)
+    @RazorHelpers.Content("assets/plugins/bootstrap-daterangepicker/daterangepicker.js", Url)
+    @*@RazorHelpers.Content("assets/plugins/bootstrap-select2/select2.min.js", Url)*@
+    @RazorHelpers.Content("pages/js/pages.min.js", Url)
+    @RazorHelpers.Content("assets/js/notifications.js", Url)
+    @RazorHelpers.Content("assets/js/scripts.js", Url)
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" integrity="sha512-UdIMMlVx0HEynClOIFSyOrPggomfhBKJE28LKl8yR3ghkgugPnG6iLfRfHwushZl1MOPSY6TsuBDGPK2X4zYKg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js" integrity="sha512-EanukVTZc4W9tUCLnDl069Izidg49PcNRKO1upLzKt9ajq66i+bXOtlzXcIbRhb6vVEGF6BCc8wQi5T1ztCpTQ==" crossorigin="anonymous"></script>
+
+    <script src="~/Client Scripts/mvcfoolproof.unobtrusive.min.js"></script>
+    @RazorHelpers.Script("validation/messages_es.js", Url)
+    @RazorHelpers.Script("validation/methods_es_CL.js", Url)
+    @RazorHelpers.Script("jquery.unobtrusive-ajax.js", Url)
+    @RazorHelpers.Script("jquery.fullscreen-min.js", Url)
+    @RazorHelpers.Script("numericInput.min.js", Url)
+    @RazorHelpers.Script("countid.min.js", Url)
+
+
+    <script src="~/Content/assets/js/select2.js"></script>
+
+    @RazorHelpers.Content("assets/js/backend/Usuario.js", Url)
+
+
+
+    <div class="row-fluid" id="default-modal-container">
+        <div class="hide" id="default-modal-loading">
+            <div class="modal-body">
+                <br />
+                <h3>
+                    <i class="fa fa-spinner fa-pulse"></i> Cargando...
+                </h3>
+            </div>
+        </div>
+        <div class="hide" id="default-modal-loading-error">
+            <div class="modal-body">
+                <br />
+                <h3>
+                    <i class="fa fa-exclamation-triangle"></i> Ha ocurrido un error
+                </h3>
+            </div>
+        </div>
+    </div>
+    @RazorHelpers.Script("Pages/Shared/Global.js", Url)
+
+    @RenderSection("Scripts", false)
+    @MessageHelpers.ShowMessages(TempData)
+</body>
+</html>
+<script>
+
+    var $animation_elements = $('.animation-element');
+    var $window = $(window);
+    $window.on('scroll', check_if_in_view);
+    $window.on('scroll resize', check_if_in_view);
+    $window.trigger('scroll');
+
+    function check_if_in_view() {
+        var window_height = $window.height();
+        var window_top_position = $window.scrollTop();
+        var window_bottom_position = (window_top_position + window_height);
+
+        $.each($animation_elements, function () {
+            var $element = $(this);
+            var element_height = $element.outerHeight();
+            var element_top_position = $element.offset().top;
+            var element_bottom_position = (element_top_position + element_height);
+
+            //check to see if this current container is within viewport
+            if ((element_bottom_position >= window_top_position) &&
+                (element_top_position <= window_bottom_position)) {
+                $element.addClass('in-view');
+                $element.find(".animatescroll").addClass("rubberBand");
+                $element.find(".animatescroll").addClass("animated");
+                $element.find(".animatescroll").addClass("delay-1s");
+
+                $element.find(".animatescroll2").addClass("flipInX");
+                $element.find(".animatescroll2").addClass("animated");
+
+                $element.find(".animatescroll3").addClass("zoomInRight");
+                $element.find(".animatescroll3").addClass("animated");
+            } else {
+                $element.removeClass('in-view');
+                $element.find(".animatescroll").removeClass("rubberBand");
+                $element.find(".animatescroll").removeClass("animated");
+                $element.find(".animatescroll").removeClass("delay-1s");
+
+                $element.find(".animatescroll2").removeClass("flipInX");
+                $element.find(".animatescroll2").removeClass("animated");
+
+                $element.find(".animatescroll3").removeClass("zoomInRight");
+                $element.find(".animatescroll3").removeClass("animated");
+
+            }
+        });
+    }
+
+</script>
+
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $('.mytextarea').wysihtml5();
+
+    });
+
+
+    $('.tbody-curso').sortable({
+        axis: 'y',
+        opacity: 0.6,
+        cursor: 'move',
+        start: function (e, ui) {
+            // creates a temporary attribute on the element with the old index
+            $(this).attr('data-previndex', ui.item.index());
+            $(this).attr('predmet-id', ui.item[0].id);
+        },
+        stop: function (event, ui) {
+            /*var newIndex = ui.item.index();
+            var oldIndex = $(this).attr('data-previndex');
+            var element_id = ui.item[0].nextElementSibling;
+            var old_id = ui.item[0].previousElementSibling;//$(this).attr('predmet-id');*/
+            /*var obj = {};
+            obj.Curso = 3;
+            obj.Index = newIndex;*/
+            //var data = new FormData();
+            //data.append("data", newIndex)
+            //var oldIndex = $(this).attr('data-previndex');
+
+            //var data = newIndex;
+            // POST to server using $.post or $.ajax
+
+            var items = $(this).sortable("toArray");
+            var jitems = JSON.stringify(items);
+
+            $.post('OrderCursoOnline', { Parametros: jitems },
+                function (returnedData) {
+                    console.log(returnedData);
+                });
+
+            /*$.ajax({
+                data: { Parametros: obj },
+                type: 'POST',
+                url: 'OrderCursoOnline',
+                success: function (msg) {
+                    // Replace the div's content with the page method's return.
+                    $("#Result").text(msg.d);
+                },
+                error: function (msg2) {
+                    alert(msg2);
+                }
+            });*/
+            /*.done(function (data) {
+                if (console && console.log) {
+                    console.log("Sample of data:", data.slice(0, 100));
+                }
+            });;*/
+
+
+
+        }
+
+    });
+
+
+
+</script>
+<!-- obj.NombreUsuario = $('#txtHEmail').val();
+ obj.Pass = $('#txtHKey').val();
+ obj.Lang = lang;
+
+ jQuery.ajax({
+     type: "POST",
+     data: {
+         __RequestVerificationToken: token,
+         usuario: obj
+     },
+     url: "/Home/ReadDates",
+     success: function (response) {
+         if (response.success) {
+             var obj = response.data;
+             userInfo = obj.Tipo;
+             info = obj.Agenda;
+             dt = getDate(obj.Agenda[0].FechaServidor);
+             clearInterval(timer);//limpiamos el reloj
+             timer = setInterval(startClock, 1000);
+             var nextMeeting = getNextMeeting(obj.Agenda);
+             setInfo(obj, nextMeeting);
+
+             $('#tblAgenda').removeClass('spinner');
+
+         } else {
+             //$('#error-message')[0].innerHTML = response.responsetext;
+             console.log(response.responsetext);
+             $('#tblAgenda').removeClass('spinner');
+         }
+     },
+     error: function (response) {
+         //$('#error-message')[0].innerHTML = "Estamos presentando un problema en estos momentos";
+         console.log("Estamos presentando un problema en estos momentos");
+         //alert("Estamos presentando un problema en estos momentos");
+         $('#tblAgenda').removeClass('spinner');
+     }
+ });-->

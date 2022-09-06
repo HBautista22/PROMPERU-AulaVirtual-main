@@ -1,0 +1,261 @@
+﻿
+@{
+    var analytics = ConvertHelpers.GetAppSeting("EVOL.Analytics");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow, max-image-preview:large">
+    <link rel="shortcut icon" href="" />
+
+    <title>Ingresar - Aula Virtual</title>
+    <link rel="canonical" href="">
+    <meta name="description" content="" />
+    <meta name="author" content="MinePeru">
+    <meta name="distribution" content="global" />
+    <meta name="keywords" content="" />
+
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="" />
+    <meta property="og:description" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:site_name" content="" />
+    <meta property="og:image" content="">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:description" content="" />
+    <meta name="twitter:title" content="" />
+    <meta name="twitter:site" content="" />
+    <meta name="twitter:image" content="" />
+    
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css")">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("plugins/icheck-bootstrap/icheck-bootstrap.min.css")">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("plugins/jqvmap/jqvmap.min.css")">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("dist/css/adminlte.min.css")">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("plugins/overlayScrollbars/css/OverlayScrollbars.min.css")">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("plugins/daterangepicker/daterangepicker.css")">
+    <!-- summernote -->
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("plugins/summernote/summernote-bs4.min.css")">
+    <!-- Normalize -->
+    <link rel="stylesheet" type="text/css" href="@Url.GetCmsResourceUrl("assets/css/normalize.css")">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- Fontawesome -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <!-- Slick -->
+    <link rel="stylesheet" type="text/css" href="@Url.GetCmsResourceUrl("assets/slick/slick.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.GetCmsResourceUrl("assets/slick/slick-theme.css")" />
+    <!-- General -->
+    <link rel="stylesheet" type="text/css" href="@Url.GetCmsResourceUrl("assets/css/style.css")">
+
+</head>
+<body>
+    <h1 style="display: none;">Aula Virtual - Promperú</h1>
+    <header class="header-web">
+        <div class="content">
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid">
+                    <div class="logos-header">
+                        <a class="navbar-brand" href="/">
+                            <img src="@Url.GetCmsResourceUrl("assets/images/logos/logo_aula-virtual.png")" alt="Aula Virtual">
+                        </a>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon" style="margin-top: -8px;">
+                        </span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" href="@Url.Action("Index","Login")">Ingresar</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-btn" href="@Url.Action("Register","Front")">Regístrate <i class="fas fa-chevron-right"></i></a>
+                            </li>
+                        </ul>
+                        <div class="contact-menu">
+                            <p><img src="@Url.GetCmsResourceUrl("assets/images/iconos/wh_telf_contact.png")"> (+51) 555 0123</p>
+                            <p><img src="@Url.GetCmsResourceUrl("assets/images/iconos/wh_movil_contact.png")"> (+51) 555 0123</p>
+                            <p><img src="@Url.GetCmsResourceUrl("assets/images/iconos/wh_movil_contact.png")"> 999-123456</p>
+                            <p><img src="@Url.GetCmsResourceUrl("assets/images/iconos/wh_mail_contact.png")"> <a href="mailto:aulavirtual@promperu.gob.pe">aulavirtual@promperu.gob.pe</a></p>
+                            <p><img src="@Url.GetCmsResourceUrl("assets/images/iconos/wh_web_contact.png")"> <a href="https://exportemos.pe" target="_blank">www.exportemos.pe</a></p>
+                        </div>
+                        <div class="rrss-menu">
+                            <a href="#" target="_blank"><i class="fab fa-facebook-square"></i></a>
+                            <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <main>
+        @RenderBody()
+        @*<section class="seccion formularios">
+                <div class="content">
+                    <div class="content-form content-form-login">
+                        <form id="login" action="">
+                            <h2>Iniciar sesión</h2>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="emailLogin">Nombre de usuario / Correo electrónico</label>
+                                            <input id="emailLogin" type="email" class="form-control" name="emailLogin">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="password">Contraseña</label>
+                                        <input id="password" type="password" class="form-control" name="password">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="icheck-primary">
+                                                <input type="checkbox" id="loginActive" name="loginActive">
+                                                <label for="loginActive">
+                                                    Mantener mi cuenta abierta
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <button type="submit" class="btn btn-primary">Ingresar</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <span id="errorGeneral" class="errorGeneral" style="display: none;"><img src="@Url.GetCmsResourceUrl("assets/images/iconos/alert_msj.png")"> El usuario y/o contraseña son incorrectos</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <span id="olvidoContrasena" class="olvidoContrasena">Olvidé mi contraseña</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group last-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <a id="irRegistro" class="irRegistro" href="../registro/">Registrarme</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <a id="irInicio" class="irInicio" href="../">Volver al inicio</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div id="olvidoPass" class="message-login" style="display: none;">
+                            <h2>Olvidé mi contraseña</h2>
+                            <p>Ingresa el correo electrónico con el que te registraste:</p>
+                            <form id="olvidoPass" action="">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="emailRecover">Correo electrónico</label>
+                                            <input id="emailRecover" type="email" class="form-control" name="emailRecover">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <button type="submit" class="btn btn-primary">Enviar nueva contraseña</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="olvidoConfirm" class="message-login" style="display: none;">
+                            <h2>Olvidé mi contraseña</h2>
+                            <p>Malesuada praesent augue risus vulputate amet ipsum. Blandit elementum mollis habitasse mauris diam eget semper. Dignissim placerat neque pretium, eu dolor non massa posuere consequat. Amet quis feugiat sit placerat in.</p>
+                            <span class="btn btn-primary">Iniciar sesión</span>
+                        </div>
+                    </div>
+                </div>
+            </section>*@
+    </main>
+    <footer>
+        <div class="content">
+            <div class="top">
+                <div class="about-us">
+                    <a href="#" target="_blank">
+                        <img src="@Url.GetCmsResourceUrl("assets/images/logos/logo_promperu.png")" alt="Promperu">
+                    </a>
+                    <p>La Comisión de Promoción de Perú para la Exportación y el Turismo - PROMPERÚ es un organismo técnico especializado con personería jurídica de derecho público interno que goza de autonomía funcional, técnica, económica, financiera, presupuestal y administrativa.  Se encuentra adscrita al Ministerio de comercio Exterior y Turismo y constituye un pliego.</p>
+                </div>
+                <div class="links-interes">
+                    <ul>
+                        <li>Links</li>
+                        <li><a href="https://peru.info/es-pe/" target="_blank">Perú Info</a></li>
+                        <li><a href="https://www.promperu.gob.pe/" target="_blank">PROMPERÚ</a></li>
+                        <li><a href="https://www.gob.pe/mincetur" target="_blank">Ministerio de Comercio Exterior y Turismo</a></li>
+                        <li><a href="https://www.promperu.gob.pe/turismoin/" target="_blank">Turismo In</a></li>
+                    </ul>
+                </div>
+                <div class="info-contacto">
+                    <h2>Información de contacto</h2>
+                    @*<p>Avenida Jacaranda 2030, San Isidro, Lima.</p>*@
+                    <p>San Isidro, Lima</p>
+                    <p><a href="tel:515550123"><img src="@Url.GetCmsResourceUrl("assets/images/iconos/wh_telf_contact.png")"> Calle Uno Oeste 050</a></p>
+                    @*<p><a href="tel:516045601"><img src="@Url.GetCmsResourceUrl("assets/images/iconos/wh_telf_contact.png")"> (+51) 604-5601</a></p>
+                    <p><a href="tel:51991820901"><img src="@Url.GetCmsResourceUrl("assets/images/iconos/wh_movil_contact.png")"> (+51) 991-820-901</a></p>
+                    <p><a href="tel:51990060194"><img src="@Url.GetCmsResourceUrl("assets/images/iconos/icons-whatsapp.png")"> (+51) 990-060-194</a></p>*@
+                    <p><a href="mailto:aulavirtual@promperu.gob.pe"><img src="@Url.GetCmsResourceUrl("assets/images/iconos/wh_mail_contact.png")"> aulavirtual@promperu.gob.pe</a></p>
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="copy">
+                    <p>Copyright &copy; 2022 PROMPERU. Todos los Derechos Reservados.</p>
+                </div>
+                <div class="legales">
+                    @*<a href="#">Preguntas frecuentes</a>
+                    <a href="#">Privacidad</a>*@
+                </div>
+                <div class="redes-sociales">
+                    <a href="https://www.facebook.com/promperu" target="_blank"><i class="fab fa-facebook-square"></i></a>
+                    <a href="https://twitter.com/PromPeru" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/company/392025?trk=vsrp_companies_res_name&amp;trkInfo=VSRPsearchId%3A1485013621477865369025%2CVSRPtargetId%3A392025%2CVSRPcmpt%3Aprimary" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.youtube.com/promperu" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JQuery -->
+    <script type="text/javascript" src="@Url.GetCmsResourceUrl("assets/js/jquery-2.1.3.min.js")"></script>
+    @RenderSection("Scripts", false)
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- Slick -->
+    <script type="text/javascript" src="@Url.GetCmsResourceUrl("assets/slick/slick.min.js")"></script>
+    <!-- jquery-validation -->
+    <script src="@Url.GetCmsResourceUrl("plugins/jquery-validation/jquery.validate.min.js")"></script>
+    <script src="@Url.GetCmsResourceUrl("plugins/jquery-validation/additional-methods.min.js")"></script>
+    <!-- AdminLTE App -->
+    <script type="text/javascript" src="@Url.GetCmsResourceUrl("assets/js/adminlte.js")"></script>
+    <!-- General -->
+    <script type="text/javascript" src="@Url.GetCmsResourceUrl("assets/js/main.js")"></script>
+</body>
+</html>

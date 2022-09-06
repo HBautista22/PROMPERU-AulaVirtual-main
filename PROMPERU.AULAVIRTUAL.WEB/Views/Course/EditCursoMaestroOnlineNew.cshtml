@@ -1,0 +1,221 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.EditCursoMaestroOnlineViewModel
+@{
+    ViewBag.Title = "EditCursoMaestroOnlineNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+
+    ViewBag.Seccion = "Cursos";
+    ViewBag.SubSeccion = "Cursos";
+
+}
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Cursos</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Agregar Curso</h2>
+        </div>
+    </div><!-- /.row -->
+}
+
+@MessageHelpers.ShowMessages(TempData)
+
+@using (Html.BeginForm("EditCursoMaestroOnline", "Course", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.CursoOnlineId)
+    <div class="row">
+        <div class="col-lg-12 box-grey-content">
+            <div class="content-form-grey">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Código</label>
+                            @Html.TextBoxFor(x => x.Codigo, new { @class = "form-control", @placeholder = "Ingresar Código", required = "required" })
+                            @Html.ValidationMessageFor(x => x.Codigo)
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Categoría</label>
+                            @Html.DropDownListFor(x => x.CategoriaCursoOnlineId, new SelectList(Model.LstCategoriaCursoOnline, "CategoriaCursoOnlineId", "Nombre"), "[- Seleccionar -]", new { @class = "Categoría form-control form-control-select form-select", required = "required" })
+                            @Html.ValidationMessageFor(x => x.CategoriaCursoOnlineId)
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Nombre</label>
+                            @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control ", @placeholder = "Ingresar Nombre", required = "required" })
+                            @Html.ValidationMessageFor(x => x.Nombre)
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group file-avatar">
+                            <label for="">Imagen relacionada</label>
+                            <div class="type2">
+                                <label class="input-file">
+                                    Seleccionar
+                                    <input type="file" name="@Html.NameFor(x => x.ArchivoImagen)" id="@Html.IdFor(x => x.ArchivoImagen)" required = "required" />
+                                    <span class="file-choose-btn">Examinar</span>
+                                </label>
+                            </div>
+                            <p class="note">Tamaño recomendado: 400 px por 200 px (.png / .jpg)</p>
+
+                            @Html.HiddenFor(x => x.RutaImagen)
+                            @Html.ValidationMessageFor(x => x.ArchivoImagen)
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 box-grey-content">
+            <div class="content-form-grey">
+                <h2 class="subtitle-form">Descripción</h2>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            @*<textarea id="summernote"></textarea>*@
+                            @Html.TextAreaFor(x => x.Descripcion, new { placeholder = "Escriba la descripccion del Curso", @cols = "120", @rows = "10" })
+                            @Html.ValidationMessageFor(x => x.Descripcion)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5 box-grey-content">
+            <div class="content-form-grey">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="">Numero de Preguntas de la Evaluación</label>
+                        @Html.TextBoxFor(x => x.NumPreguntasEvaluacion, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.NumPreguntasEvaluacion)
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for=""> Porcentaje de Aprobación </label>
+                        @Html.TextBoxFor(x => x.PorcentajeAprobacion, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(x => x.PorcentajeAprobacion)
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for=""> Tiempo de Evaluación </label>
+                        @Html.TextBoxFor(x => x.TiempoEvaluacion, new { @class = "form-control " })
+                        @Html.ValidationMessageFor(x => x.TiempoEvaluacion)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7 box-grey-content">
+            <div class="content-form-grey conditions">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @if (Model.RutaBanner == null)
+                        {
+                            <div class="row">
+                                <div class="col-sm-12 m-l-20">
+                                    @Html.LabelFor(m => m.BannerImage, new { @class = "col-sm-3 control-label text-add-categoria" })
+                                </div>
+                                <div class='col-sm-12'>
+                                    @Html.TextBoxFor(m => m.BannerImage, new { @class = "form-control bg", @type = "file", @accept = "image/png" })
+                                </div>
+                            </div> }
+                        else
+                        {
+                            <div class="row">
+                                <div class="col-sm-12 m-l-20">
+                                    @Html.LabelFor(m => m.BannerImage, new { @class = "col-sm-3 control-label text-add-categoria" })
+                                </div>
+                                <div class='col-sm-12'>
+                                    <a class="btn btn-xs" @Data.ModalLink("_ViewContentAdditionalFile", new { CursoOnlineId = Model.CursoOnlineId, hasFile = true })><i class="fa fa-eye"></i> Ver archivo</a>
+                                    <a class="btn btn-xs" onclick="editFileSection(0)"><i class="fa fa-pencil"></i> Cambiar</a>
+                                    <div id="editfile" style="display:none">
+                                        @Html.TextBoxFor(m => m.BannerImage, new { @class = "form-control bg", @type = "file", @accept = "application/pdf,video/mp4,video/x-m4v,video/*" })
+                                        <a class="btn btn-xs btn-danger" onclick="editFileSection(1)"><i class="fa fa-pencil"></i> Cancelar</a>
+                                    </div>
+                                </div>
+                            </div>}
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="icheck-primary activo-2 bgd-azul">
+                                @*<input type="checkbox" id="activo" name="activo">
+                                    <label for="activo">
+                                        ¿Está activo?
+                                    </label>*@
+                                @Html.CheckBoxFor(m => m.Estado, new { @checked = "checked" })
+                                <label for="Estado">
+                                    ¿Está activo?
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group condition-double">
+                            <div class="icheck-primary activo-2 bgd-azul">
+                                @Html.CheckBoxFor(m => m.TieneExamen, new { @checked = "checked" })
+                                <label for="TieneExamen">
+                                    Tiene examen
+                                </label>
+                            </div>
+                            <div class="repeat-examen">
+                                <label for="">Cantidad de Repeticiones</label>
+                                <select name="repeat" class="repeat form-control form-control-select form-select">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="icheck-primary activo-2 bgd-azul">
+                                @Html.CheckBoxFor(m => m.ReinicioScorm, new { @checked = "checked" })
+                                <label for="ReinicioScorm">
+                                    ¿Los usuarios pueden reiniciar una unidad del curso?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="icheck-primary activo-2 bgd-azul">
+
+                                    @Html.CheckBoxFor(m => m.DisponibleCurso, new { @checked = "checked" });
+                                    <label for="activo">
+                                        ¿Disponible para todos los usuarios?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>*@
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="icheck-primary activo-2 bgd-azul">
+                                @Html.CheckBoxFor(m => m.AutoMatricula, new { @checked = "checked" })
+                                <label for="AutoMatricula">
+                                    ¿Los usuarios pueden auto-matricularse?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-btn">
+            <input type="submit" class="btn btn-primary" value="Guardar">
+            <a class="btn btn-secondary" href="@Url.Action("ListCursoOnlineAdminMaestro", "Course", new { CursoOnlineId = Model.CursoOnlineId })">Cancelar</a>
+        </div>
+    </div>
+}
+

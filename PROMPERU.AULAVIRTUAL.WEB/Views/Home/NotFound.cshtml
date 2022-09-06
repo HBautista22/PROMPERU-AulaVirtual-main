@@ -1,0 +1,45 @@
+﻿@model System.Exception
+@{
+    ViewBag.Title = "Error";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+    ViewBag.IsLogin = true;
+    ViewBag.IsAppPage = true;
+    ViewBag.URLPortal = System.Web.Configuration.WebConfigurationManager.AppSettings["PORTAL.Url"].ToString();
+
+}
+
+<section class="login min-vh-100 d-flex align-content-center flex-wrap bg-blue" style="background-image: url('@Url.Content("~/Content/new/img/icons/app-shape.svg")');">
+    <div class="container py-5">
+        <div class="row h-100">
+            <div class="col-xl-6 col-md-6 col-sm-12 pb-4 d-flex align-content-center">
+                <div class="text-white">
+                    <h2 class="sansa-bold">
+                        ERROR
+                    </h2>
+                    <h1 class="sansa-bold display-1">
+                        404
+                    </h1>
+                    <h3>
+                        La página a la que quieres<br />
+                        acceder no está funcionando, <br />
+                        vuelvalo a intentar en unos minutos.
+                    </h3>
+                    @*<div class="d-none">
+                        @Model.Message
+                    </div>*@
+                    <a href="@ViewBag.URLPortal" class="btn btn-sodexo btn-dark-sodexo"> Ir al Inicio</a>
+                </div>
+            </div>
+            @*<div class="col-xl-6 col-md-6 col-sm-12">
+                <div class="text-white">
+                    <h4 class="sansa-light"> Descarga nuestra APP <br /> <strong> Sodexo Club Perú </strong> en:</h4>
+                    <div class="pt-3">
+                        <a href="https://play.google.com/store/apps/details?id=com.laagenciadigital.sodexooneapp"><img src="@Url.Content("~/Content/new/img/icons/app-store.svg")" alt="iOS" /></a>
+                        <a href="https://itunes.apple.com/uy/app/sodexo/id1205511352?l=es&mt=8"><img src="@Url.Content("~/Content/new/img/icons/google-play.svg")" alt="Android" /></a>
+                    </div>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</section>
+

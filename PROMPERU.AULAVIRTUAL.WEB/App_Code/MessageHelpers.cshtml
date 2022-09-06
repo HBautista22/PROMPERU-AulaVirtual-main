@@ -1,0 +1,54 @@
+﻿@using PROMPERU.AULAVIRTUAL.WEB.Helpers
+@helper ShowMessages(System.Web.Mvc.TempDataDictionary tempData, string customStyle = "")
+{
+    
+    List<FlashMessage> messages = (List<FlashMessage>)tempData["FlashMessages"];
+
+    if (messages != null)
+    {
+    <div class="pgn-wrapper" data-position="top">
+        @foreach (FlashMessage message in messages)
+        {
+            string alertClass;
+            string alertBtnClass;
+            string iconClass;
+
+            switch (message.Type)
+            {
+                case MessageType.Error: alertClass = "alert-danger"; alertBtnClass = "btn-danger"; iconClass = "fa fa-times-circle"; break;
+                case MessageType.Info: alertClass = "alert-info"; alertBtnClass = "btn-info"; iconClass = "fa fa-info"; break;
+                case MessageType.Warning: alertClass = "alert-warning"; alertBtnClass = "btn-warning"; iconClass = "fa fa-warning"; break;
+                case MessageType.Success: alertClass = "alert-success"; alertBtnClass = "btn-success"; iconClass = "fa fa-check"; break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            <div class="pgn pgn-bar">
+                <div class="alert @(!message.Inline ? "alert-block" : "") @alertClass" role="alert" style="@customStyle">
+                    <a class="close" data-dismiss="alert" style="height: auto;top: 1px;"><i class="pg-close fs-14"></i></a>
+
+                    @if (!message.Inline)
+                    {
+                        <h4><i class='@iconClass'></i>@(message.Title)</h4>
+                        <p>@(message.Body)</p>
+                    }
+
+                    @if (message.Inline)
+                    {
+                        <span><i class='@iconClass'></i> <strong>@(message.Title)</strong> @(message.Body) </span>
+                    }
+
+                    @if (message.Actions != null && message.Actions.Count > 0)
+                    {
+                        <p>
+                            @foreach (FlashAction action in message.Actions)
+                            {
+                                <a class="btn @(message.Actions.First() == action ? alertBtnClass : string.Empty)" href="@action.Action">@action.Text</a>
+                            }
+                        </p>
+                    }
+                </div>
+            </div>
+        }
+    </div> 
+    }
+}

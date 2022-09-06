@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewBag.Title = "Preguntas frecuentes";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+
+@{ Html.RenderPartial("~/Views/Shared/_FrontNavigation.cshtml"); }
+
+<!-- Jumbotron -->
+<div class="card card-image" style="background-image: url('@Url.Content("~/Content/landing/img/banner-pf.jpg")');">
+    <div class="text-white text-center rgba-stylish-strong py-55 px-4">
+        <div class="py-55">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb d-inline-flex pl-0 pt-0">
+                    <!--<li class="breadcrumb-item"><a class="white-text" href="@Url.Action("Index","Front")">Inicio</a></li>-->
+                    <li class="breadcrumb-item"><a class="white-text" href="/">Inicio</a></li>
+                    <li class="breadcrumb-item active">Preguntas Frecuentes</li>
+                </ol>
+            </nav>
+            <!--h2 class="card-title h2 my-4 py-2">Preguntas Frecuentes</h2>-->
+        </div>
+    </div>
+</div>
+<!-- Jumbotron -->
+<section class="page-section" style="padding: 25px 0;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="section-heading text-center">Preguntas Frecuentes</h2>
+            </div>
+            <div class="col-md-12">
+                <div class="accordion" id="accordionExample">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">¿Qué es Aula Virtual </button>
+                            </h2>
+                        </div>
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                            <div class="card-body">
+                                Es una plataforma de auto-aprendizaje en línea dirigido a la comunidad exportadora, que permite desde
+                                la pantalla de un dispositivo digital y en cualquier parte del mundo, poder ver diferentes temas del
+                                proceso exportador.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    ¿Cómo me inscribo?
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                            <div class="card-body">
+                                ¡Es muy simple! Sólo debes hacer clic en el botón Crear Nueva Cuenta, que se encuentra en la parte
+                                superior derecha de la pantalla principal y llenar con la información que se solicita o puedes iniciar
+                                sesión con tu cuenta personal de Facebook.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    ¿Una vez registrado en el Aula Virtual, ¿por dónde empiezo?
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                            <div class="card-body">
+                                Accede a la plataforma del curso con la cuenta de mail con la que te has registrado o inicia sesión
+                                con tu cuenta en facebook. Una vez dentro, ¡ya puedes comenzar! Te recomendamos que entres a la
+                                sección Módulos y escojas el curso que quisieras llevar.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingFour">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                        data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    ¿No resido en Lima, ¿puedo acceder a los cursos?
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+                            <div class="card-body">
+                                Sí. Nuestros módulos están abiertos a toda persona sin distinción de nacionalidad o país de
+                                residencia.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingFive">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                    ¿Qué duración tienen los cursos de Aula Virtual?
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
+                            <div class="card-body">
+                                Se estima que la duración de cada módulo es de hasta 25 minutos. No obstante, puedes organizarte como
+                                desees de acuerdo a tu tiempo y disponibilidad.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingSix">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                ¿Puedo descargar el contenido de Aula Virtual?
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionExample">
+                            <div class="card-body">
+                                Sí, podrás descargar el contenido en formato PDF. En algunos de los cursos encontrarás transcripciones
+                                de los vídeos y en otros documentos.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingSeven">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                                    Si tengo dudas sobre el contenido del curso, ¿a quién puedo dirigirme?
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#accordionExample">
+                            <div class="card-body">
+                                Si necesitas ayuda con parte del contenido puedes consultar tus dudas a aulavirtual@promperu.gob.pe
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@{ Html.RenderPartial("~/Views/Shared/_FrontFooter.cshtml"); }
+

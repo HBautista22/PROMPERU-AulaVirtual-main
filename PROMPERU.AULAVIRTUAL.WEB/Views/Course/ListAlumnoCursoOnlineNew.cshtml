@@ -1,0 +1,116 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ListAlumnoCursoOnlineViewModel
+@{
+    var usuario = Model.Usuario;
+    ViewBag.Title = "ListAlumnoCursoOnlineNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+@section Breadcrumbs{
+
+
+    <div class="row mb-2">
+        <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="@Url.Action("ListUsuario", "User")">usuario</a></li>
+            <li class="breadcrumb-item active">Historial de Cursos</li>
+        </ol>
+    </div>
+    <div class="col-sm-6">
+        <h2 class="m-0">Historial de Cursos  </h2>
+    </div>
+}
+<div class="row">
+    <div class="col-lg-12 box-grey-content">
+        <div class="content-form-grey">
+            <form action="" id="searchUser">
+                @Html.HiddenFor(x => x.UsuarioId)
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Buscar Curso</label>
+                            
+                            @Html.TextBoxFor(x => x.CadenaBuscar, new { @class = "form-control", @placeholder = "Curso" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-btn">
+                        <input type="submit" class="btn btn-primary" value="Filtrar">
+                        <a class="btn btn-secondary" href="@Url.Action("ListUsuario", "User")">Regresar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="row table-acciones table-content">
+    <div class="col-sm-6">
+        <h2><strong>@usuario.Apellido, @usuario.Nombre</strong></h2>
+    </div>
+    @*<div class="col-sm-12 btns-table">
+        <a class="btn btn-primary" href="nuevo-profesor/">Agregar Curso</a>
+    </div>*@
+</div>
+<div class="row mis-solicitudes table-content">
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list asesorias">
+            <thead>
+                <tr>
+                    <th align="center">Estado</th>
+                    <th align="center">Curso</th>
+                    <th align="center">Nota</th>
+                    <th align="center">% obtenido</th>
+                    <th align="center">Fecha inicio</th>
+                    <th align="center">Fecha aprobado</th>
+                    <th align="center">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.LstMatriculaCursoOnline)
+                {
+                    var curso = item.CursoOnline;
+                    var caterogria = item.CursoOnline.CategoriaCursoOnline;
+                    var puedeDescargarCertificado = (item.Nota.HasValue && item.Estado == ConstantHelpers.ESTADO_MATRICULA.APROBADO);
+
+
+                    <tr>
+                        <td align="center">
+                            <span class="label-estado @ConstantHelpers.TextoColorEstado(item.Estado)">
+                                @ConstantHelpers.TextoEstado(item.Estado)
+                            </span>
+                        </td>
+                        <td>
+                            <p>@curso.Nombre</p>
+                        </td>
+                        <td>@(item.Nota == null ? "--" : item.Nota.ToString() )</td>
+                        <td>@(item.PorcentajeObtenido != null ? item.PorcentajeObtenido + " %" : "--")</td>
+                        <td>@item.FechaMatricula.ToShortDateString()</td>
+                        <td>@(item.FechaAprobado != null ? String.Format("{0:d MMMM, yyyy}", item.FechaAprobado) : "-")</td>
+                        <td>
+                            <div class="dropdown">
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Acciones
+                                </a>
+
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
+
+                                    @if (item.Estado == ConstantHelpers.ESTADO_MATRICULA.PENDIENTE && item.FechaMatricula >= ConstantHelpers.GET_FECHA_INICIO_MATRICULA_VIGENTE())
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" href="@Url.Action("EnableEvaluacion","Enrollment", new { MatriculaCursoOnlineId= item.MatriculaCursoOnlineId })">Ver Evaluaciones</a>
+                                        </li>
+
+                                    }
+                                    </ul>
+                            </div>
+                        </td>
+                    </tr>
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>

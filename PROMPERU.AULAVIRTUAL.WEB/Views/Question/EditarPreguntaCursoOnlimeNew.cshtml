@@ -1,0 +1,630 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Question._EditPreguntaCursoOnlineViewModel
+@{
+    ViewBag.Title = "EditarPreguntaCursoOnlimeNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+
+    var esPreguntaNueva = !Model.PreguntaCursoOnlineId.HasValue;
+    var tipoPregunta = esPreguntaNueva ? ConstantHelpers.TIPO_PREGUNTA.VERDADERO_FALSO : Model.Tipo;
+    ViewBag.GUID = ViewBag.GUID ?? Guid.NewGuid().ToString();
+    var numRespuestas = Model.NumRespuestas;
+}
+<style>
+    .content-preguntas .box-grey .tab-content .campos .input-group .delete {
+        padding: 1px 6px;
+    }
+</style>
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="#">Cursos</a></li>
+                <li class="breadcrumb-item"><a href="#">Canales de distribución digital - Lima</a></li>
+                <li class="breadcrumb-item active">Silabo e información adicional</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Editar pregunta</h2>
+        </div>
+    </div><!-- /.row -->
+}
+
+<div class="row">
+
+
+    <div class="row col-sm-12 content-preguntas content-preguntas-new">
+
+        @using (Html.BeginForm("_EditPreguntaCursoOnline", "Question", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+        {
+
+
+
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(x => x.PreguntaCursoOnlineId)
+            @Html.HiddenFor(x => x.UnidadOnlineId)
+            @Html.HiddenFor(x => x.Tipo)
+            @Html.HiddenFor(x => x.NumRespuestas)
+            @Html.HiddenFor(x => x.Estado)
+
+            var orden = 0;
+            var codigoPregunta = "";
+            var codigoRespuesta = "";
+            var codigoPreguntaId = "0";
+            if (Model.PreguntaCursoOnlineId.HasValue)
+            {
+                codigoPreguntaId = Model.PreguntaCursoOnlineId + "";
+
+            }
+
+
+            if ( tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.VERDADERO_FALSO)
+            {
+                codigoPregunta = "PRE-VOF-" + codigoPreguntaId;
+            }
+            if (tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.SIMPLE)
+            {
+                codigoPregunta = "PRE-SIM-" + codigoPreguntaId;
+            }
+            if (tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.MULTIPLE)
+            {
+                codigoPregunta = "PRE-MUL-" + codigoPreguntaId;
+            }
+            if ( tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.COMPLETAR)
+            {
+                codigoPregunta = "PRE-COM-" + codigoPreguntaId;
+            }
+            if ( tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.RELACIONAR)
+            {
+                codigoPregunta = "PRE-REL-" + codigoPreguntaId;
+
+            }
+            <h2>Agregar pregunta</h2>
+            <div class="col-sm-12 box-grey">
+                @if (!esPreguntaNueva)
+                {
+
+                    <div class="options col-sm-12 row">
+                        <span class="option @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.VERDADERO_FALSO ? "selected" : String.Empty)">Verdadero/Falso</span>
+                        <span class="option @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.SIMPLE ? "selected" : String.Empty)">Respuesta única</span>
+                        <span class="option @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.MULTIPLE ? "selected" : String.Empty)">Selección múltiple</span>
+                        <span class="option @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.COMPLETAR ? "selected" : String.Empty)">Completar espacios</span>
+                        <span class="option @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.RELACIONAR ? "selected" : String.Empty)">Relacionar</span>
+                    </div>
+                }
+
+                else
+                {
+                    <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+
+                        <li class="nav-item">
+                            <a href="#pnl-VOF" class="nav-link active" id="pnl-VOF-tab" data-toggle="pill" role="tab" aria-controls="pnl-VOF" aria-selected="true">Verdadero/falso</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#pnl-SIM" class="nav-link " id="pnl-SIM-tab" data-toggle="pill" role="tab" aria-controls="pnl-SIM" aria-selected="false">Respuesta única</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#pnl-MUL" class="nav-link " id="pnl-MUL-tab" data-toggle="pill" role="tab" aria-controls="pnl-MUL" aria-selected="false">Selección múltiple</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#pnl-COM" class="nav-link " id="pnl-COM-tab" data-toggle="pill" role="tab" aria-controls="pnl-COM" aria-selected="false">Completar Espacios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#pnl-REL" class="nav-link " id="pnl-REL-tab" data-toggle="pill" role="tab" aria-controls="pnl-REL" aria-selected="false">Relacionar</a>
+                        </li>
+                    </ul>
+                }
+
+
+
+                <div class="tab-content" id="custom-tabs-one-tabContent">
+                    <div class="tab-pane fade @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.VERDADERO_FALSO ? "active show" : String.Empty)" id="pnl-VOF" role="tabpanel" aria-labelledby="pnl-VOF-tab">
+                        <div class="campos row col-sm-12">
+                            <div class="col-sm-6">
+                                <label for="">Pregunta:</label>
+                                @Html.TextAreaFor(x => x.Texto, new { rows = "10", cols = "30", @Name = "TXT-PRE-VOF-" + Model.PreguntaCursoOnlineId, id = "TXT-PRE-VOF-" + Model.PreguntaCursoOnlineId, @placeholder = "Agregar pregunta" })
+                                @Html.ValidationMessageFor(x => x.Texto)
+
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="">Respuestas:</label>
+                                @if (Model.PreguntaCursoOnlineId.HasValue)
+                                {
+                                    foreach (var respuesta in Model.LstRespuestaCursoOnline)
+                                    {
+                                        codigoRespuesta = "RES-VOF-" + codigoPreguntaId + "-" + respuesta.RespuestaCursoOnlineId;
+                                        <div class="col-sm-6 answer-radio tipo-2">
+                                            <label for="@codigoRespuesta">
+
+                                                <input type="radio" name="@codigoPregunta" id="@codigoRespuesta" @(respuesta.EsSolucion ? "checked" : "") value="@respuesta.Texto" required>
+                                                <span>@respuesta.Texto</span>
+                                            </label>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    codigoRespuesta = "RES-VOF-";
+
+                                    @(codigoPregunta)
+                                    <br />
+                                    @(tipoPregunta)
+                                    
+                                    <div class="col-sm-6 answer-radio tipo-2">
+                                                        <label for="@(codigoRespuesta + "0")">
+                                                            <input id = "@(codigoRespuesta + "0")" type="radio" name="@(codigoPregunta)" value="Verdadero">
+                                                            <span>Verdadero</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-sm-6 answer-radio tipo-2">
+                                                        <label for="@(codigoRespuesta + "1")">
+                                                            <input id = "@(codigoRespuesta + "1")" name="@(codigoPregunta)" value="Falso" type="radio">
+                                                            <span>Falso</span>
+                                                        </label>
+                                                    </div>
+                                                }
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.SIMPLE ? "active show" : String.Empty)" id="pnl-SIM" role="tabpanel" aria-labelledby="pnl-SIM-tab">
+                        <div class="campos row col-sm-12">
+                            <div class="col-sm-6">
+                                <label for="">Pregunta:</label>
+
+
+                                @Html.TextAreaFor(x => x.Texto, new { rows = "10", cols = "30", @Name = "TXT-PRE-SIM-" + Model.PreguntaCursoOnlineId, id = "TXT-PRE-SIM-" + Model.PreguntaCursoOnlineId, @placeholder = "Agregar pregunta" })
+                                @Html.ValidationMessageFor(x => x.Texto)
+
+
+
+
+
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row col-sm-12 header-answer">
+                                    <label class="col-sm-6" for="">Respuestas:</label>
+                                    <div class="options options-relation col-sm-6">
+                                        <div class="btn-option btn-respuesta">
+
+                                            <a href="#" class="btn" id="RUAddRespuesta"><span class="icon"></span>Añadir respuesta</a>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12" id="RURespuestas">
+                                    @if (!esPreguntaNueva && tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.SIMPLE)
+                                    {
+
+                                        if (Model.PreguntaCursoOnlineId.HasValue)
+                                        {
+                                            foreach (var respuesta in Model.LstRespuestaCursoOnline)
+                                            {
+                                                orden++;
+                                                codigoRespuesta = "RES-SIM-" + codigoPreguntaId + "-" + respuesta.RespuestaCursoOnlineId;
+
+                                                orden++;
+                                                codigoRespuesta = "RES-SIM-" + codigoPreguntaId + "-" + respuesta.RespuestaCursoOnlineId;
+                                                <div class='input-group answer-radio tipo-2' id="RU-@respuesta.RespuestaCursoOnlineId">
+                                                    <label for='" + id + "'>
+
+                                                        <input type="radio" name="@codigoPregunta" id="@codigoRespuesta" value="@respuesta.RespuestaCursoOnlineId" @(respuesta.EsSolucion ? "checked" : "") />
+                                                        <span></span>
+
+                                                        <input type="text" name="@("TXT-" + codigoRespuesta)" id="@( "TXT-" + codigoRespuesta)" value="@respuesta.Texto" />
+                                                        <a class='delete' id='@codigoRespuesta'><img src='@Url.GetCmsResourceUrl("assets/images/iconos/menu_close.png")'></a>
+                                                    </label>
+                                                </div>
+
+                                            }
+                                        }
+                                    }
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.MULTIPLE ? "active show" : String.Empty)" id="pnl-MUL" role="tabpanel" aria-labelledby="pnl-MUL-tab">
+                        <div class="campos row col-sm-12">
+                            <div class="col-sm-6">
+                                <label for="">Pregunta:</label>
+
+
+
+                                @Html.TextAreaFor(x => x.Texto, new { rows = "10", cols = "30", @Name = "TXT-PRE-MUL-" + Model.PreguntaCursoOnlineId, id = "TXT-PRE-MUL-" + Model.PreguntaCursoOnlineId, @placeholder = "Agregar pregunta" })
+                                @Html.ValidationMessageFor(x => x.Texto)
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row col-sm-12 header-answer">
+                                    <label class="col-sm-6" for="">Respuestas:</label>
+                                    <div class="options options-relation col-sm-6">
+                                        <div class="btn-option btn-respuesta">
+                                            <a class="btn" id="SMAddRespuesta"><span class="icon"></span>Añadir respuesta</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12" id="SMRespuestas">
+
+                                    @if (!esPreguntaNueva && tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.MULTIPLE)
+                                    {
+
+                                        if (Model.PreguntaCursoOnlineId.HasValue)
+                                        {
+                                            foreach (var respuesta in Model.LstRespuestaCursoOnline)
+                                            {
+                                                orden++;
+                                                codigoRespuesta = "RES-MUL-" + codigoPreguntaId + "-" + respuesta.RespuestaCursoOnlineId;
+                                                <div class='input-group answer-check' id="RU-@respuesta.RespuestaCursoOnlineId">
+                                                    <div class='icheck-primary activo-2 bgd-azul'>
+                                                        <input type='checkbox' name="@codigoPregunta" id="@codigoRespuesta" value="@respuesta.RespuestaCursoOnlineId" @(respuesta.EsSolucion ? "checked" : "")>
+                                                        <label for="@codigoPregunta"></label>
+                                                    </div>
+                                                    @*<input type='text' placeholder='Respuesta " + respuestasSM + "' name='TXT-" + id + "' id='TXT-" + id + "'>*@
+                                                    <input type="text" name="@("TXT-" + codigoRespuesta)" id="@( "TXT-" + codigoRespuesta)" value="@respuesta.Texto" required />
+
+                                                    <a class='delete' id='@codigoRespuesta'><img src='@Url.GetCmsResourceUrl("assets/images/iconos/menu_close.png")'></a>
+                                                </div>
+                                            }
+                                        }
+                                    }
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.COMPLETAR ? "active show" : String.Empty)" id="pnl-COM" role="tabpanel" aria-labelledby="pnl-COM-tab">
+                        <div class="campos row col-sm-12">
+                            <div class="col-sm-6">
+                                <label for="">Pregunta:</label>
+
+
+                                @Html.TextAreaFor(x => x.Texto, new { rows = "10", cols = "30", @Name = "TXT-PRE-COM-" + Model.PreguntaCursoOnlineId, id = "PRE-COM" + Model.PreguntaCursoOnlineId, @placeholder = "Agregar pregunta" })
+                                @Html.ValidationMessageFor(x => x.Texto)
+
+
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row col-sm-12 header-answer">
+                                    <label class="col-sm-6" for="">Respuestas:</label>
+                                    <div class="options options-relation col-sm-6">
+                                        <div class="btn-option btn-respuesta">
+                                            <a class="btn" id="CEAddRespuesta"><span class="icon"></span>Añadir respuesta</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12" id="CERespuestas">
+
+                                    @if (!esPreguntaNueva && tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.COMPLETAR)
+                                    {
+
+                                        if (Model.PreguntaCursoOnlineId.HasValue)
+                                        {
+                                            foreach (var respuesta in Model.LstRespuestaCursoOnline)
+                                            {
+                                                orden++;
+                                                codigoRespuesta = "RES-COM-" + codigoPreguntaId + "-" + respuesta.RespuestaCursoOnlineId;
+
+
+                                                <div class='input-group ' id="ER-@respuesta.RespuestaCursoOnlineId">
+
+                                                    <input type="text" name="@("TXT-" + codigoRespuesta)" id="@( "TXT-" + codigoRespuesta)" value="@respuesta.Texto" required />
+                                                    <a class='delete' id='@codigoRespuesta'><img src='@Url.GetCmsResourceUrl("assets/images/iconos/menu_close.png")'></a>
+                                                </div>
+
+                                            }
+                                        }
+
+
+                                    }
+
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade @(tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.RELACIONAR ? "active show" : String.Empty)" id="pnl-REL" role="tabpanel" aria-labelledby="pnl-REL-tab">
+                        <div class="campos row col-sm-12">
+                            <div class="col-sm-12">
+                                <label for="">Pregunta:</label>
+
+
+                                @Html.TextAreaFor(x => x.Texto, new { rows = "10", cols = "30", @Name = "TXT-PRE-REL-" + Model.PreguntaCursoOnlineId, id = "PRE-REL" + Model.PreguntaCursoOnlineId, @placeholder = "Agregar pregunta" })
+                                @Html.ValidationMessageFor(x => x.Texto)
+                            </div>
+                            <div class="content-respuestas row col-sm-12">
+                                <label class="col-sm-6" for="">Respuestas:</label>
+                                <div class="options options-relation col-sm-6">
+                                    <div class="btn-option btn-relation">
+                                        <a class="btn" id="RRAddRespuesta"><span class="icon"></span>Añadir relación</a>
+                                    </div>
+                                    <div class="btn-option btn-respuesta">
+                                        <a class="btn" id="RREAddRespuesta"><span class="icon"></span>Añadir respuesta</a>
+                                    </div>
+                                </div>
+
+
+                                @{
+                                    codigoPregunta = "PRE-REL-" + codigoPreguntaId;
+                                    var Respuestas = Model.LstRespuestaCursoOnline.OrderBy(x => x.OrdenSolucion == null).ThenBy(x => x.OrdenSolucion);
+
+                                }
+
+
+                            <div class="col-sm-6 respuestas" id="RRRespuestas">
+
+
+                                @if (!esPreguntaNueva && tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.RELACIONAR)
+                                {
+                                    foreach (var respuesta in Respuestas)
+                                    {
+                                        codigoRespuesta = "RES-REL-" + codigoPreguntaId + "-" + respuesta.RespuestaCursoOnlineId;
+
+
+
+                                        <div class='row input-group col-sm-12'>
+                                            <input type="text" name="@("TXT-ENU-" + codigoRespuesta)" value="@respuesta.Texto.Split(new[] { "###" }, StringSplitOptions.None)[0]" @(!respuesta.EsSolucion ? "disabled" : "") />
+
+                                        </div>
+
+
+                                    }
+                                }
+
+
+
+                            </div>
+                            <div class="col-sm-6 relacion" id="RRERespuestas">
+                                @if (!esPreguntaNueva && tipoPregunta == ConstantHelpers.TIPO_PREGUNTA.RELACIONAR)
+                                {
+                                    foreach (var respuesta in Respuestas)
+                                    {
+                                        codigoRespuesta = "RES-REL-" + codigoPreguntaId + "-" + respuesta.RespuestaCursoOnlineId;
+
+
+
+
+                                        <div class='row input-group col-sm-12' id='RRE-" + guid + "'>
+
+                                            <input type="text" name="@("TXT-" + codigoRespuesta)" id="@("TXT-" + codigoRespuesta)" value="@respuesta.Texto.Split(new[] { "###" }, StringSplitOptions.None)[1]" /><br />
+                                        </div>
+
+
+
+                                    }
+                                }
+
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row col-sm-12">
+                <div class="col-sm-2 form-btn">
+                    <input type="submit" class="btn btn-primary" value="Guardar">
+                </div>
+                <div class="col-sm-2 form-btn">
+                    <input type="submit" class="btn btn-secondary cancelar-edicion" value="Cancelar">
+                </div>
+            </div>
+
+        }
+
+
+
+    </div>
+</div>
+
+@section Scripts
+{
+
+    <script>
+
+
+        var respuestasRU = 0;
+        var respuestasSM = 0;
+        var respuestasCE = 0;
+        var respuestasRR = 0;
+
+
+        var preguntaId = ($('#PreguntaCursoOnlineId').val() != "" ? $('#PreguntaCursoOnlineId').val() : 0);
+          @if (esPreguntaNueva)
+        {<text> $('#Tipo').val('VOF');</text>}
+
+
+        var tipoPregunta = $('#Tipo').val();
+        function guid() {
+            function _p8(s) {
+                var p = (Math.random().toString(16) + "000000000").substr(2, 8);
+                return s ? "0" + p.substr(0, 4) + "0" + p.substr(4, 4) : p;
+            }
+            return _p8() + _p8(true) + _p8(true) + _p8();
+        }
+
+
+
+
+
+
+
+        $(document).ready(function () {
+            $('#RUAddRespuesta').click(function () {
+
+                var GUID = guid();
+                var nombrePregunta = "PRE-" + tipoPregunta + "-" + preguntaId;
+                var id = "RES-" + tipoPregunta + "-" + preguntaId + "-" + GUID;
+
+                respuestasRU++;
+                $('#RURespuestas').append(
+                    "<div class='input-group answer-radio tipo-2'  id='RU-" + GUID+"' > " +
+                    "<label for='" + id+"'>" +
+                    "<input id='" + id + "' type='radio' name='" + nombrePregunta + "' value='" + GUID+"'>" +
+                     "<span></span>" +
+                    "<input type='text' placeholder='Respuesta " + respuestasRU + "' name='TXT-" + id + "' id='TXT-" + id + "' required> "+
+                    "<a class='delete' id='" + id +"' ><img src='@Url.GetCmsResourceUrl("assets/images/iconos/menu_close.png")' ></a>"+
+                        "</label>" +
+                      "</div>"
+                );
+
+
+                $('.delete').click(function () {
+                    var id = $(this).attr('id');
+                    var LstIdGUID = id.split('-');
+                    var GUID = LstIdGUID[LstIdGUID.length - 1];
+                    //$('#NumRespuestas').val(--numRespuestas);
+                    $('#RU-'+GUID).remove();
+                });
+
+
+            })
+
+            $('#SMAddRespuesta').click(function () {
+
+
+                var GUID = guid();
+                var nombrePregunta = "PRE-" + tipoPregunta + "-" + preguntaId;
+                var id = "RES-" + tipoPregunta + "-" + preguntaId + "-" + GUID;
+
+
+
+                respuestasSM++;
+
+                $('#SMRespuestas').append("<div class='input-group answer-check' id='RU-" + GUID +"'>" +
+                                            "<div class='icheck-primary activo-2 bgd-azul'>" +
+                    "<input type='checkbox' id='" + id + "' name='" + nombrePregunta + "' value='" + GUID +"'>" +
+                    "<label for='" + id +"'></label>" +
+                    "</div>" +
+                    "<input type='text' placeholder='Respuesta " + respuestasSM + "' name='TXT-" + id + "' id='TXT-" + id + "' >" +
+                    "<a class='delete'  id='" + id +"' ><img src='@Url.GetCmsResourceUrl("assets/images/iconos/menu_close.png")'></a>" +
+                    "</div>");
+
+
+                $('.delete').click(function () {
+                    var id = $(this).attr('id');
+                    var LstIdGUID = id.split('-');
+                    var GUID = LstIdGUID[LstIdGUID.length - 1];
+                    //$('#NumRespuestas').val(--numRespuestas);
+                    $('#RU-' + GUID).remove();
+                });
+
+
+            })
+
+            $('#CEAddRespuesta').click(function () {
+
+
+
+                var GUID = guid();
+                var nombrePregunta = "PRE-" + tipoPregunta + "-" + preguntaId;
+                var id = "RES-" + tipoPregunta + "-" + preguntaId + "-" + GUID;
+
+
+
+                respuestasCE++;
+                $('#CERespuestas').append("<div class='input-group '  id='ER-" + GUID +"'>" +
+                    "<input type='text' placeholder='Respuesta " + respuestasCE + "' name='TXT-" + id + "' id='TXT-" + id + "'>" +
+                    "<a class='delete'  id='" + id +"'><img src='@Url.GetCmsResourceUrl("assets/images/iconos/menu_close.png")'></a>" +
+                    "</div>");
+
+                $('.delete').click(function () {
+                    var id = $(this).attr('id');
+                    var LstIdGUID = id.split('-');
+                    var GUID2 = LstIdGUID[LstIdGUID.length - 1];
+                    //$('#NumRespuestas').val(--numRespuestas);
+                    $('#ER-' + GUID2).remove();
+                });
+            })
+
+            $('#RRAddRespuesta').click(function () {
+                respuestasRR++;
+
+                var GUID = guid();
+                var nombrePregunta = "PRE-" + tipoPregunta + "-" + preguntaId;
+                var id = "RES-" + tipoPregunta + "-" + preguntaId + "-" + GUID;
+                var nombrePregunta = "PRE-" + tipoPregunta + "-" + preguntaId;
+
+
+                AddRRRespuestas(respuestasRR, GUID, id, nombrePregunta)
+                AddRREAddRespuesta(respuestasRR, GUID, id)
+                $('.delete').click(function () {
+
+
+                    var id = $(this).attr('id');
+                    var LstIdGUID = id.split('-');
+                    var GUID2 = LstIdGUID[LstIdGUID.length - 1];
+                    //$('#NumRespuestas').val(--numRespuestas);
+                    $('#RRR-' + GUID2).remove();
+                    $('#RRE-' + GUID2).remove();
+
+                    console.log('#RU-' + GUID2);
+
+                });
+            })
+
+            $('#RREAddRespuesta').click(function () {
+                respuestasRR++;
+
+                var GUID = guid();
+                var nombrePregunta = "PRE-" + tipoPregunta + "-" + preguntaId;
+                var id = "RES-" + tipoPregunta + "-" + preguntaId + "-" + GUID;
+                var nombrePregunta = "PRE-" + tipoPregunta + "-" + preguntaId;
+
+                AddRREAddRespuesta(respuestasRR, GUID, id)
+
+                $('.delete').click(function () {
+                    var id = $(this).attr('id');
+                    var LstIdGUID = id.split('-');
+                    var GUID2 = LstIdGUID[LstIdGUID.length - 1];
+                    //$('#NumRespuestas').val(--numRespuestas);
+                    $('#RRE-' + GUID2).remove();
+                });
+
+            })
+            function AddRRRespuestas(item, guid, id, nombrePregunta) {
+                $('#RRRespuestas').append("<div class='row input-group col-sm-12' id='RRR-" + guid +"'>" +
+                    "<input type='text' placeholder='Relacion " + item + "'  name='TXT-ENU-" + id + "'  id='TXT-" + nombrePregunta + "-" + guid + "'>" +
+                    "<a class='delete' id='" + id +"'><img src='@Url.GetCmsResourceUrl("assets/images/iconos/menu_close.png")'></a>" +
+                    " </div>");
+            }
+            function AddRREAddRespuesta(item,guid,id) {
+                $('#RRERespuestas').append("<div class='row input-group col-sm-12' id='RRE-" + guid +"'>" +
+                    "<input type='text' placeholder='Respuesta relacion " + item + "' name='TXT-" + id + "'  id='TXT-" + id + "'>" +
+                    " <a class='delete' id='" + id +"'><img src='@Url.GetCmsResourceUrl("assets/images/iconos/menu_close.png")'></a>" +
+                                       " </div>");
+            }
+
+            $('#custom-tabs-one-tab').on('shown.bs.tab', function (e) {
+
+                //console.log(e.target.href);
+                var tipo = e.target.href.split('-');
+                tipoPregunta = tipo[tipo.length - 1];
+                $('#Tipo').val(tipoPregunta);
+
+            });
+
+        });
+
+        function myFunction() {
+            alert('test')
+            return false;
+        }
+
+
+
+
+
+
+
+
+    </script>
+}

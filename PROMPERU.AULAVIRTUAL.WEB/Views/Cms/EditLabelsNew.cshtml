@@ -1,0 +1,124 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Cms.EditLabelsViewModel
+@{
+    ViewBag.Title = "EditLabelsNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Etiquetas</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Etiquetas</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row table-acciones table-content list-empresa">
+    <div class="col-sm-6">
+        <h2>Lista de Etiquetas</h2>
+    </div>
+
+</div>
+
+
+
+
+@using (Html.BeginForm("AddImageLabel", "CMS", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    <div class="form-group file-avatar">
+
+        <div class="type2">
+            <label class="input-file">
+                Seleccionar
+                @Html.TextBox("fileImagen", null, new { @class = "", @type = "file" })
+                @Html.ValidationMessageFor(model => model.Imagen, "", new { @class = "text-danger" })
+                <span class="file-choose-btn">Examinar</span>
+            </label>
+        </div>
+        <p class="note">@ViewBag.Imagen</p>
+    </div>
+    <button type="submit" name="BtnSubmit" class="btn btn-primary mb-5"><i class="fa fa-save"></i>&nbsp;Subir Imagen</button>
+}
+@using (Html.BeginForm("EditLabels", "CMS", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(x => x.FiltroCodigo)
+    @Html.HiddenFor(x => x.FiltroTextoES)
+    @Html.HiddenFor(x => x.MostrarPendientes)
+    <div class="row">
+        @*<div class="col-sm-6 text-center">
+                <button type="submit" name="BtnSubmit" class="btn btn-primary mb-5"><i class="fa fa-save"></i>&nbsp;Guardar</button>
+            </div>*@
+        <div class="col-sm-6">
+        </div>
+        <div class="col-sm-6">
+
+
+
+
+            <button type="submit" name="BtnSubmit" class="btn btn-primary mb-5"><i class="fa fa-save"></i>&nbsp;Guardar</button>
+        </div>
+    </div>
+    <div class="row mis-solicitudes table-content">
+        <div class="col-sm-12 table-responsive altomin">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list tipo-empresa" align="center">
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Texto</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var traduccion in Model.LstTraduccionTexto)
+                    {
+                        <tr>
+                            @if (traduccion.TipoComponente == "WY-RA")
+                            {
+                                <td><textarea class="summernote" disabled>@traduccion.Codigo</textarea></td>
+                                <td><textarea class="summernote" name="DictTextoES[@traduccion.CMS_LabelId]">@traduccion.Texto</textarea></td>
+                            }
+                            else if (traduccion.TipoComponente == "TA-RA" || traduccion.TipoComponente == "TA-NO")
+                            {
+                                <td><textarea name="DictCodigo[@traduccion.CMS_LabelId]" disabled class="form-control text-info">@traduccion.Codigo</textarea></td>
+                                <td><textarea name="DictTextoES[@traduccion.CMS_LabelId]" class="form-control">@traduccion.Texto</textarea></td>
+                            }
+                            else
+                            {
+                                <td><input name="DictCodigo[@traduccion.CMS_LabelId]" disabled value="@traduccion.Codigo" class="form-control text-info"></td>
+                                <td><input name="DictTextoES[@traduccion.CMS_LabelId]" value="@traduccion.Texto" class="form-control"></td>
+                            }
+
+                            <td>
+                                <textarea name="DictCodigo[@traduccion.CMS_LabelId]" style="display:none;">@traduccion.Codigo</textarea>
+
+                                <select class="form-control" name="DictTipoComponente[@traduccion.CMS_LabelId]">
+                                    <option value="TB-NO">Texto - Normal</option>
+                                    <option value="TB-RA" @(traduccion.TipoComponente == "TB-RA" ? "selected" : "")>Texto - HTML</option>
+                                    <option value="TA-NO" @(traduccion.TipoComponente == "TA-NO" ? "selected" : "")>Multilínea</option>
+                                    <option value="TA-RA" @(traduccion.TipoComponente == "TA-RA" ? "selected" : "")>Multilínea - HTML</option>
+                                    <option value="WY-RA" @(traduccion.TipoComponente == "WY-RA" ? "selected" : "")>Editor - HTML</option>
+                                </select>
+                            </td>
+
+
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <button type="submit" name="BtnSubmit" class="btn btn-primary mb-5"><i class="fa fa-save"></i>&nbsp;Guardar</button>
+        </div>
+    </div>
+}
+
+

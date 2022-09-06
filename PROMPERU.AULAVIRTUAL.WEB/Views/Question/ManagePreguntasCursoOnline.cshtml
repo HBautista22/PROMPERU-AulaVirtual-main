@@ -1,0 +1,165 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Question.ManagePreguntasCursoOnlineViewModel
+
+@{
+    ViewBag.Title = Model.UnidadOnline.Nombre;
+    ViewBag.Icon = "cubes";
+    ViewBag.Seccion = "Cursos";
+    ViewBag.SubSeccion = "Curso";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+@section Styles{
+    @RazorHelpers.Content("assets/plugins/jquery-datatable/media/css/jquery.dataTables.css", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-datatable/extensions/FixedColumns/css/dataTables.fixedColumns.min.css", Url)
+    @RazorHelpers.Content("assets/plugins/datatables-responsive/css/datatables.responsive.css", Url)
+    @RazorHelpers.Content("assets/plugins/switchery/css/switchery.min.css", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-highlighttextarea/jquery.highlighttextarea.min.css", Url)
+
+    <style>
+
+        #CustomHighlight mark {
+            padding: 0 2px;
+            margin: 0 -3px;
+            border-radius: 2.5px;
+            border: 1px solid #F55753;
+        }
+
+        .highlightTextarea,
+        .highlightTextarea-container,
+        .highlightTextarea-highlighter {
+            width: 100% !important;
+            height: auto !important;
+        }
+    </style>
+}
+
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListCursoOnlineAdmin", "Course")">Cursos</a></li>
+    <li><a href="@Url.Action("ViewCursoOnlineAdmin", "Course", new { CursoOnlineId = Model.UnidadOnline.CursoOnlineId })">@Model.UnidadOnline.CursoOnline.Nombre</a></li>
+}
+
+<div class="container-fluid container-fixed-lg bg-white">
+
+    <div class="panel panel-transparent">
+
+        <div class="panel-heading">
+            <div>
+                <div class="btn-group pull-left m-r-20"><h4 class="m-t-0 m-b-10 usuarios">Preguntas</h4></div>
+                <div class="btn-group pull-left m-b-10">
+                    <a class="btn btn-course-enable" href="@Url.Action("EditarPreguntaCursoOnlime", "Question", new { unidadCursoOnlineId = Model.UnidadCursoOnlineId })">Agregar Pregunta</a>
+                </div>
+            </div>
+            <br />
+            <div class="col-md-12">
+                <div class="col-md-12 m-b-30">
+                    @*<input type="text" id="search-table" class="form-control pull-right rectangle-31" placeholder="Buscar Pregunta">*@
+                    <div class="form-group form-group-default input-group transparent center-margin rectangle-31">
+                        @Html.Label("Buscar pregunta", new { @class = "buscar-usuario" })
+                        @Html.TextBox("search-table", "", new { @class = "form-control", @id = "search-table" })
+                        <span class="input-group-addon"><i class="pg-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-search" id="table-search">
+                <thead>
+                    <tr>
+                        <th class="title-table" style="max-width: 2em; width: 1%;"></th>
+                        <th class="title-table" style="max-width: 2em; width: 1%;">Tipo</th>
+                        <th class="col-md-11 title-table">Texto</th>
+                        <th class="text-center title-table" style="min-width: 8.4em">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var np = 1;}
+                    @foreach (var pregunta in Model.LstPreguntaCursoOnline)
+                    {
+                        if (pregunta.Estado != ConstantHelpers.ESTADO.ELIMINADO)
+                        {
+                            <tr class="v-align-middle">
+                                <td class="v-align-middle semi-bold text-right text-table">
+                                    @np
+                                </td>
+                                <td class="v-align-middle text-table">
+                                    <span class="label @(pregunta.Estado == ConstantHelpers.ESTADO.ACTIVO ? "label-success" : "label-danger") ">@ConstantHelpers.TextoTipoPregunta(pregunta.Tipo)</span>
+                                </td>
+                                <td class="v-align-middle text-table">
+                                    @pregunta.Texto
+                                </td>
+                                <td class="text-table">
+                                    <div class='base dropdown p-t-5 p-b-5 p-l-10'>
+                                        <a class="base m-r-80" @Data.ModalLink("_EditPreguntaCursoOnline", "Question", new { unidadCursoOnlineId = pregunta.UnidadOnlineId, PreguntaCursoOnlineId = pregunta.PreguntaCursoOnlineId })>Editar</a>
+                                        <i class='fa fa-chevron-down dropdown-toggle m-r-10' data-toggle='dropdown' style="cursor:pointer"></i>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="btn-xs" href="@Url.Action("ChangeStatePregunta", "Question", new { PreguntaCursoOnlineId = pregunta.PreguntaCursoOnlineId })">
+                                                    @if (pregunta.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                                                    {
+                                                        <text><i class="fa fa-check fa-fw"></i>&nbsp;Activar Pregunta</text>
+                                                    }
+                                                    else
+                                                    {
+                                                        <text><i class="fa fa-ban fa-fw"></i>&nbsp;Desactivar Pregunta</text>
+                                                    }
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="btn-xs" href="@Url.Action("DeleteStatePregunta", "Question", new { PreguntaCursoOnlineId = pregunta.PreguntaCursoOnlineId })">
+                                                    @if (pregunta.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                                                    {
+                                                        <text><i class="fa fa-times fa-fw"></i>&nbsp;Eliminar Pregunta</text>
+                                                    }
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            np++;
+                        }
+
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    @RazorHelpers.Content("assets/plugins/switchery/js/switchery.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-highlighttextarea/jquery.highlighttextarea.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-datatable/media/js/jquery.dataTables.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-datatable/extensions/TableTools/js/dataTables.tableTools.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/jquery-datatable/extensions/Bootstrap/jquery-datatable-bootstrap.js", Url)
+    @RazorHelpers.Content("assets/plugins/datatables-responsive/js/datatables.responsive.js", Url)
+    @RazorHelpers.Content("assets/plugins/datatables-responsive/js/lodash.min.js", Url)
+    @RazorHelpers.Content("assets/js/datatables.js", Url)
+
+    <script>
+        $(document).ready(function () {
+            var initTableWithSearch = function () {
+                var table = $('#table-search');
+                var settings = {
+                    "sDom": "<'table-responsive't><'row'<p i>>",
+                    "destroy": true,
+                    "info": false,
+                    "ordering": false,
+                    "oLanguage": {
+                        "zeroRecords": "No encontrado",
+                        "infoFiltered": "(filtered from _MAX_ total records)",
+                        "sEmptyTable": "No existen exámenes"
+                    },
+                    "iDisplayLength": 25
+                };
+                table.dataTable(settings);
+                $('#search-table').keyup(function () { table.fnFilter($(this).val()); });
+            }
+            initTableWithSearch();
+        });
+    </script>
+
+}

@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "ListCategoriaCursoOnlineNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Categoria</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Categoria</h2>
+        </div>
+    </div><!-- /.row -->
+}
+
+@MessageHelpers.ShowMessages(TempData)
+
+@if (Session.GetRol() == AppRol.Administrador)
+{
+    <div class="row table-acciones table-content">
+        <div class="col-sm-12 btns-table">
+            <a class="btn btn-primary" href="@Url.Action("EditCategoriaCursoOnline", "Course")">Agregar Categoria</a>
+        </div>
+    </div>
+}
+<div class="row mis-solicitudes table-content">
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list asesorias">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var categoria in Model.LstCategoriaCursoOnline)
+                {
+                    <tr>
+                        <td>@categoria.Nombre</td>
+                        <td>
+                            <div class="dropdown">
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Acciones
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
+                                    <li><a class="dropdown-item" href="@Url.Action("EditCategoriaCursoOnline", "Course", new {CategoriaCursoOnlineId = categoria.CategoriaCursoOnlineId })">Editar</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("EliminarCategoriaCursoOnline", "Course", new {categoriaCursoOnlineId = categoria.CategoriaCursoOnlineId})">Eliminar</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

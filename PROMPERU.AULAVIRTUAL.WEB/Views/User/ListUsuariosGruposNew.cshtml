@@ -1,0 +1,599 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.ListUsuariosGruposViewModel
+@{
+    ViewBag.Title = "ListUsuariosGruposNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item">
+                    <a href="#">Inicio</a>
+                </li>
+                <li class="breadcrumb-item active">Grupos</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Grupos</h2>
+        </div>
+    </div><!-- /.row -->
+}
+
+<div class="row">
+    <div class="col-lg-12 box-grey-content">
+        <div class="content-form-grey">
+            <form method="post" id="searchUser">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Grupo</label>
+
+                            @Html.TextBoxFor(x => x.CadenaBuscar, new { @class = "form-control", @placeholder = "Buscar Grupo" })
+                        </div>
+                    </div>
+                    <div class="row col-sm-12">
+                        <div class="col-sm-6 form-btn">
+                            <input type="submit" class="btn btn-primary" value="Buscar">
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row col-sm-12 table-acciones table-content">
+    <div class="col-sm-12 btns-table">
+        <a class="btn btn-primary AgregarGrupo" href="#">Agregar Grupo</a>
+
+    </div>
+</div>
+<div class="row col-sm-12 mis-solicitudes table-content">
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list asesorias">
+            <thead>
+            <tr>
+                <th>Descripcion</th>
+                <th>#Usuarios</th>
+
+                <th>Proceso</th>
+                <th>Estado</th>
+                <th>Opciones</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            @foreach (var grupo in Model.LstUsuario)
+            {
+                var cantidad = @Model.CantidadRegistros[grupo.GrupoId];
+                <tr>
+                    <td>@grupo.Descripcion</td>
+                    <td>@cantidad</td>
+
+                    <td>
+
+                        <span class="label-estado completado">@(grupo.Aforo == 1 ? "Automático" : "Manual")</span>
+                    </td>
+                    <td>
+                        <span class="label-estado @(grupo.Estado == ConstantHelpers.ESTADO.ACTIVO ? "completado" : grupo.Estado == ConstantHelpers.ESTADO.PENDIENTE ? "pendiente" : "inactivo")">@(grupo.Estado == ConstantHelpers.ESTADO.ACTIVO ? "Activo" : "Inactivo")</span>
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                Acciones
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                @*<li><a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#editGroup">Editar Grupo</a></li>*@
+                                <li>
+                                    <a class="dropdown-item editarGrupo" href="#" id="lnk-@grupo.GrupoId">Editar Grupo</a>
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item usuariosAsignados" href="#" id="lnk3-@grupo.GrupoId">Ver Usuarios Asignados</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item cursosAsignados" href="#" id="lnk2-@grupo.GrupoId">Ver Cursos Asignados</a>
+                                </li>
+
+                                @*<li><a class="dropdown-item" href="#">Activar Registro Automático</a></li>
+                                    <li><a class="dropdown-item" href="#">Enviar Notificaciones</a></li>*@
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal modal-2 fade" id="editGroup" tabindex="-1" aria-labelledby="editGroupLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Grupo</h5>
+            </div>
+            <form method="post" action="@Url.Action("EditGrupo", "User")" id="">
+                <div class="modal-body">
+
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="GrupoId" id="GrupoId"/>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="">Descripcion</label>
+                                <input type="text" class="form-control" name="Descripcion" id="Descripcion">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="">Seleccionar Tipo Grupo</label>
+                                @Html.DropDownListFor(x => x.TipoGrupo, new SelectList(Model.LstTipoGrupo, "Codigo", "Nombre", Model.TipoGrupo), "[- Seleccionar -]", new { @class = "form-control bg" })
+                                @Html.ValidationMessageFor(x => x.TipoGrupo)
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="">Aforo</label>
+                                <input type="number" class="form-control" name="Aforo" id="Aforo">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="icheck-primary activo-2 bgd-azul">
+                                    <input type="checkbox" id="activo" name="activo">
+
+                                    <label for="activo">
+                                        ¿Está activo?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="Estado" id="Estado" value="True"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-2 fade" id="addEditCourses" tabindex="-1" aria-labelledby="addEditCoursesLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar y/o Retirar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="@Url.GetCmsResourceUrl("assets/images/iconos/menu_close_blue.png")" alt="">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="content-drag-drop">
+                    <div class="box">
+                        <div class="container agregados">
+                            <h3 id="title-agregados"><img src="@Url.GetCmsResourceUrl("assets/images/iconos/cursos-agregados.png")" alt=""> Cursos Agregados</h3>
+                            <div class="bg-transparent block border-0 form-control mt-2 w-100">
+                                &nbsp;
+                            </div>
+                            <ul class="list one" id="agregadosList" data-type="agregados">
+                                
+                            </ul>
+                        </div>
+                        <div class="container bucket disponibles">
+                            <h3 id="title-disponibles"><img src="@Url.GetCmsResourceUrl("assets/images/iconos/cursos_disponibles.png")" alt=""> Cursos Disponibles</h3>
+                            <div class="block w-100 mt-2 h-25">
+                                <input type="hidden" id="hdnTipoBusqueda"/>
+                                <input type="text" id="buscar" class="form-control" placeholder="Buscar..."/>
+                            </div>
+                            <ul class="list one" id="DisponibleList">
+                                
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <p>
+                            <span>*Dar clic en el curso para poder agregar o eliminar de cada grupo.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+            let cursos;
+            let usuarios;
+
+            /*const disponibles = document.getElementById('DisponibleList');
+            const agregados = document.getElementById('agregadosList');
+
+            const listaDisponibles = Sortable.create(disponibles, {
+                group: {
+                    name: "lista-disponibles",
+                    pull: true,
+                    put: true
+                },
+                animation: 150,
+                easing: "cubic-bezier(0.895, 0.03, 0.685, 0.22)",
+                handle: ".draggable",
+                store: {
+                    set: function (sortable) {
+                        const orden = sortable.toArray();
+                        localStorage.setItem('lista-disponibles', orden.join('|'));
+                    },
+                    get: function () {
+                        const orden = localStorage.getItem('lista-disponibles');
+                        return orden ? orden.split('|') : [];
+                    }
+                },
+
+                onChoose: (evento) => { console.log('Se ha seleccionado un elemento'); },
+                onUnchoose: (evento) => { console.log('Se ha deseleccionado un elemento') },
+                onStart: (evento) => { console.log('Se inicio el drag and drop') },
+                onEnd: (evento) => { console.log('Finalizo el drag and drop') },
+                onAdd: (evento) => { console.log('Se agrego un elemento a la lista') },
+                onRemove: (evento) => { console.log('Se elimino un elemento a la lista') },
+                onUpdate: (evento) => { console.log('Se actualizo la lista') },
+                onFilter: (evento) => { console.log('Se intento mover un elemento filtrado') },
+                onMove: (evento) => { console.log('Se movió un elemento') },
+                onChange: (evento) => { console.log('Un elemento cambio de lugar') },
+            });
+
+            const listaAgregados = Sortable.create(agregados, {
+                group: {
+                    name: "lista-disponibles",
+                    pull: true,
+                    put: true
+                },
+                animation: 150,
+                easing: "cubic-bezier(0.895, 0.03, 0.685, 0.22)",
+                handle: ".draggable"
+            });*/
+
+
+
+            $("#buscar").on("keyup",
+                function() {
+                    var texto = $(this).val().toLowerCase();
+
+                    const tipoObjeto = $("#hdnTipoBusqueda").val() === 'cursos' ? cursos : usuarios;
+
+                    const found = window.$.grep(tipoObjeto,
+                        (item) => {
+                            return item.Nombre.toLowerCase().indexOf(texto) > -1;
+                        });
+
+                    $("#DisponibleList li").remove();
+
+                    if ($("#hdnTipoBusqueda").val() === 'cursos') {
+                        const grupoId = $(".cursosAsignados").attr('id').replace('lnk2-', '');
+
+                        $.each(found,
+                            function(k, v) {
+
+                                $("#DisponibleList").append(`<li draggable="true" data-type="agregados" data-idmaestro="${v.CursoOnlineMaestroId}" data-idcurso="${v.CursoOnlineId}" data-idgrupo="${grupoId}" data-nombre="${v.Nombre
+                                    }" onclick="AddGrupoAddCurso(this)"><a style="font-size: 30px;"><span class="nav-icon"></span><i class="left fas fa-angle-left"></i></a> ${
+                                    v.Nombre}</li>`);
+                            });
+                    } else {
+                        const grupoId = $(".usuariosAsignados").attr('id').replace('lnk3-', '');
+
+                        $.each(found,
+                            function(key, val) {
+                                $("#DisponibleList").append(`<li draggable="true" data-type="agregados" data-idusuario="${val.UsuarioId}" data-idgrupo="${grupoId}" data-nombre="${val.Nombre} ${val.Apellido}" onclick="AddGrupoAddUsuario(this)"><a style="font-size: 30px;"><span class="nav-icon"></span><i class="left fas fa-angle-left"></i></a> ${val.Nombre} ${val.Apellido}</li>`);
+                            });
+                    }
+                });
+
+            $("#activo").on("click",
+                function() {
+                    if ($(this).is(":checked") === true) {
+                        $('#Estado').val("True");
+                    } else {
+                        $('#Estado').val("False");
+                    }
+                });
+
+            $('.editarGrupo').click(function() {
+                var id = $(this).attr('id').replace('lnk-', '');
+                var API = "/Grupo/Grupo";
+                $.getJSON(API, { GrupoID: id })
+                    .done(function(data) {
+                        $('#Descripcion').val(data.Descripcion);
+                        $('#TipoGrupo').val(data.TipoRegistro);
+                        $('#Aforo').val(data.Aforo);
+                        $('#GrupoId').val(data.GrupoId);
+                        if (data.Estado === 'ACT') {
+                            $('#Estado').val("True");
+                            $('#activo').prop('checked', true);
+                        } else {
+                            $('#activo').prop('checked', false);
+                            $('#Estado').val("False");
+                        }
+
+                        $("#editGroup").modal("show");
+                        //console.log(data);
+                    });
+
+            });
+
+            $('.AgregarGrupo').click(function() {
+                $('#Descripcion').val('');
+                $('#TipoGrupo').val('');
+                $('#Aforo').val('');
+                $('#GrupoId').val('');
+                $('#activo').prop('checked', true);
+                $("#editGroup").modal("show");
+            });
+
+            $('.usuariosAsignados').click(function() {
+                $("#hdnTipoBusqueda").val("usuarios");
+                $("#title-agregados").html(`<img src="@Url.GetCmsResourceUrl("assets/images/iconos/cursos-agregados.png")" alt=""> Alumnos Agregados`);
+                $("#title-disponibles").html(`<img src="@Url.GetCmsResourceUrl("assets/images/iconos/cursos_disponibles.png")" alt=""> Alumnos Disponibles`);
+
+                $("#addEditCourses").modal("show");
+                $("#agregadosList li").remove();
+                $("#DisponibleList li").remove();
+
+                const id = $(this).attr('id').replace('lnk3-', '');
+                const api = "/Grupo/UsuarioAgregado";
+
+                $.getJSON(api, { grupoId: id })
+                    .done(function(data) {
+                        $.each(data.alumnos,
+                            function(key, val) {
+                                //$("#agregadosList").append('<li draggable="true" data-type="agregados" data-id="' + val.CursoGrupoId + '" data-idgrupo="' + id + '" onclick="EliminarGrupoAddCurso(this)">' + val.Nombre + ' <a style="font-size: 30px;"><span class="nav-icon"></span><i class="right fas fa-angle-right"></i></a></li>');
+                                $("#agregadosList").append(`<li draggable="true" data-type="agregados" data-idusuariogrupo="${val.UsuarioGrupoId}" data-idusuario="${val.UsuarioId}" data-idgrupo="${val.GrupoId}" data-nombre="${val.Nombre
+                                    }" onclick="EliminarGrupoAddUsuario(this)"><a style="font-size: 30px;"><span class="nav-icon"></span><i class="right fas fa-angle-right"></i></a> ${val.Nombre}</li>`);
+                            });
+                        //console.log(data);
+                    });
+
+                $("#DisponibleList li").remove();
+                const apiDisponible = "/Grupo/UsuarioDisponible";
+                $.getJSON(apiDisponible, { grupoID: id })
+                    .done(function(data) {
+
+                        $.each(data.alumnos,
+                            function(key, val) {
+                                $("#DisponibleList").append(`<li draggable="true" data-type="agregados" 
+                                    data-idusuario="${val.UsuarioId}" 
+                                    data-idgrupo="${id}" 
+                                    data-nombre="${val.Nombre} ${val.Apellido}" 
+                                    onclick="AddGrupoAddUsuario(this)"><a style="font-size: 30px;">
+                                    <span class="nav-icon"></span><i class="left fas fa-angle-left"></i></a> ${val.Nombre} ${val.Apellido}</li>`);
+                            });
+
+                    })
+                    .always(result => {
+                        usuarios = result.alumnos;
+                    });
+            });
+
+            $('.cursosAsignados').click(function() {
+                $("#hdnTipoBusqueda").val("cursos");
+                $("#title-agregados").html(`<img src="@Url.GetCmsResourceUrl("assets/images/iconos/cursos-agregados.png")" alt=""> Cursos Agregados`);
+                $("#title-disponibles").html(`<img src="@Url.GetCmsResourceUrl("assets/images/iconos/cursos_disponibles.png")" alt=""> Cursos Disponibles`);
+
+                $("#addEditCourses").modal("show");
+                $("#agregadosList li").remove();
+                $("#DisponibleList li").remove();
+
+
+                var id = $(this).attr('id').replace('lnk2-', '');
+                const apiCursoAgregado = "/Grupo/CursoAgregado";
+                $.getJSON(apiCursoAgregado, { grupoID: id })
+                    .done(function(data) {
+                        $.each(data,
+                            function(key, val) {
+
+                                if (val.CursoOnlineMaestroId !== null) {
+                                    $("#agregadosList").append(`<li class="draggable" data-type="agregados" data-idcursoagregado="${val.CursoGrupoId}" data-idmaestro="${val.CursoOnlineMaestroId}" data-idcurso="${val.CursoOnlineId}" data-idgrupo="${val.GrupoId}" data-nombre="${val.CursoOnlineMaestro.DetalleCursoOnlineMaestro[0].Nombre
+                                        }" onclick="EliminarGrupoAddCurso(this)"><a style="font-size: 30px;"><span class="nav-icon"></span><i class="right fas fa-angle-right"></i></a> ${
+                                        val.CursoOnlineMaestro.DetalleCursoOnlineMaestro[0].Nombre}</li>`);
+                                }
+
+                                if (val.CursoOnlineId !== null) {
+                                    $("#agregadosList").append(`<li class="draggable" data-type="agregados" data-idcursoagregado="${val.CursoGrupoId}" data-idmaestro="${val.CursoOnlineMaestroId}" data-idcurso="${val.CursoOnlineId}" data-idgrupo="${val.GrupoId}" data-nombre="${val.CursoOnlineMaestro.DetalleCursoOnlineMaestro[0].CursoOnline.Nombre
+                                        }" onclick="EliminarGrupoAddCurso(this)"><a style="font-size: 30px;"><span class="nav-icon"></span><i class="right fas fa-angle-right"></i></a> ${val.CursoOnlineMaestro.DetalleCursoOnlineMaestro[0].CursoOnline.Nombre}</li>`);
+                                }
+                            });
+                    });
+
+
+                $("#DisponibleList li").remove();
+
+                const apiCursoDisponible = "/Grupo/CursoDisponible";
+                $.getJSON(apiCursoDisponible, { grupoID: id })
+                    .done(function(data) {
+
+                        $.each(data.maestros,
+                            function(k, v) {
+
+                                $("#DisponibleList").append(`<li class="draggable" data-type="agregados" data-idmaestro="${v.CursoOnlineMaestroId}" data-idcurso="${v.CursoOnlineId}" data-idgrupo="${id}" data-nombre="${v.Nombre
+                                    }" onclick="AddGrupoAddCurso(this)"><a style="font-size: 30px;"><span class="nav-icon"></span><i class="left fas fa-angle-left"></i></a> ${
+                                    v.Nombre}</li>`);
+                            });
+
+                    })
+                    .always(result => {
+                        cursos = result.maestros;
+                    });
+            });
+        });
+
+        function AddGrupoAddUsuario(element) {
+            const idGrupo = $(element).data("idgrupo");
+            const idUsuario = $(element).data("idusuario");
+            const nombre = $(element).data("nombre");
+
+            const api = "/Grupo/AddUsuarioGrupoMaestro";
+
+            $.getJSON(api,
+                    {
+                        grupoId: idGrupo,
+                        usuarioId: idUsuario,
+                        nombre: nombre
+                    })
+                .done(function(data2) {
+                    if (data2.Estado === "OK") {
+                        const apiAgregado = "/Grupo/UsuarioAgregado";
+                        $.getJSON(apiAgregado,
+                                {
+                                    grupoId: idGrupo
+                                })
+                            .done(function(data) {
+                                $("#agregadosList").html("");
+                                $.each(data.alumnos,
+                                    function(key, val) {
+                                        $("#agregadosList").append(`<li draggable="true" data-type="agregados" data-idusuariogrupo="${val.UsuarioGrupoId}" data-idusuario="${val.UsuarioId}" data-idgrupo="${val.GrupoId}" data-nombre="${val.Nombre
+                                            }" onclick="EliminarGrupoAddUsuario(this)"><a style="font-size: 30px;"><span class="nav-icon"></span><i class="right fas fa-angle-right"></i></a> ${val.Nombre}</li>`);
+                                    });
+                                //console.log(data);
+                            });
+                    }
+                    //console.log(data2);
+                });
+        }
+
+        function AddGrupoAddCurso(element) {
+            var idgrupo = $(element).data("idgrupo");
+            var id = $(element).data("idmaestro");
+            const idCurso = $(element).data("idcurso");
+            const nombrecurso = $(element).data("nombre");
+            const api = "/Grupo/AddCursoGrupoMaestro";
+            $.getJSON(api,
+                    {
+                        grupoId: idgrupo,
+                        cursoOnlineMaestroId: id,
+                        nombre: nombrecurso,
+                        cursoOnlineId: idCurso
+                    }
+                )
+                .done(function(data2) {
+                    if (data2.Estado === "OK") {
+                        var API = "/Grupo/CursoAgregado";
+                        $.getJSON(API,
+                                {
+                                    grupoID: idgrupo,
+                                }
+                            )
+                            .done(function(data) {
+                                $("#agregadosList").html("");
+                                $.each(data,
+                                    function(key, val) {
+                                        if (val.CursoOnlineMaestroId !== null) {
+                                            $("#agregadosList").append(`<li draggable="true" data-type="agregados" data-idcursoagregado="${val.CursoGrupoId}" data-idmaestro="${val.CursoOnlineMaestroId}" data-idcurso="${val.CursoOnlineId}" data-idgrupo="${val.GrupoId}" data-nombre="${val.CursoOnlineMaestro.DetalleCursoOnlineMaestro[0].Nombre
+                                                }" onclick="EliminarGrupoAddCurso(this)"><a style="font-size: 30px;"><span class="nav-icon"></span><i class="right fas fa-angle-right"></i></a> ${
+                                                val.CursoOnlineMaestro.DetalleCursoOnlineMaestro[0].Nombre}</li>`);
+                                        }
+
+                                        if (val.CursoOnlineId !== null) {
+                                            $("#agregadosList").append(`<li draggable="true" data-type="agregados" data-idcursoagregado="${val.CursoGrupoId}" data-idmaestro="${val.CursoOnlineMaestroId}" data-idcurso="${val.CursoOnlineId}" data-idgrupo="${val.GrupoId}" data-nombre="${val.CursoOnlineMaestro.DetalleCursoOnlineMaestro[0].CursoOnline.Nombre
+                                                }" onclick="EliminarGrupoAddCurso(this)"><a style="font-size: 30px;"><span class="nav-icon"></span><i class="right fas fa-angle-right"></i></a> ${val.CursoOnlineMaestro.DetalleCursoOnlineMaestro[0].CursoOnline.Nombre}</li>`);
+                                        }
+                                    });
+                                //console.log(data);
+                            });
+                    }
+                    //console.log(data2);
+                });
+        }
+
+        function EliminarGrupoAddUsuario(element) {
+            const idUsuarioGrupo = $(element).data("idusuariogrupo");
+            const idGrupo = $(element).data("idgrupo");
+            const idUsuario = $(element).data("idusuario");
+            const nombre = $(element).data("nombre");
+
+            const api = "/Grupo/EliminarUsuarioGrupoMaestro";
+
+            $.getJSON(api,
+                    {
+                        usuarioGrupoId: idUsuarioGrupo,
+                        usuarioId: idUsuario,
+                        grupoId: idGrupo,
+                        nombre: nombre
+                    }
+                )
+                .done(function(data2) {
+                    if (data2.Estado === "OK") {
+                        const api1 = "/Grupo/UsuarioAgregado";
+                        $.getJSON(api1,
+                                {
+                                    grupoID: idGrupo
+                                }
+                            )
+                            .done(function(data) {
+                                $("#agregadosList").html("");
+                                $.each(data.alumnos,
+                                    function(key, val) {
+                                        $("#agregadosList").append(`<li draggable="true" data-type="agregados" data-idusuariogrupo="${val.UsuarioGrupoId}" data-idusuario="${val.UsuarioId}" data-idgrupo="${val.GrupoId}" data-nombre="${val.Nombre
+                                            }" onclick="EliminarGrupoAddUsuario(this)"><a style="font-size: 30px;"><span class="nav-icon"></span><i class="right fas fa-angle-right"></i></a> ${val.Nombre}</li>`);
+                                    });
+                                //console.log(data);
+                            });
+                    }
+                    //console.log(data2);
+                });
+        }
+
+        function EliminarGrupoAddCurso(element) {
+            const idcursogrupo = $(element).data("idcursoagregado");
+            var idgrupo = $(element).data("idgrupo");
+            const id = $(element).data("idmaestro");
+            const idCurso = $(element).data("idcurso");
+            const nombrecurso = $(element).data("nombre");
+            const api = "/Grupo/EliminarCursoGrupoMaestro";
+            $.getJSON(api,
+                    {
+                        cursoGrupoId: idcursogrupo,
+                        cursoOnlineId: idCurso,
+                        nombre: nombrecurso
+                    }
+                )
+                .done(function(data2) {
+                    if (data2.Estado === "OK") {
+                        const api1 = "/Grupo/CursoAgregado";
+                        $.getJSON(api1,
+                                {
+                                    grupoID: idgrupo
+                                }
+                            )
+                            .done(function(data) {
+                                $("#agregadosList").html("");
+                                $.each(data,
+                                    function(key, val) {
+                                        if (val.CursoOnlineMaestroId !== null) {
+                                            $("#agregadosList").append(`<li draggable="true" data-type="agregados" data-idcursoagregado="${val.CursoGrupoId}" data-idmaestro="${val.CursoOnlineMaestroId}" data-idcurso="${val.CursoOnlineId}" data-idgrupo="${val.GrupoId}" data-nombre="${val.CursoOnlineMaestro.DetalleCursoOnlineMaestro[0].Nombre
+                                                }" onclick="EliminarGrupoAddCurso(this)"><a style="font-size: 30px;"><span class="nav-icon"></span><i class="right fas fa-angle-right"></i></a> ${
+                                                val.CursoOnlineMaestro.DetalleCursoOnlineMaestro[0].Nombre}</li>`);
+                                        }
+
+                                        if (val.CursoOnlineId !== null) {
+                                            $("#agregadosList").append(`<li draggable="true" data-type="agregados" data-idcursoagregado="${val.CursoGrupoId}" data-idmaestro="${val.CursoOnlineMaestroId}" data-idcurso="${val.CursoOnlineId}" data-idgrupo="${val.GrupoId}" data-nombre="${val.CursoOnlineMaestro.DetalleCursoOnlineMaestro[0].CursoOnline.Nombre
+                                                }" onclick="EliminarGrupoAddCurso(this)"><a style="font-size: 30px;"><span class="nav-icon"></span><i class="right fas fa-angle-right"></i></a> ${val.CursoOnlineMaestro.DetalleCursoOnlineMaestro[0].CursoOnline.Nombre}</li>`);
+                                        }
+                                    });
+                                //console.log(data);
+                            });
+                    }
+                    //console.log(data2);
+                });
+        }
+    </script>
+}

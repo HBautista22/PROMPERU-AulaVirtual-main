@@ -1,0 +1,134 @@
+﻿@{
+    ViewBag.Title = "Asesoria";
+    ViewBag.Seccion = "MisAsesorias";
+
+    //ViewBag.BodyStyle = "dashboard";
+
+    TimeSpan tspan = ViewBag.TiempoFin - DateTime.Now;
+
+    double TimeLeft = tspan.TotalSeconds;
+}
+
+<div class="container-fluid container-fixed-lg">
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4 class="m-t-0 m-b-0"><i class="fa fa-user_new"></i>&nbsp;Conferencia</h4>
+            </div>
+            <div>
+                <h3>Inicio: @ViewBag.TiempoIni</h3>
+                <h3>Fin: @ViewBag.TiempoFin</h3>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="pgn-wrapper" data-position="top-right">
+            <div class="pgn pgn-flip">
+                <div class="alert alert-success" id="alerta_tiempo" style="padding: 10px 30px 5px 20px;">
+                    <h2 class="m-t-0"><i class="fa fa-clock-o"></i>&nbsp; <span class="time" id="@ViewBag.RoomName" style="font-size:120%"></span></h2>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h4 id="timer"></h4>
+        </div>
+        <div class="panel-body" id="meetDiv">
+
+
+        </div>
+    </div>
+</div>
+
+<script src="https://meet.jit.si/external_api.js"></script>
+<script>
+
+    var domain = "meet.jit.si";
+    var options = {
+        roomName: "AulaVirtual-@(ViewBag.RoomName)",
+        width: 800,
+        height: 650,
+        parentNode: document.getElementById("meetDiv"),
+        configOverwrite: {},
+        interfaceConfigOverwrite: {}
+    }
+    var api = new JitsiMeetExternalAPI(domain, options);
+</script>
+
+
+@section Scripts{
+    <script>
+        var duracion = parseInt(@TimeLeft);
+        var duracionMilisecconds = parseInt(@(TimeLeft*1000));
+
+        function startTimer(duracion, display, progress, notification)
+        {
+            var inicio = Date.now(), diferencia, minutos, segundos, tmr, cambio;
+            cambio = 0;
+            function timer() {
+                diferencia = duracion - (((Date.now() - inicio) / 1000) | 0);
+                if (diferencia < 0) {
+                    clearInterval(trm);
+                    return;
+                }
+                minutos = (diferencia / 60) | 0;
+                segundos = (diferencia % 60) | 0;
+                minutos = (minutos < 10) ? "0" + minutos : minutos;
+                segundos = (segundos < 10) ? "0" + segundos : segundos;
+
+                //display.textContent = minutos + ":" + segundos;
+                display.text(minutos + ":" + segundos);
+
+                porcentaje = (diferencia / duracion) * 100;
+                progress.css('width', porcentaje + '%');
+
+                if (diferencia <= 300) {
+                    progress.removeClass("progress-bar-success").addClass("progress-bar-danger");
+                    notification.removeClass("alert-success").addClass("alert-danger");
+                    //display.style.color = "#E63528";
+                    display.css('color', '#E63528')
+                    $('.alert h2').css("color", "#E63528");
+                }
+
+            };
+
+
+
+            timer();
+            tmr = setInterval(timer, 1000);
+
+        }
+
+        $(function () {
+            setTimeout(checkTime(), 4000);
+        });
+
+        function checkTime()
+        {
+            console.log("check");
+            var now = new Date();
+            var RightNow = new Date();
+
+            now = new Date(@(ViewBag.TiempoIni.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds));
+
+            var millisTill10 = now - RightNow
+
+            if (millisTill10 < 0)
+            {
+
+                var tiempoTotal = duracion, $display = $(".time, #@ViewBag.RoomName");
+                var progress = $('.progress-bar');
+                var notification = $('.alert');
+
+                startTimer(tiempoTotal, $display, progress, notification);
+
+                setTimeout(function () { $("#alerta_tiempo").css("display", "block"); }, 4000);
+            }
+            else
+            {
+                setTimeout(checkTime(), 1000);
+            }
+        }
+    </script>
+
+}

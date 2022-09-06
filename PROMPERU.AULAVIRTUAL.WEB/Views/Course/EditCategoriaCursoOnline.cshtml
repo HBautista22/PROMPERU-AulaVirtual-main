@@ -1,0 +1,82 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.EditCategoriaCursoOnlineViewModel
+@{
+    ViewBag.Title = "Agregar Categoría";
+    ViewBag.Icon = "cube";
+    ViewBag.Seccion = "Categorias"; 
+}
+
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListCategoriaCursoOnline", "Course")">Categorias</a></li>
+}
+
+@section Styles{
+    @RazorHelpers.Content("assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css", Url)
+}
+
+<div class="container-fluid container-fixed-lg">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <h3 class="usuarios m-b-20">@ViewBag.Title</h3>
+                </div>
+
+                <form class="form form-horizontal panel-add-categoria" method="post">
+                    <div class="panel-body">
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(x => x.CategoriaCursoOnlineId)
+
+                        <div class="form-group">
+                            
+                           
+                            <div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-b-10 m-l-20"> @Html.LabelFor(x => x.Nombre, new { @class = "col-sm-6 control-label text-add-categoria" })</div>
+                                    <div class="col-sm-12">
+                                        <div class="input-group">
+
+                                            @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control bg" })
+                                        </div>
+                                        @Html.ValidationMessageFor(x => x)
+                                    </div>
+                                 </div>
+                            </div>
+                            <div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-b-10 m-l-20">@Html.LabelFor(x => x.Color, new { @class = "col-sm-6 control-label text-add-categoria" })</div>
+                                    <div class="col-sm-12">
+                                        <div class="input-group color-picker">
+
+                                            @Html.TextBoxFor(x => x.Color, new { @class = "form-control bg" })
+                                            <span class="input-group-addon"><i class="fa fa-"></i> </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(x => x)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-9 col-sm-offset-3">
+                                <a class="btn btn-cancelar text-btn-generico pull-right" href="@Url.Action("ListCategoriaCursoOnline", "Course")">Cancelar</a>
+                                <button class="btn btn-guardar-matricula text-btn-generico pull-right" type="submit">Guardar</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @RazorHelpers.Content("assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js", Url)
+    @RazorHelpers.Content("assets/plugins/bootstrap-colorpicker/js/docs.js", Url)
+    <script>
+        $(function () {
+            $('.color-picker').colorpicker();
+        });
+    </script>
+}

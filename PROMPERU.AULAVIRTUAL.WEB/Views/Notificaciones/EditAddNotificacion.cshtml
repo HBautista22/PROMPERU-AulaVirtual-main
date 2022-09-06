@@ -1,0 +1,107 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Notificaciones.EditAddNotificacionViewModel
+
+@{
+    ViewBag.Title = "Notificación";
+    ViewBag.Seccion = "Notificaciones";
+}
+
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListNotificaciones", "Notificaciones")">Notificaciones</a></li>
+}
+
+
+<style>
+    .bg-max {
+        max-width:100% !important;
+    }
+</style>
+
+<div class="container-fluid container-fixed-lg">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <h3 class="usuarios">@(Model.NotificacionId != null ? "Editar " : "Crear ") @ViewBag.Title</h3>
+                </div>
+
+                <form class="form form-horizontal fondo-generico" method="post">
+                    <div class="panel-body">
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(x => x.NotificacionId)
+
+                        <div class='form-group'>
+                            <div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        @Html.LabelFor(x => x.Titulo, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @Html.TextBoxFor(x => x.Titulo, new { @class = "form-control bg" })
+                                        @Html.ValidationMessageFor(x => x.Titulo)
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        @Html.LabelFor(x => x.TipoNotificacionId, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @Html.DropDownListFor(x => x.TipoNotificacionId, new SelectList(Model.LstTipoNotificaciones, "TipoNotificacionId", "Nombre", Model.TipoNotificacionId), "[- Seleccionar -]", new { @class = "form-control bg" })
+                                        @Html.ValidationMessageFor(x => x.TipoNotificacionId)
+                                    </div>
+                                </div>
+                            </div>*@
+
+
+                            <div class="col-sm-6 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-12 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        @Html.LabelFor(x => x.Nombre, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control bg bg-max" })
+                                        @Html.ValidationMessageFor(x => x.Nombre)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 m-t-10">
+                                <div class="row">
+                                    <div class="col-sm-12 m-l-20">
+                                        @Html.LabelFor(x => x.Contenido, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @Html.TextAreaFor(x => x.Contenido, new { @class = "form-control mytextarea", @style= "min-height: 400px" })
+                                        @Html.ValidationMessageFor(x => x.Contenido)
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        @Html.EditorFor(x => x.Estado)
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-4">
+                                <button class="btn btn-guardar-matricula pull-center text-btn-generico" type="submit">Guardar</button>
+                                <a class="btn btn-cancelar pull-center text-btn-generico" href="@Url.Action("ListNotificaciones", "Notificaciones")">Cancelar</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,252 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.EditUnidadCursoOnlineViewModel
+@{
+    ViewBag.Title = "EditUnidadCursoOnlineNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Cursos</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Cursos</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row">
+    <div class="col-lg-12 box-grey-content">
+        <h2>Agregar Unidad</h2>
+        <div class="content-form-grey">
+            @*<form method="post" id="searchUser">*@
+            @using (Html.BeginForm("EditUnidadCursoOnline", "Course", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(x => x.UnidadCursoOnlineId)
+                @Html.HiddenFor(x => x.CursoOnlineId)
+                @Html.HiddenFor(x => x.UnidadCursoOnlinePadreId)
+
+                <div class="row">
+
+                    @if (Model.UnidadPadre != null)
+                    {
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for=""> Unidad padre</label>
+                                <b>@Model.UnidadPadre.Nombre</b>
+                            </div>
+                            @Html.HiddenFor(m => m.UnidadCursoOnlinePadreId)
+                        </div>
+
+                    }
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Nombre</label>
+
+                            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", required = "required", @placeholder = "Ingresar Nombre" })
+                            @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Tipo Unidad</label>
+                            @Html.DropDownListFor(x => x.TipoUnidadId, new SelectList(Model.LstTipoUnidad, "TipoUnidadId", "Nombre"), "[--Seleccione--]", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.TipoUnidad)
+                        </div>
+                    </div>
+
+                    @if (Model.RutaArchivoAdicional == null)
+                    {
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="">Cargar archivo (PDF, Video/mp4 - Video/x-m4v)</label>
+                                <div class="type2">
+                                    <label class="input-file">
+                                        Seleccionar
+                                        @*<input type="file" id="avatar">*@
+                                        @Html.TextBoxFor(model => model.ArchivoAdicional, new { @class = "form-control", @type = "file", @accept = "application/pdf,video/mp4,video/x-m4v" })
+                                        <span class="file-choose-btn">Examinar</span>
+                                    </label>
+                                </div>
+                                
+
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="">
+                                    Cargar archivo (PDF, Video/mp4 - Video/x-m4v)
+                                </label>
+                                <a class="btn btn-xs" @Data.ModalLink("_ViewContentAdditionalFile", new { UnidadCursoOnlineId = Model.UnidadCursoOnlineId, hasFile = true })><i class="fa fa-eye"></i> Ver archivo</a>
+                                <a class="btn btn-xs" onclick="editFileSection(0)"><i class="fa fa-pencil"></i> Cambiar</a>
+                                <div id="editfile" style="display:none">
+                                    @Html.TextBoxFor(m => m.ArchivoAdicional, new { @class = "form-control", @type = "file", @accept = "application/pdf,video/mp4,video/x-m4v" })
+                                    <a class="btn btn-xs btn-danger" onclick="editFileSection(1)"><i class="fa fa-pencil"></i> Cancelar</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Tiempo de Permanencia (min)</label>
+
+                            @Html.TextBoxFor(x => x.TiempoPermanencia, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.TiempoPermanencia)
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Ancho del contenedero</label>
+
+                            @Html.TextBoxFor(x => x.AnchoContenedor, new { @class = "form-control", @placeholder = "Ancho del contenedor" })
+                            @Html.ValidationMessageFor(x => x.AnchoContenedor)
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Alto del  contendedor</label>
+
+                            @Html.TextBoxFor(x => x.AltoContenedor, new { @class = "form-control", @placeholder = "Alto del contenedor" })
+                            @Html.ValidationMessageFor(x => x.AltoContenedor)
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Tipo de Unidad</label>
+
+                            @Html.DropDownListFor(x => x.TipoUnidad, new SelectList(ConstantHelpers.ListTipoUnidad()), "[--Seleccione--]", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.TipoUnidad)
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Ruta externa</label>
+
+                            @Html.TextBoxFor(x => x.RutaWeb, new { @class = "form-control", @placeholder = "" })
+                            @Html.Label("", "Enlace de internet ejemplo: https://www.youtube.com/watch?v=-wFgyCzq7FY", new { @class = "col-sm-6 control-label text-add-categoria" })
+                            @Html.ValidationMessageFor(x => x.RutaWeb)
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="icheck-primary activo-2">
+
+
+
+                                @Html.CheckBoxFor(m => m.Estado, new { @checked = "checked" })
+                                <label for="Estado">
+                                    ¿Está activo?
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="isNoTema" class="col-sm-12 @(Model.TipoUnidadId.ToString() == "" | Model.TipoUnidadId.ToString() == "1" ? "d-none" : String.Empty)">
+                        <div class="form-group">
+                            <div class="icheck-primary activo-2">
+
+                                @Html.CheckBoxFor(m => m.HasTarea, new { @checked = "checked" })
+                                <label for="HasTarea">
+                                    ¿tiene tarea?
+                                </label>
+
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div id="isTarea" class="col-sm-12 @(!Model.HasTarea ? "d-none" : String.Empty)" >
+                        <div class="form-group">
+                            <label for="">Fecha límite para envió de tarea</label>
+
+
+                            @Html.TextBoxFor(x => x.TareaFechaLimite, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
+                            @Html.ValidationMessageFor(x => x.TareaFechaLimite)
+                        </div>
+                    </div>
+
+
+
+                    @Html.HiddenFor(x => x.CodigoCursoOnline)
+                    @Html.HiddenFor(x => x.GUID)
+                    @Html.HiddenFor(x => x.RutaArchivoInicio)
+
+
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-btn">
+                        <input type="submit" class="btn btn-primary" value="Guardar">
+                        
+                        <a class="btn btn-secondary" href="@Url.Action("ViewCursoOnlineAdmin", "Course", new { CursoOnlineId = @Model.CursoOnlineId })">Cancelar</a>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .d-none {
+        display: none !important;
+    }
+</style>
+@section Scripts {
+  
+    <script>
+     
+
+        $(document).ready(function () {
+            $("#TipoUnidadId").on("change", function () {
+                const val = $(this).val();
+
+                if (val == 1 || val == "") {
+                    $("#isNoTema").addClass("d-none");
+                } else {
+                    $("#isNoTema").removeClass("d-none");
+                }
+            });
+            //$('#HasTarea').on('change', function (event) {
+            //    alert(event.type + ' callback');
+            //});
+            
+            $("#HasTarea").on("change", function () {
+                //const checked = $(this).prop("checked");
+                const checked = $(this).is(':checked')
+                if (!checked) {
+                    $("#isTarea").addClass("d-none");
+                } else {
+                    $("#isTarea").removeClass("d-none");
+                }
+            });
+        });
+    </script>
+}

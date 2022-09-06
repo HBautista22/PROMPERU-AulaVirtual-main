@@ -1,0 +1,340 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.ListUsuarioViewModel
+@{
+    ViewBag.Title = "Usuarios";
+    ViewBag.Icon = "user_new";
+    ViewBag.Seccion = "Usuarios";
+
+}
+@*@section Breadcrumbs{
+
+    }*@
+<style>
+
+    /*.checkbox label:after {
+        content: '';
+        display: table;
+        clear: both;
+    }*/
+    /*
+    .checkbox .cr {
+        position: relative;
+        display: inline-block;
+        border: 1px solid #a9a9a9;
+        border-radius: .25em;
+        width: 1.3em;
+        height: 1.3em;
+        float: left;
+        margin-right: .5em;
+    }
+
+        .checkbox .cr .cr-icon {
+            position: absolute;
+            font-size: .8em;
+            line-height: 0;
+            top: 50%;
+            left: 15%;
+        }
+
+    .checkbox label input[type="checkbox"] {
+        display: none;
+    }
+
+        .checkbox label input[type="checkbox"] + .cr > .cr-icon {
+            opacity: 0;
+        }
+
+        .checkbox label input[type="checkbox"]:checked + .cr > .cr-icon {
+            opacity: 1;
+        }
+
+        .checkbox label input[type="checkbox"]:disabled + .cr {
+            opacity: .5;
+        }
+        */
+
+
+    .contenedor {
+        display: block;
+        position: relative;
+        padding-left: 35px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 22px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+        /* Hide the browser's default checkbox */
+        .contenedor input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+    /* Create a custom checkbox */
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        background-color: #eee;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .contenedor:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    /* When the checkbox is checked, add a blue background */
+    .contenedor input:checked ~ .checkmark {
+        background-color: #E63528;
+    }
+
+    /* Create the checkmark/indicator (hidden when not checked) */
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    /* Show the checkmark when checked */
+    .contenedor input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* Style the checkmark/indicator */
+    .contenedor .checkmark:after {
+        left: 9px;
+        top: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+</style>
+
+@section Jumbotron{
+    <div class="container-fluid container-lg sm-p-l-20 sm-p-r-20 full-height">
+        <h3 class="usuarios m-b-20">Usuarios</h3>
+        <div class="inner full-height" style="transform: translateY(0px); opacity: 1;">
+            <form class="form row" method="get" action="@Url.Action("ListUsuario","User",new { p = 1 })">
+                @Html.HiddenFor(x => x.MarcaTodo)
+                @Html.HiddenFor(x => x.MarcaAlgunos)
+                
+                <div class="col-md-4 m-b-30">
+                    <div class="form-group form-group-default input-group transparent center-margin rectangle-31">
+                        @*@Html.LabelFor(x => x.CadenaBuscar, new { @class = "buscar-usuario" })*@
+                        @Html.TextBoxFor(x => x.CadenaBuscar, new { @class = "form-control input-group-addon text-left", @placeholder = "Apellidos Y Nombres", @autocomplete = "off" })
+                        <span class="input-group-addon"><i class="pg-search"></i></span>
+                    </div>
+                </div>
+                <div class="col-md-4 m-b-30">
+                    <div class="form-group form-group-default input-group transparent center-margin rectangle-31">
+                        @*@Html.LabelFor(x => x.CadenaBuscar, new { @class = "buscar-usuario" })*@
+                        @Html.TextBoxFor(x => x.EmailBuscar, new { @class = "form-control input-group-addon text-left", @placeholder = "Email", @autocomplete = "off" })
+                        <span class="input-group-addon"><i class="pg-search"></i></span>
+                    </div>
+                </div>
+                <div class="col-md-4 m-b-30">
+                    <div class="form-group form-group-default input-group transparent center-margin rectangle-31">
+                        @*@Html.LabelFor(x => x.CadenaBuscar, new { @class = "buscar-usuario" })*@
+                        @Html.TextBoxFor(x => x.DniBuscar, new { @class = "form-control input-group-addon text-left", @placeholder = "Dni", @autocomplete = "off" })
+                        <span class="input-group-addon"><i class="pg-search"></i></span>
+                    </div>
+                </div>
+                <div class="col-md-4 m-b-30">
+                    <div class="form-group form-group-default input-group transparent center-margin rectangle-31" style="width: 100% !important;">
+                        @Html.LabelFor(x => x.EmpresaId, new { @class = "buscar-usuario" })
+                        @Html.DropDownListFor(x => x.EmpresaId, new SelectList(Model.LstEmpresa, "EmpresaId", "RazonSocial"), "[ - Seleccione - ]", new { @class = "form-control buscar-usuario" })
+                    </div>
+                </div>
+
+                <div class="col-md-4 m-b-30">
+                    <div class="form-group form-group-default input-group transparent center-margin rectangle-31" style="width: 100% !important;">
+                        @Html.LabelFor(x => x.RolId, new { @class = "buscar-usuario" })
+                        @Html.DropDownListFor(x => x.RolId, new SelectList(Model.LstRol, "codigo", "nombre"), "[ - Seleccione - ]", new { @class = "form-control buscar-usuario" })
+                    </div>
+                </div>
+
+                
+                <div class="col-md-4 m-b-30">
+                    <div class="form-group form-group-default input-group transparent center-margin rectangle-31" style="width: 100% !important;">
+                        @Html.LabelFor(x => x.EstadoId, new { @class = "buscar-usuario" })
+                        @Html.DropDownListFor(x => x.EstadoId, new SelectList(Model.LstEstado, "codigo", "nombre"), "[ - Seleccione - ]", new { @class = "form-control buscar-usuario" })
+                    </div>
+                </div>
+
+                <div class="col-md-12 m-b-30 text-right">
+                    <button type="button" id="btnreset" class="btn btn-filtrar-usuario  btn-lg m-t-5  p-t-5 p-b-5 filtrar"><i class="fa fa-eraser"></i>&nbsp;LIMPIAR</button>
+                    <button type="submit" class="btn btn-filtrar-usuario  btn-lg m-t-5  p-t-5 p-b-5 filtrar"><i class="fa fa-filter"></i>&nbsp;FILTRAR</button>
+               
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+
+
+
+
+
+<div class="container-fluid container-fixed-lg">
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4 class="m-t-0 m-b-0"><i class="fa fa-@ViewBag.Icon"></i>&nbsp;@ViewBag.Title</h4>
+            </div>
+            <div class="btn-group pull-right">
+                @if (Session.GetRol() == AppRol.Administrador)
+                {
+
+
+
+                    <div class="pull-right">
+                        <div class='dropdown p-t-5 p-b-5'>
+                            <a class="btn btn-filtrar-usuario btn-lg m-t-0" data-toggle='dropdown' style="cursor:pointer;color:#fff;opacity:1;">DESCARGAR <i class='fa fa-download'></i></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    @if (Session.GetRol() == AppRol.Administrador)
+                                    {
+                                        <a class="btn-xs" href="@Url.Action("DownloadReportHistoricoAlumnosLst", "Report", new {Codigo = Model.EmailBuscar, Estado = Model.DniBuscar , Type = "EXCEL" })"><i class="fa fa-users"></i>&nbsp;EXCEL</a>
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="pull-right">
+                        <div class='dropdown p-t-5 p-b-5'>
+                            <a class="btn btn-filtrar-usuario btn-lg m-t-0" data-toggle='dropdown' style="cursor:pointer;color:#fff;opacity:1;">OPCIONES <i class='fa fa-gear'></i></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="btn-xs" id="addGrupo" data-type="modal-link" style="overflow: hidden;" data-source-url="@Url.Action("_AddGrupo", "User")"><i class="fa fa-user-plus"></i>&nbsp;Asignar Grupo</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                }
+            </div>
+
+          
+
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="panel-body">
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline no-footer" id="basicTable_wrapper">
+                    <table role="grid" class="table table-hover dataTable no-footer" id="basicTable">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-2 title-table">
+
+
+                                    <div class="input-group">
+
+                                        <label class="contenedor">
+                                            <input name="chkmarcaopcion" id="chkmarcaopcion" type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+
+
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></button>
+                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                <!--<li><a href="#" id="lnkactual">ACTUAL</a></li>
+                                                <li role="separator" class="divider"></li>-->
+                                                <li><a href="#" id="lnktotal">TOTAL</a></li>
+                                            </ul>
+                                        </div><!-- /btn-group -->
+                                    </div>
+
+
+
+                                </th>
+                                <th class="col-sm-7 title-table">Nombres</th>
+                                <th class="col-sm-5 title-table">Código</th>
+                                <th class="col-sm-5 title-table">Rol</th>
+                                <th class="text-center title-table">Estado</th>
+                                <th class="text-center title-table" style="min-width: 9.3em">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var usuario in Model.LstUsuario)
+                            {
+
+                                <tr>
+                                    <td class="text-table">
+                                        <label class="contenedor">
+                                            <input type="checkbox" name="chkopcion" value="@usuario.UsuarioId">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </td>
+                                    <td class="text-table"><a href="@Url.Action("ViewPerfil", "User", new { UsuarioId = usuario.UsuarioId })">@usuario.Apellido, @usuario.Nombre</a></td>
+                                    <td class="text-table">@usuario.Codigo</td>
+                                    <td class="text-table">@ConstantHelpers.TextoRol(usuario.Rol)</td>
+
+                                    <td class="text-table">
+                                        @usuario.Estado
+                                        <span class="label @(usuario.Estado == ConstantHelpers.ESTADO.ACTIVO ? "completado" : usuario.Estado  == ConstantHelpers.ESTADO.PENDIENTE ? "pendiente" : "label-important"  )">@(usuario.Estado == ConstantHelpers.ESTADO.ACTIVO ? "Activo" : usuario.Estado == ConstantHelpers.ESTADO.PENDIENTE ? "Pendiente" : "Inactivo")</span>
+                                    </td>
+                                    <td class="text-right text-table">
+                                        <div class='base dropdown p-t-5 p-b-5'>
+                                            <a class="base m-r-80" href="@Url.Action("EditUsuario", "User", new { UsuarioId = usuario.UsuarioId })">Editar</a>
+                                            <i class='fa fa-chevron-down dropdown-toggle m-r-10' data-toggle='dropdown' style="cursor:pointer"></i>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="btn-xs" href="@Url.Action("ChangeStateUsuario", "User", new { UsuarioId = usuario.UsuarioId })">
+                                                        @if (usuario.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                                                        {
+                                                            <text><i class="fa fa-user fa-fw"></i>&nbsp;Activar a Usuario</text>
+                                                        }
+                                                        else
+                                                        {
+                                                            <text><i class="fa fa-user-times fa-fw"></i>&nbsp;Desactivar Usuario</text>
+                                                        }
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="btn-xs" href="@Url.Action("ListAlumnoCursoOnline", "Course", new { UsuarioId = usuario.UsuarioId })"><i class="fa fa-book"></i>&nbsp;Ver Cursos</a>
+                                                </li>
+                                                @if (Session.GetRol() == AppRol.Administrador && !usuario.Estado.Equals(ConstantHelpers.ESTADO.PENDIENTE))
+                                                {
+                                                    <li>
+                                                        <a class="btn-xs" href="@Url.Action("ViewAccesos", new { UsuarioId = usuario.UsuarioId })"><i class="fa fa-user-secret"></i>&nbsp;Ver Accesos</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="btn-xs" href="@Url.Action("HistoryMatriculaCursoOnline", "Course", new { UsuarioId = usuario.UsuarioId })"><i class="fa fa-bookmark"></i>&nbsp;Ver Matrículas</a>
+                                                    </li>
+                                                     <li>
+                                                        <a class="btn-xs" data-type="modal-link" style="overflow: hidden;" data-source-url="@Url.Action("_AddGrupo", "User", new { UsuarioId = usuario.UsuarioId })"><i class="fa fa-user-plus"></i>&nbsp;Asignar Grupo</a>
+                                                    </li>
+                                                }
+                                                
+                                                   
+                                                
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model.LstUsuario, page => Url.Action("ListUsuario", "User", new { p = page, CadenaBuscar = Model.CadenaBuscar, EmpresaId = Model.EmpresaId }), ConstantHelpers.Bootstrap3Pager)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

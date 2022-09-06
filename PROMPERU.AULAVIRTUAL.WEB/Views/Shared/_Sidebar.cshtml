@@ -1,0 +1,316 @@
+﻿<ul class="menu-items">
+    <li class="m-t-30 @(ViewBag.Seccion == "Index" ? "active" : String.Empty)">
+        <span class="icon-thumbnail @(ViewBag.Seccion == "Index" ? "" : String.Empty)"><i class="fa fa-home"></i></span>
+        <a href="@Url.Action("Dashboard", "Home")" class="detailed">
+            <span class="title">Inicio</span>
+        </a>
+    </li>
+
+    @if (Session.GetRol() == AppRol.Administrador)
+    {
+        <li class="@(ViewBag.Seccion == "Usuarios" ? "active" : String.Empty)">
+            <a href="@Url.Action("ListUsuario", "User")" class="detailed">
+                <span class="title">Usuarios</span>
+            </a>
+            <span class="icon-thumbnail @(ViewBag.Seccion == "Usuarios" ? "bg-primary" : String.Empty)"><i class="fa fa-user_new"></i></span>
+        </li>
+
+
+        <li class="@(ViewBag.Seccion == "Asesores" ? "active" : String.Empty)">
+            <a href="@Url.Action("", "Asesor")">Asesores</a>
+            <span class="icon-thumbnail  @(ViewBag.Seccion == "Asesores" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-calendar"></i>
+            </span>
+        </li>
+
+        <li class="@(ViewBag.Seccion == "Grupos" ? "active" : String.Empty)">
+            <a href="@Url.Action("ListUsuariosGrupos", "User")" class="detailed">
+                <span class="title">Grupos</span>
+            </a>
+            <span class="icon-thumbnail @(ViewBag.Seccion == "Grupos" ? "bg-primary" : String.Empty)"><i class="fa fa-group"></i></span>
+        </li>
+
+        <li class="@(ViewBag.Seccion == "Notificaciones" ? "active" : String.Empty)">
+            <a href="@Url.Action("ListNotificaciones", "Notificaciones")" class="detailed">
+                <span class="title">Notificaciones</span>
+            </a>
+            <span class="icon-thumbnail @(ViewBag.Seccion == "Notificaciones" ? "bg-primary" : String.Empty)"><i class="fa fa-envelope"></i></span>
+        </li>
+        <li class="@(ViewBag.Seccion == "Cursos" ? "active" : String.Empty)">
+            <a href="javascript:;">
+                <span class="title">Cursos</span>
+                <span class="arrow"></span>
+            </a>
+            <span class="icon-thumbnail @(ViewBag.Seccion == "Cursos" || ViewBag.Seccion == "CursosDisponibles" ? "bg-primary" : String.Empty)"><i class="fa fa-bookmark"></i></span>
+            <ul class="sub-menu">
+                <li class="@(ViewBag.SubSeccion == "Categorias" ? "active" : String.Empty)">
+                    <a href="@Url.Action("ListCategoriaCursoOnline", "Course")">Administrar Categorías</a>
+                    <span class="icon-thumbnail"><i class="fa fa-cubes"></i></span>
+                </li>
+                <li class="@(ViewBag.SubSeccion == "Cursos" ? "active" : String.Empty)">
+                    <a href="@Url.Action("ListCursoOnlineAdmin", "Course")">Administrar Cursos</a>
+                    <span class="icon-thumbnail"><i class="fa fa-book"></i></span>
+                </li>
+
+
+                <li class="@(ViewBag.SubSeccion == "CursosMaestros" ? "active" : String.Empty)">
+                    <a href="@Url.Action("ListCursoOnlineAdminMaestro", "Course")">Administrar Cursos Maestros</a>
+                    <span class="icon-thumbnail"><i class="fa fa-database"></i></span>
+                </li>
+                <li class="@(ViewBag.SubSeccion == "CursosDisponibles" ? "active" : String.Empty)">
+                    <a href="@Url.Action("ListCursoOnline", "Course")">Cursos Disponibles</a>
+                    <span class="icon-thumbnail"><i class="fa fa-circle"></i></span>
+                </li>
+
+            </ul>
+        </li>
+        <li class="@(ViewBag.Seccion == "Reportes" ? "active" : String.Empty)">
+            <a href="javascript:;">
+                <span class="title">Reportes</span>
+                <span class="arrow"></span>
+            </a>
+            <span class="icon-thumbnail @(ViewBag.Seccion == "Reportes" ? "bg-primary" : String.Empty)"><i class="fa fa-file-o"></i></span>
+            <ul class="sub-menu">
+                <li class="@(ViewBag.SubSeccion == "Alumnos" ? "active" : String.Empty)">
+                    <a href="@Url.Action("ReportHistoricoAlumnos", "Report")">Seguimiento de Alumnos</a>
+                    <span class="icon-thumbnail"><i class="fa fa-users"></i></span>
+                </li>
+                <li class="@(ViewBag.SubSeccion == "Alumnos" ? "active" : String.Empty)">
+                    <a href="@Url.Action("ReportAsesoriaRemota", "Report")">Seguimiento de Asesorias</a>
+                    <span class="icon-thumbnail"><i class="fa fa-users"></i></span>
+                </li>
+                <li class="@(ViewBag.SubSeccion == "Alumnos" ? "active" : String.Empty)">
+                    <a href="@Url.Action("ReportSolicitudAsesoria", "Report")">Seguimiento de Solicitudes de Asesoria</a>
+                    <span class="icon-thumbnail"><i class="fa fa-users"></i></span>
+                </li>
+                @* <li class="@(ViewBag.SubSeccion == "Alumnos" ? "active" : String.Empty)">
+                        <a href="@Url.Action("ReportHistoricoAlumnos", "Report")">Seguimiento de Alumnos</a>
+                        <span class="icon-thumbnail"><i class="fa fa-users"></i></span>
+                    </li>*@
+            </ul>
+        </li>
+        <li class="@(ViewBag.Seccion == "CMS" ? "active" : String.Empty)">
+            <a href="javascript:;">
+                <span class="title">CMS</span>
+                <span class="arrow"></span>
+            </a>
+            <span class="icon-thumbnail @(ViewBag.Seccion == "CMS" ? "bg-primary" : String.Empty)"><i class="fa fa-globe"></i></span>
+            <ul class="sub-menu">
+                <li class="@(ViewBag.SubSeccion == "Banner" ? "active" : String.Empty)">
+                    <a href="@Url.Action("ListBanner", "CMS")">Banners</a>
+                    @*<span class="icon-thumbnail"><i class="fa fa-users"></i></span>*@
+                </li>
+                <li class="@(ViewBag.SubSeccion == "Agenda" ? "active" : String.Empty)">
+                    <a href="@Url.Action("ListAgenda", "CMS")">Agendas</a>
+                    @*<span class="icon-thumbnail"><i class="fa fa-users"></i></span>*@
+                </li>
+                <li class="@(ViewBag.SubSeccion == "Certificate" ? "active" : String.Empty)">
+                    <a href="@Url.Action("ListCertificate", "CMS")">Certificate</a>
+                    @*<span class="icon-thumbnail"><i class="fa fa-users"></i></span>*@
+                </li>
+                <li class="@(ViewBag.SubSeccion == "PreguntaFrecuente" ? "active" : String.Empty)">
+                    <a href="@Url.Action("ListPreguntaFrecuente", "CMS")">Preguntas Frecuentes</a>
+                    @*<span class="icon-thumbnail"><i class="fa fa-users"></i></span>*@
+                </li>
+                <li class="@(ViewBag.SubSeccion == "Testimonio" ? "active" : String.Empty)">
+                    <a href="@Url.Action("ListTestimonio", "CMS")">Testimonios</a>
+                    @*<span class="icon-thumbnail"><i class="fa fa-users"></i></span>*@
+                </li>
+                <li class="@(ViewBag.SubSeccion == "Label" ? "active" : String.Empty)">
+                    <a href="@Url.Action("EditLabels", "CMS")">Etiquetas</a>
+                    @*<span class="icon-thumbnail"><i class="fa fa-users"></i></span>*@
+                </li>
+            </ul>
+        </li>
+    }
+    else if (Session.GetRol() == AppRol.Supervisor)
+    {
+
+        <li class="@(ViewBag.Seccion == "Usuarios" ? "active" : String.Empty)">
+            <a href="@Url.Action("ListUsuario", "User")" class="detailed">
+                <span class="title">Usuarios</span>
+            </a>
+            <span class="icon-thumbnail @(ViewBag.Seccion == "Usuarios" ? "bg-primary" : String.Empty)"><i class="fa fa-users"></i></span>
+        </li>
+        <li class="@(ViewBag.SubSeccion == "CursosDisponibles" ? "active" : String.Empty)">
+            <a href="@Url.Action("ListCursoOnline", "Course")">Cursos Disponibles</a>
+            <span class="icon-thumbnail @(ViewBag.SubSeccion == "CursosDisponibles" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-circle"></i>
+            </span>
+        </li>
+        @*
+            <li class="@(ViewBag.Seccion == "Categorias" ? "active" : String.Empty)">
+                <a href="@Url.Action("ListCategoriaCursoOnline", "Course")">Categorías</a>
+                <span class="icon-thumbnail @(ViewBag.Seccion == "Categorias" ? "bg-primary" : String.Empty)">
+                    <i class="fa fa-cubes"></i></span>
+            </li>
+        *@
+        <li class="@(ViewBag.Seccion == "MisCursos" ? "active" : String.Empty)">
+            <a href="@Url.Action("ListCursoOnlineAlumno", "Course")">Mis Cursos</a>
+            <span class="icon-thumbnail  @(ViewBag.Seccion == "MisCursos" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-book"></i>
+            </span>
+        </li>
+
+        <li class="@(ViewBag.Seccion == "MisCursos" ? "active" : String.Empty)">
+            <a href="@Url.Action("ListCursoOnlineMaestroAlumno", "Course")">Mis Cursos Macro</a>
+            <span class="icon-thumbnail  @(ViewBag.Seccion == "MisCursos" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-book"></i>
+            </span>
+        </li>
+
+        <li class="@(ViewBag.Seccion == "MisCalificaciones" ? "active" : String.Empty)">
+            <a href="@Url.Action("HistoryMatriculaCursoOnline", "Course")">Mis Calificaciones</a>
+            <span class="icon-thumbnail  @(ViewBag.Seccion == "MisCalificaciones" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-history"></i>
+            </span>
+        </li>
+
+        <li class="@(ViewBag.Seccion == "Reportes" ? "active" : String.Empty)">
+            <a href="javascript:;">
+                <span class="title">Reportes</span>
+                <span class="arrow"></span>
+            </a>
+            <span class="icon-thumbnail @(ViewBag.Seccion == "Reportes" ? "bg-primary" : String.Empty)"><i class="fa fa-file-o"></i></span>
+            <ul class="sub-menu">
+                <li class="@(ViewBag.SubSeccion == "Certificados" ? "active" : String.Empty)">
+                    <a href="@Url.Action("ListCursoOnline", "Report")">Certificados</a>
+                    <span class="icon-thumbnail"><i class="fa fa-file-archive-o"></i></span>
+                </li>
+                <li class="@(ViewBag.SubSeccion == "Alumnos" ? "active" : String.Empty)">
+                    <a href="@Url.Action("ReportHistoricoAlumnos", "Report")">Seguimiento de Alumnos</a>
+                    <span class="icon-thumbnail"><i class="fa fa-users"></i></span>
+                </li>
+            </ul>
+        </li>
+
+    }
+    else if (Session.GetRol() == AppRol.Asesor)
+    {
+        <li class="@(ViewBag.Seccion == "MisAsesoriasAsesor" ? "active" : String.Empty)">
+            <a href="@Url.Action("", "AsesoriaAsesor")">Telexportemos </a>
+            <span class="icon-thumbnail  @(ViewBag.Seccion == "MisAsesoriasAsesor" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-calendar"></i>
+            </span>
+        </li>
+    }
+    else if (Session.GetCursoMaestro() == AppCursoMaestro.TieneCurso)
+    {
+
+        <li class="@(ViewBag.Seccion == "CursosDisponibles" ? "active" : String.Empty)">
+            <a href="@Url.Action("ListCursoOnline", "Course")">Cursos Disponibles</a>
+            <span class="icon-thumbnail @(ViewBag.SubSeccion == "CursosDisponibles" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-circle"></i>
+            </span>
+        </li>
+        @*
+            <li class="@(ViewBag.Seccion == "Categorias" ? "active" : String.Empty)">
+                <a href="@Url.Action("ListCategoriaCursoOnline", "Course")">Categorías</a>
+                <span class="icon-thumbnail @(ViewBag.Seccion == "Categorias" ? "bg-primary" : String.Empty)">
+                    <i class="fa fa-cubes"></i></span>
+            </li>
+        *@
+        <li class="@(ViewBag.Seccion == "MisCursos" ? "active" : String.Empty)">
+            <a href="@Url.Action("ListCursoOnlineAlumno", "Course")">Mis Cursos</a>
+            <span class="icon-thumbnail  @(ViewBag.Seccion == "MisCursos" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-book"></i>
+            </span>
+        </li>
+
+        <li class="@(ViewBag.Seccion == "MisCursosMacro" ? "active" : String.Empty)">
+            <a href="@Url.Action("ListCursoOnlineMaestroAlumno", "Course")">Cursos Maestro</a>
+            <span class="icon-thumbnail  @(ViewBag.Seccion == "MisCursosMacro" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-mortar-board"></i>
+            </span>
+        </li>
+
+        <li class="@(ViewBag.Seccion == "MisCalificaciones" ? "active" : String.Empty)">
+            <a href="@Url.Action("HistoryMatriculaCursoOnline", "Course")">Mis Calificaciones</a>
+            <span class="icon-thumbnail  @(ViewBag.Seccion == "MisCalificaciones" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-edit"></i>
+            </span>
+        </li>
+
+
+
+        <li class="@(ViewBag.Seccion == "MisCertificaciones" ? "active" : String.Empty)">
+            <a href="@Url.Action("ViewCertificadoOnline", "Course")">Mis Certificaciones</a>
+            <span class="icon-thumbnail  @(ViewBag.Seccion == "MisCertificaciones" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-trophy"></i>
+            </span>
+        </li>
+
+        <li class="@(ViewBag.Seccion == "MisAsesoriasAsesorado" ? "active" : String.Empty)">
+            <a href="@Url.Action("", "AsesoriaAsesorado")" data-toggle="tooltip" title="<span style='font-family:breePeru-Light;'>Funcionalidad que le permitirá agendar una cita con un asesor en exportaciones</span>" data-placement="right" data-container="body" data-html="true">Telexportemos</a>
+            <span class="icon-thumbnail  @(ViewBag.Seccion == "MisAsesorias" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-calendar"></i>
+            </span>
+        </li>
+
+
+
+
+    }
+    else if (Session.GetRol() == AppRol.Alumno || Session.GetRol() == AppRol.Empresa)
+    {
+
+        <li class="@(ViewBag.Seccion == "CursosDisponibles" ? "active" : String.Empty)">
+            <a href="@Url.Action("ListCursoOnline", "Course")">Cursos Disponibles</a>
+            <span class="icon-thumbnail @(ViewBag.SubSeccion == "CursosDisponibles" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-circle"></i>
+            </span>
+        </li>
+        @*
+            <li class="@(ViewBag.Seccion == "Categorias" ? "active" : String.Empty)">
+                <a href="@Url.Action("ListCategoriaCursoOnline", "Course")">Categorías</a>
+                <span class="icon-thumbnail @(ViewBag.Seccion == "Categorias" ? "bg-primary" : String.Empty)">
+                    <i class="fa fa-cubes"></i></span>
+            </li>
+        *@
+        <li class="@(ViewBag.Seccion == "MisCursos" ? "active" : String.Empty)">
+            <a href="@Url.Action("ListCursoOnlineAlumno", "Course")">Mis Cursos</a>
+            <span class="icon-thumbnail  @(ViewBag.Seccion == "MisCursos" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-book"></i>
+            </span>
+        </li>
+
+        <li class="@(ViewBag.Seccion == "MisCalificaciones" ? "active" : String.Empty)">
+            <a href="@Url.Action("HistoryMatriculaCursoOnline", "Course")">Mis Calificaciones</a>
+            <span class="icon-thumbnail  @(ViewBag.Seccion == "MisCalificaciones" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-history"></i>
+            </span>
+        </li>
+
+        <!--<li class="@(ViewBag.Seccion == "MisCertificaciones" ? "active" : String.Empty)">
+            <a href="@Url.Action("ViewCertificadoOnline", "Course")">Mis Certificaciones</a>
+            <span class="icon-thumbnail  @(ViewBag.Seccion == "MisCertificaciones" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-certificate"></i>
+            </span>
+        </li>
+            -->
+        <li class="@(ViewBag.Seccion == "MisAsesoriasAsesorado" ? "active" : String.Empty)">
+            <a href="@Url.Action("", "AsesoriaAsesorado")">Mis Asesorias <br />(Solicitar)</a>
+            <span class="icon-thumbnail  @(ViewBag.Seccion == "MisAsesorias" ? "bg-primary" : String.Empty)">
+                <i class="fa fa-calendar"></i>
+            </span>
+        </li>
+
+
+    }
+
+
+
+    <li class="@(ViewBag.Seccion == "Perfil" ? "active" : String.Empty) Ocultar" style="display:none">
+        <a href="@Url.Action("ViewPerfil","User",new {UsuarioId = Session.GetUsuarioId() })">Perfil</a>
+        <span class="icon-thumbnail  @(ViewBag.Seccion == "Perfil" ? "bg-primary" : String.Empty)">
+            <i class="fa fa-eye"></i>
+        </span>
+    </li>
+    <li class="@(ViewBag.Seccion == "Logout" ? "active" : String.Empty) Ocultar" style="display:none">
+        <a href="@Url.Action("Logout", "Home")">Salir</a>
+        <span class="icon-thumbnail  @(ViewBag.Seccion == "Logout" ? "bg-primary" : String.Empty)">
+            <i class="pg-power"></i>
+        </span>
+    </li>
+</ul>
+

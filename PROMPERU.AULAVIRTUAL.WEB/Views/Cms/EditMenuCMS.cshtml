@@ -1,0 +1,87 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Cms.EditMenuViewModel
+@{
+    ViewBag.Title = "EditMenuCMS";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Menu</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Menu</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row table-acciones table-content list-empresa">
+    <div class="col-sm-6">
+        <h2>Lista de Menus</h2>
+    </div>
+
+</div>
+<form method="post" class="form">
+    @Html.HiddenFor(x => x.FiltroCodigo)
+    @Html.HiddenFor(x => x.FiltroTextoES)
+    @Html.HiddenFor(x => x.MostrarPendientes)
+    <div class="row mis-solicitudes table-content">
+        <div class="col-sm-12 table-responsive altomin">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list tipo-empresa" align="center">
+                <thead>
+                    <tr>
+                        <th>Menu</th>
+                        <th>Perfil</th>
+                        <th>Estado</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var menu in Model.LstcMS_MenuCMs)
+                    {
+                    <tr>
+
+                        @if (menu.MenuIDPadre != null)
+                        {
+                            <td style="padding-left: 4%;">
+                                @menu.Nombre
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @menu.Nombre
+                            </td>
+                        }
+
+                        <td>
+                            @menu.Perfil
+                        </td>
+
+                    <td>
+                        <input type="hidden" name="MenuID[@menu.MenuID]" />
+                        <select class="form-control" name="Estado[@menu.MenuID]">
+                            <option value="True" @(menu.Activo == true ? "selected" : "")>Activo</option>
+                            <option value="False" @(menu.Activo ==false ? "selected" : "")>Desactivado</option>
+                        </select>
+                    </td>
+
+
+                    </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <button type="submit" name="BtnSubmit" class="btn btn-primary mb-5"><i class="fa fa-save"></i>&nbsp;Guardar</button>
+        </div>
+    </div>
+</form>
+
+

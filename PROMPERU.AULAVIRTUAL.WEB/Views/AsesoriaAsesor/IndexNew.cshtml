@@ -1,0 +1,320 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Asesoria.AsesoriaAsesorViewModel
+@using PROMPERU.AULAVIRTUAL.BE.Aesorias
+
+
+@{
+    ViewBag.Title = "IndexNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+
+    Dictionary<string, string> Estados = new Dictionary<string, string>()
+    {
+        { "SOL", "Solicitado" },
+        { "ACE", "Aceptado" },
+        { "REC", "Rechazado" },
+        { "ATE", "Atendido" },
+        { "CAN", "Cancelado" }
+    };
+}
+
+@section Scripts
+{
+    <link href='~/Scripts/fullcalendar-5.4.0/lib/main.css' rel='stylesheet'/>
+    <script src='~/Scripts/fullcalendar-5.4.0/lib/main.js'></script>
+    <link rel="stylesheet" href="~/Content/assets/plugins/jquery-ui/css/jquery-ui.css"/>
+    <script src='~/Content/assets/js/Asesoria/AsesoriaAsesor.js'></script>
+
+    <script>
+        var initialLocaleCode = 'es';
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl,
+            {
+                initialView: 'timeGridWeek',
+                slotMinTime: '09:00:00',
+                slotMaxTime: '19:00:00',
+                firstDay: @((int)DateTime.Now.AddDays(1).DayOfWeek),
+                weekends: false,
+                height: 'auto',
+                width: 'auto',
+                allDaySlot: false,
+                slotLabelFormat: [
+                    {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    }
+                ],
+                headerToolbar:
+                {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: '' //'dayGridMonth,dayGridWeek,dayGridDay'
+                },
+                initialDate: '@(DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"))',
+                locale: initialLocaleCode,
+                navLinks: false, // can click day/week names to navigate views
+                editable: false,
+                dayMaxEvents: true, // allow "more" link when too many events
+                eventSources: [
+                    {
+                        url: '/AsesoriaAsesor/AsesoriasRemotasListar',
+                        method: 'GET',
+                        //extraParams: {
+                        //    custom_param1: 'something',
+                        //    custom_param2: 'somethingelse'
+                        //},
+                        failure: function() {
+                            alert('there was an error while fetching events!');
+                        }
+                    }
+                ]
+            });
+
+        document.addEventListener('DOMContentLoaded',
+            function() {
+
+                calendar.render();
+            });
+
+    </script>
+}
+
+@section Styles{
+    <style>
+
+        .widget-11 .widget-11-table tr td:first-child { width: 55% !important; }
+
+        .ui-dialog-titlebar-close { background-image: url(/content/assets/img/ui-icons_777777_256x240.png); }
+
+        .ui-dialog-titlebar-close { background-position: -96px -128px; }
+
+        .ui-icon-closethick { background-position: -96px -128px; }
+
+        .fc-v-event {
+            border: 1px solid #07354F !important;
+            border: 1px solid var(--fc-event-border-color, #07354F) !important;
+            background-color: #07354F !important;
+            background-color: #07354F !important;
+        }
+
+        .fc .fc-col-header-cell-cushion { color: #07354F; }
+    </style>
+}
+
+<div class="row">
+    <div class="col-lg-12 box-grey-content">
+        <h2>Programar asesoría</h2>
+        <div class="content-form-grey">
+            <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="asesoria-individual-tab" data-toggle="pill" href="#asesoria-individual" role="tab" aria-controls="asesoria-individual" aria-selected="true"><span class="icon"></span> Individual</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="bloque-asesoria-tab" data-toggle="pill" href="#bloque-asesoria" role="tab" aria-controls="bloque-asesoria" aria-selected="false"><span class="icon"></span> En bloque</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="custom-tabs-one-tabContent">
+                <div class="tab-pane fade active show" id="asesoria-individual" role="tabpanel" aria-labelledby="asesoria-individual-tab">
+                    <form action="" id="addSingleAsesoria">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="">Titulo</label>
+                                    <input type="text" class="form-control" name="titulo" id="titleScheduled" placeholder="Ingresar titulo">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="">Duración</label>
+                                    <select name="duracion" class="duracion form-control form-control-select form-select">
+                                        <option value="15">15</option>
+                                        <option value="30">30</option>
+                                        <option value="45">45</option>
+                                        <option value="60" selected>60</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="">Fecha</label>
+                                    <input type="date" class="form-control" id="dateScheduled" name="fecha">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="">Hora</label>
+                                    <input type="time" class="form-control" id="timeScheduled" name="hora">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 form-btn">
+                                <input type="submit" onclick="AddAsesoriaDetallado()" class="btn btn-primary" value="Crear Asesoría">
+                                @*<button type="button" onclick="AddAsesoriaDetallado()" class="btn btn-primary pull-left">Crear Asesoria</button>*@
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="bloque-asesoria" role="tabpanel" aria-labelledby="bloque-asesoria-tab">
+                    <form action="" id="addBlockAsesoria">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="">Titulo</label>
+                                    <input type="text" class="form-control" name="titulo" id="titleScheduledBloque" placeholder="Ingresar titulo">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="">Duración</label>
+                                    <select name="duracion" class="duracion form-control form-control-select form-select" id="durationScheduledBloque">
+                                        <option value="15">15</option>
+                                        <option value="30">30</option>
+                                        <option value="45">45</option>
+                                        <option value="60" selected>60</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="">Fecha inicial</label>
+                                    <input type="date" class="form-control" id="dateScheduledInicioBloque" name="fechaInicial">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="">Fecha final</label>
+                                    <input type="date" class="form-control" id="dateScheduledFinBloque" name="fechaFinal">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 form-btn">
+                                <input type="button" class="btn btn-primary" value="Crear Asesoría" onclick="AddAsesoriaBloque()">
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <section class="col-lg-12 table-content">
+    <div class="container-fluid container-table-responsive d-flex content-asesorias">
+        <div class="col-sm-12">
+            <h3>Asesorías programadas</h3>
+        </div>
+        <div id="calendar"></div>
+    </div>
+</div>
+
+<div id="dialog-confirm" title="Anular Entrevista?" style="display: none;">
+    <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 12px 12px 20px 0;"></span>Desea eliminar el Agendamiento?</p>
+</div>
+<div class="row mis-solicitudes table-content">
+    <div class="col-sm-12 ">
+        <h3>Solicitudes recibidas</h3>
+    </div>
+    <div class="col-sm-12 table-responsive altomin">
+        @if (Model.AsesoriasSolicitadas != null && Model.AsesoriasSolicitadas.Count > 0)
+        {
+            <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list asesorias">
+                <thead>
+                <tr>
+                    <th>Asesorado</th>
+                    <th>Consulta</th>
+                    <th>Tema</th>
+                    <th>Fecha</th>
+                    <th>Enlace</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+
+
+
+                @foreach (AsesoriaAsesorSolicitud asre in Model.AsesoriasSolicitadas)
+                {
+                    <tr>
+                        <td>@asre.NombreAsesorado @asre.ApellidoAsesorado</td>
+                        <td>@asre.Consulta</td>
+                        <td> @asre.Asre_Nombre</td>
+                        <td>@asre.Asre_Inicio</td>
+                        <td>
+
+                            @if (asre.Sola_Estado == "ACE")
+                            {
+                                <a href="/conferencia/?RoomName=@asre.Asre_ConferenciaId">Ingresar a la Videoconferencia</a>
+                            }
+
+                        </td>
+                        <td>
+                            <span class="label-estado @Html.Raw(Estados[asre.Sola_Estado] == "Aceptado" ? "bg-info" : (Estados[asre.Sola_Estado] == "Atendido" ? "bg-success" : ""))">
+                                @Estados[asre.Sola_Estado]
+                            </span>
+                        </td>
+                        <td class="text-center text-table">
+                            @if (asre.Sola_Estado == "SOL")
+                            {
+                                <div class="padding-10" style="float: left;">
+                                    <a href="javascript:AceptarSolicitud(@asre.Sola_Id)" class="btn aceptar">Aceptar</a>
+                                </div>
+                                <div class="padding-10" style="float: left;">
+                                    <a href="javascript:MostrarRechazar(@asre.Sola_Id)" class="btn rechazar">Rechazar</a>
+                                </div>
+                            }
+                            @if (asre.Sola_Estado == "ACE")
+                            {
+                                <a href="javascript:TerminarSolicitud(@asre.Sola_Id)" class="btn atendido">Atendido</a>
+                            }
+                        </td>
+                    </tr>
+                }
+
+                @*<tr>
+                <td>Manuel Lopez</td>
+                <td>20 / 11 / 2021 - 12:00-12:30</td>
+                <td>
+                    <a href="#">www.link.com</a>
+                </td>
+                <td>
+                    <span class="label-estado completado">
+                        Aceptado
+                    </span>
+                </td>
+            </tr>*@
+                </tbody>
+            </table>
+        }
+
+        else
+        {
+            <p class="noRegistros"><img src="@Url.GetCmsResourceUrl("assets/images/iconos/alert_azul_msj.png")"> No se encontraron solicitudes.</p>
+        }
+
+
+    </div>
+</div>
+<div id="dialog-detalle-solicitud" title="Detalle de Solicitud" style="display: none;">
+    <p>
+        <strong>Solicitante: <span id="solicitud-nombres"></span></strong>
+    </p>
+    <p>Solicitud: <span id="solicitud-solicitud"></span></p>
+    <p>Telefono: <span id="solicitud-telefono"></span></p>
+    <p>Cargo: <span id="solicitud-cargo"></span></p>
+</div>
+<div id="dialog-rechazar" title="Rechazar Entrevista?" class="form-group" style="display: none;">
+    <input type="hidden" id="SolicitudId" value=""/>
+    <p>
+        Escriba un comentario:
+    </p>
+    <p>
+        <textarea class="form-control" id="Comentario" name="Comentario"></textarea>
+    </p>
+</div>

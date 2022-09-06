@@ -1,0 +1,90 @@
+﻿@using PROMPERU.AULAVIRTUAL.BE.CURSOS
+@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Evaluation.ViewHistorialEvaluacionAlumnoViewModel
+
+@{
+    ViewBag.Title = Model.CursoOnline.Nombre;
+    ViewBag.Seccion = "MisCalificaciones";
+    ViewBag.SubSeccion = "Cursos";
+    var matricula = Model.MatriculaCursoOnline;
+    var curso = Model.CursoOnline;
+    var usuario = Model.Usuario;
+}
+
+@section Breadcrumbs {
+
+    <div class="row mb-2">
+        <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item">
+                <a href="#">Inicio</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("HistoryMatriculaCursoOnline", "Course")">Historial de Cursos</a>
+            </li>
+            <li class="breadcrumb-item active">Mis Evaluaciones</li>
+        </ol>
+    </div>
+    <div class="col-sm-6">
+        <h2 class="m-0">Mis Evaluaciones</h2>
+    </div>
+}
+
+<div class="container-fluid container-fixed-lg">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="padding-0 sm-padding-10">
+                <div class="table-responsive">
+                    <table class="table m-t-50">
+                        <thead>
+                        <tr>
+                            <th class="text-center title-table">Nombre</th>
+                            <th class="text-center title-table">Inicio</th>
+                            <th class="text-center title-table">Fin</th>
+                            <th class="text-center title-table">Puntaje Obtenido/Total</th>
+                            <th class="text-center title-table" style="min-width: 9.3em">Estado</th>
+                        </tr>
+                        </thead>
+                        
+                        @if (!Model.LstEvaluacionCursoOnline.Any())
+                        {
+                            <tbody>
+                            <tr>
+                                <th colspan="5">
+                                    <div class="alert-info w-100">
+                                        <i class="fa fa-exclamation-triangle"></i>&nbsp;No se encontraron evaluaciones.
+                                    </div>
+                                </th>
+                            </tr>
+                            </tbody>
+                        }
+                        else
+                        {
+                            <tbody>
+                                @{ int i = 0; }
+                                @foreach (EvaluacionCursoOnline evaluacion in Model.LstEvaluacionCursoOnline)
+                                {
+                                    i++;
+                                    decimal porcentajeObtenido = (evaluacion.PuntajeObtenido / evaluacion.PuntajeTotal).ToDecimal();
+                                    bool aprobado = porcentajeObtenido >= evaluacion.PorcentajeAprobacion;
+
+                                    <tr class="@(aprobado ? "success" : string.Empty)">
+                                        <td class="text-center text-table">@i - @Model.MatriculaCursoOnline.CursoOnline.Nombre</td>
+                                        <td class="text-center text-table">@evaluacion.FechaInicio </td>
+                                        <td class="text-center text-table">@(evaluacion.FechaFin != null ? evaluacion.FechaFin + "" : "--")</td>
+                                        <td class="text-center text-table">@(evaluacion.PuntajeObtenido != null ? evaluacion.PuntajeObtenido.ToString() : "0") / @evaluacion.PuntajeTotal </td>
+                                        <td class="text-center text-table">
+                                            <div class="label label-@(((evaluacion.PuntajeObtenido ?? 0) * 100 / evaluacion.PuntajeTotal) < evaluacion.PorcentajeAprobacion ? "danger" : "success")">
+                                                @(((evaluacion.PuntajeObtenido ?? 0) * 100 / evaluacion.PuntajeTotal) < evaluacion.PorcentajeAprobacion ? "Desaprobado" : "Aprobado")
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

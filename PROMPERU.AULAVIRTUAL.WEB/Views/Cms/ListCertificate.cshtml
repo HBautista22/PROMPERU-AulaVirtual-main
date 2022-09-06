@@ -1,0 +1,57 @@
+﻿@model IEnumerable<PROMPERU.AULAVIRTUAL.BE.CMS.CMS_Certificate>
+
+@{
+    ViewBag.Title = "Certifícate";
+}
+<div class="container-fluid container-fixed-lg">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h2>Certifícate</h2>
+
+            <p>
+                @Html.ActionLink("Agregar", "AddEditCertificate")
+            </p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Nombre
+                        </th>
+                        <th>
+                            Imagen
+                        </th>
+                        <th>
+                            Sumilla
+                        </th>
+                        <th>
+                            Publicado
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Nombre)
+                            </td>
+                            <td>
+                                <img style="background-image:url('@(item.Imagen != null ? Url.Content(item.Imagen) : "")'); background-size: contain; width:200px; height:100px; background-repeat: no-repeat; background-position: center;" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sumilla)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EsPublicado)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Editar", "AddEditCertificate", new { id = item.Id })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

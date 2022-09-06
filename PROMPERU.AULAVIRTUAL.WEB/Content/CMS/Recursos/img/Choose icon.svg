@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="14px" viewBox="0 0 16 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 56.3 (101010) - https://sketch.com -->
+    <title>A1E99812-5C9D-40D6-8897-A91F1E33ABA1</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <path d="M15.3536875,6.3536875 L0.64631247,6.3536875 C0.289374968,6.3536875 -3.33334356e-08,6.6430625 -3.33334356e-08,7 C-3.33334356e-08,7.35696875 0.289374968,7.6463125 0.64631247,7.6463125 L15.3536875,7.6463125 C15.7106563,7.6463125 16,7.35696875 16,7 C16,6.6430625 15.7106563,6.3536875 15.3536875,6.3536875 Z M15.8106875,6.54296875 L10.2954375,1.02771873 C10.0430313,0.775343724 9.63381252,0.775343724 9.38140627,1.02771873 C9.12903126,1.28012498 9.12903126,1.68934373 9.38140627,1.94174998 L14.4396563,7 L9.38140627,12.0582188 C9.12903126,12.310625 9.12903126,12.7198438 9.38140627,12.97225 C9.50759377,13.0984688 9.67303127,13.1615625 9.83843752,13.1615625 C10.0038438,13.1615625 10.1692813,13.0984688 10.2954688,12.97225 L15.8107188,7.457 C16.0630938,7.20459375 16.0630938,6.795375 15.8106875,6.54296875 Z" id="path-1"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="versión-5" transform="translate(-1210.000000, -3924.000000)">
+            <g id="Group-3" transform="translate(673.000000, 3901.000000)">
+                <g id="Button/Button-with-Icon" transform="translate(375.000000, 0.000000)">
+                    <g id="Choose-icon..." transform="translate(162.000000, 23.000000)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use id="Icons/133-right-arrow" fill="#FFFFFF" fill-rule="nonzero" xlink:href="#path-1"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

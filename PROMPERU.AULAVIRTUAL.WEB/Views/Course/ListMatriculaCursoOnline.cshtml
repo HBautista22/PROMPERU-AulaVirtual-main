@@ -1,0 +1,207 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ListaMatriculaCursoOnlineViewModel
+@{
+    ViewBag.Title = "ListMatriculaCursoOnline";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+            <li class="breadcrumb-item active">Matrículas</li>
+        </ol>
+    </div>
+    <div class="col-sm-6">
+        <h2 class="m-0"> Matrículas</h2>
+    </div>
+}
+<div class="row">
+    <div class="col-lg-12 box-grey-content">
+        <div class="content-form-grey">
+            <form action="@Url.Action("ListMatriculaCursoOnline", "Course", new { p = 1 })" id="searchUser" method="post">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Curso</label>
+
+
+                            @Html.DropDownListFor(x => x.CursoOnlineId, new SelectList(Model.LstCursoOnline, "CursoOnlineId", "Nombre"), "- Seleccionar curso -", new { @class = "custom-select" })
+                        </div>
+                    </div>
+                    <div class="row col-sm-12">
+                        <div class="col-sm-6 form-btn">
+                            <input type="submit" class="btn btn-primary" value="Filtrar">
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row col-sm-12 table-acciones table-content">
+    <div class="col-sm-12 btns-table">
+        @*<a class="btn btn-primary" href="@Url.Action("EditCursoMaestroOnline", "Course")">Agregar Curso</a>*@
+        <button id="BtnAsignarAlumnosCurso" type="button" class="btn btn-primary">Habilitar Matrícula</button>
+
+    </div>
+</div>
+<div class="row col-sm-12 mis-solicitudes table-content">
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list asesorias" id="HistoricoAlumnos">
+            <thead>
+                <tr>
+                    @if (Session.GetRol() == AppRol.Administrador)
+                    {
+                        <th class="text-center">
+                            <div class="custom-checkbox custom-checkbox-red">
+                                <label>
+                                    <input type="checkbox" id="SelectAll">
+                                    <span class="cr mr-0"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                </label>
+                            </div>
+                        </th>
+                    }
+                    <th>Alumno</th>
+                    <th>Correo electrónico</th>
+                    <th>Curso</th>
+                    <th>Fecha Matrícula</th>
+                    <th>Estado</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.LstMatriculaCursoOnline.Count > 0)
+                {
+                    foreach (var registro in Model.LstMatriculaCursoOnline)
+                    {
+                        <tr id="@registro.MatriculaCursoOnlineId">
+                            @if (Session.GetRol() == AppRol.Administrador)
+                            {
+                                <td class="text-center">
+                                    <div class="custom-checkbox">
+                                        <label>
+                                            <input id="checkbox-@registro.MatriculaCursoOnlineId" type="checkbox">
+                                            <span class="cr mr-0"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                        </label>
+                                    </div>
+                                </td>
+                            }
+                            <td><a href="@Url.Action("ViewPerfil","User",new {UsuarioId=registro.UsuarioId })">@registro.Usuario.Nombre @registro.Usuario.Apellido</a></td>
+                            <td>@registro.Usuario.Email</td>
+                            <td>@registro.CursoOnline.Nombre</td>
+                            <td class="text-center">@registro.FechaMatricula</td>
+                            <td class="text-center">
+                                <span class="text-center label label-@(ConstantHelpers.TextoColorEstado(registro.Estado))">
+                                    @ConstantHelpers.TextoEstado(registro.Estado)
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="1000" class="text-center">No hay registros disponibles.</td>
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+    <div class="col-xs-12 text-center">
+        @Html.PagedListPager(Model.LstMatriculaCursoOnline, page => Url.Action("ListMatriculaCursoOnline", "Course", new { p = page }), ConstantHelpers.Bootstrap3Pager)
+    </div>
+</div>
+
+<div class="modal fade" id="HabilitarMatriculaMensaje" tabindex="-1" role="dialog" backdrop="static" keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button id="btnCerrar" type="button" class="btn btn-promperu-default round" data-dismiss="modal">Cerrar</button>
+                <button id="btnAceptar" type="button" class="btn btn-promperu-red round" onclick="window.location.replace('/Course/ListMatriculaCursoOnline')">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>$("#SelectAll").on("click", function (e) {
+            var checked = e.target.checked;
+            var table = document.getElementById("HistoricoAlumnos");
+
+            for (var i = 1; i < table.rows.length; i++) {
+                const id = table.rows[i].getAttribute("id");
+                const checkbox = $("#checkbox-" + id);
+
+                if (checked) {
+                    if (!checkbox.is(":checked")) {
+                        checkbox.click();
+                    }
+                } else {
+                    if (checkbox.is(":checked")) {
+                        checkbox.click();
+                    }
+                }
+            }
+        });
+
+        $("#BtnAsignarAlumnosCurso").on("click", function () {
+            var ids = $(":checkbox:checked").map(function () {
+                var id = $(this).closest("tr").prop("id");
+                return id;
+            }).get();
+
+            ids = ids.filter(function (id) { return id !== "" });
+
+            if (ids.length > 0) {
+                console.log(ids);
+
+                const $modal = $("#HabilitarMatriculaMensaje");
+                const $btnCancelar = $("#btnCerrar");
+                const $btnAceptar = $("#btnAceptar");
+
+                $btnCancelar.hide();
+                $btnAceptar.hide();
+
+                const data = new FormData();
+                data.append("ids", ids);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Course/HabilitarMatricula",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    success: function (res) {
+                        if (res.status) {
+                            $modal.find(".modal-title").html("Éxito");
+                            $modal.find(".modal-body").html(res.message);
+                            $btnAceptar.show();
+                            $("#HabilitarMatriculaMensaje").modal("show");
+
+                            return;
+                        }
+
+                        $modal.find(".modal-title").html("Error");
+                        $modal.find(".modal-body").html("¡Ocurrio un error!, por favor intentelo más tarde.");
+                        $btnCancelar.show();
+                        $("#HabilitarMatriculaMensaje").modal("show");
+                    },
+                    error: function (err) {
+                        $modal.find(".modal-title").html("Error");
+                        $modal.find(".modal-body").html(err.message);
+                        $btnCancelar.show();
+                        $("#HabilitarMatriculaMensaje").modal("show");
+                    }
+                })
+            }
+        });</script>
+}

@@ -1,0 +1,150 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Home.AdministradorIndexViewModel
+@{
+    ViewBag.Title = "AdministradorIndexNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+    ViewBag.SubSeccion = "Index";
+}
+
+
+<div class="row mb-2">
+    <section class="col-lg-12">
+        <div class="card">
+            <div class="card-body info-alumno">
+                <div class="foto-perfil">
+                    <div class="foto">
+                        <img id="profile" src="@Url.GetCmsResourceUrl("assets/images/user.png")">
+                    </div>
+                </div>
+                <div class="datos-usuario">
+                    <div class="header">
+                        <h2>@Session.GetNombreCompleto()</h2>
+                        <a href="@Url.Action("ViewPerfil", "User", new { UsuarioId = Session.GetUsuarioId() })">
+                            <i class="fas fa-cog"></i>
+                        </a>
+                    </div>
+                    <p class="perfil">Administrador</p>
+                </div>
+            </div>
+        </div>
+        <!-- /.card -->
+    </section>
+    <!-- /.Left col -->
+    <section class="col-lg-12 section-cards-grey section-cards-grey-admin ">
+        <div class="row">
+            <div class="col-sm-3 grey-box">
+                <div class="body-card card-admin">
+                    <div class="info-total">
+                        <div class="item">
+                            <img src="@Url.GetCmsResourceUrl("assets/images/iconos/alumnos.png")">
+                            <div class="info">
+                                <p><strong>Alumnos:</strong> @Model.CantidadAlumno</p>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <img src="@Url.GetCmsResourceUrl("assets/images/iconos/empresas.png")">
+                            <div class="info">
+                                <p><strong>Empresas:</strong> @Model.CantidadEmpresa</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 grey-box">
+                <div class="body-card card-admin">
+                    <div class="info-total">
+                        <div class="item">
+                            <img src="@Url.GetCmsResourceUrl("assets/images/iconos/cursos.png")" alt="">
+                            <div class="info">
+                                <p><strong>Cursos:</strong> @Model.CantidadCursos</p>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <img src="@Url.GetCmsResourceUrl("assets/images/iconos/constancias.png")" alt="">
+                            <div class="info">
+                                <p>
+                                    <strong>Constancias:</strong>
+                                    @if (Model.CantidadCertificados > 0)
+                                    {
+                                        <a href="@Url.Action("ExportarUsuarioConCertificado", "Home")">@Model.CantidadCertificados</a>
+                                    }
+                                    else
+                                    {
+                                        @Model.CantidadCertificados
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 info-eventos grey-box">
+                <div class="header-card">
+                    <h2>Enlaces de Interés</h2>
+                    <a href="@Url.Action("ListLinkAdmin", "Link")"><i class="fas fa-link"></i> Ver todos</a>
+                </div>
+                <div class="body-card">
+                    <ul>
+                        @foreach (var item in Model.EnlacesInteres)
+                        {
+                            <li>
+                                <div class="det-list">
+                                    <p>@item.Titulo</p>
+                                    <div class="actions">
+                                        <a href="@item.Url" target="_blank" class="btn-list">Conoce mas</a>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+
+                       
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="col-sm-12 info-eventos grey-box" style="width: 100%; flex: 0 0 100%;">
+                <div class="header-card">
+                    <h2>Cursos con mayor numero de matriculados</h2>
+                    
+                </div>
+                <div class="body-card">
+                    <ul>
+                        <li>
+                            <div class="det-list">
+                                <p style="width: 60%">Cursos</p>
+                                <p style="width: 10%">Inscritos</p>
+                                <p style="width: 10%">% Culminaron</p>
+                                <div style="width: 20%" class="actions">
+                                    <a style="display: none" class="btn-list">Conoce mas</a>
+                                </div>
+                            </div>
+                        </li>
+                        @foreach (var item in Model.CursosOnlineRanking)
+                        {
+                            <li>
+                                <div class="det-list">
+                                    <p style="width: 60%">@item.Nombre</p>
+
+                                    <p style="width: 10%">@item.Total </p>
+
+
+                                    @{
+                                        Double por = (Double.Parse(item.Total.ToString()) / Double.Parse(item.Ranking.ToString())) * 100;
+                                    }
+                                    <p style="width: 10%"> @por.ToString("##")%   </p>
+
+                                    <div style="width: 20%" class="actions">
+                                        <a href="@Url.Action("ViewCursoOnlineAdmin", "Course", new { CursoOnlineId = item.CursoOnlineId })" class="btn-list">Conoce mas</a>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+
+
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>

@@ -1,0 +1,154 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.ListUsuarioViewModel
+@{
+    ViewBag.Title = "Usuarios";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+    ViewBag.Seccion = "Usuarios";
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Usuarios</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Usuarios</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row">
+    <div class="col-lg-12 box-grey-content">
+        <div class="content-form-grey">
+            <form action="@Url.Action("ListUsuario","User",new { p = 1 })" id="searchUser" method="get">
+                @Html.HiddenFor(x => x.MarcaTodo)
+                @Html.HiddenFor(x => x.MarcaAlgunos)
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Buscar Usuario</label>
+                            @Html.TextBoxFor(x => x.CadenaBuscar, new { @class = "form-control", @placeholder = "Apellidos y Nombres", @autocomplete = "off" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Buscar por email</label>
+                            @Html.TextBoxFor(x => x.EmailBuscar, new { @class = "form-control", @placeholder = "Email", @autocomplete = "off" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Buscar por documento de identidad</label>
+                            @Html.TextBoxFor(x => x.DniBuscar, new { @class = "form-control", @placeholder = "Número de documento de identidad", @autocomplete = "off" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">RUC</label>
+                            @Html.TextBoxFor(x => x.RucBuscar, new { @class = "form-control", @placeholder = "Número de RUC", @autocomplete = "off" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Estado</label>
+                            @Html.DropDownListFor(x => x.EstadoId, new SelectList(Model.LstEstado, "codigo", "nombre"), "Seleccionar", new { @class = "estado form-control form-control-select form-select" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Rol</label>
+                            @Html.DropDownListFor(x => x.RolId, new SelectList(Model.LstRol, "codigo", "nombre"), "Seleccionar", new { @class = "estado form-control form-control-select form-select" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-btn">
+                        <input type="submit" class="btn btn-primary" value="Filtrar">
+                        <input type="button" id="btnreset" class="btn btn-secondary" value="Limpiar">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row table-acciones table-content">
+
+    @if (Session.GetRol() == AppRol.Administrador)
+    {
+    <div class="col-sm-12 btns-table">
+        <a href="@Url.Action("DownloadReportAlumnos", "Report", new {EmailBuscar = Model.EmailBuscar,CadenaBuscar = Model.CadenaBuscar,DniBuscar = Model.DniBuscar,EmpresaId = Model.EmpresaId, EstadoId = Model.EstadoId , Type = "PDF" })" class="btn btn-secondary">PDF</a>
+        <a href="@Url.Action("DownloadReportAlumnos", "Report", new {EmailBuscar = Model.EmailBuscar,CadenaBuscar = Model.CadenaBuscar,DniBuscar = Model.DniBuscar,EmpresaId = Model.EmpresaId, EstadoId = Model.EstadoId , Type = "EXCEL" })" class="btn btn-secondary">EXCEL</a>
+        @*<input type="submit" class="btn btn-primary" value="Opciones">*@
+        @*<a class="btn btn-secondary" href="@Url.Action("DownloadReportHistoricoAlumnosLst", "Report", new {Codigo = Model.EmailBuscar, Estado = Model.DniBuscar , Type = "EXCEL" })">Descargar</a>*@
+    </div>
+    }
+
+<div class="col-sm-12 table-responsive altomin">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list text-nowrap table-checkbox">
+        <thead>
+            <tr>
+                <th>
+                    <input type="checkbox" class="checkAll" name="checkAll" />
+                </th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var usuario in Model.LstUsuario)
+            {
+                <tr>
+                    <td><input type="checkbox" name="chkopcion" value="@usuario.UsuarioId"></td>
+                    <td>@usuario.Apellido, @usuario.Nombre</td>
+                    <td>@usuario.Email</td>
+                    <td>@ConstantHelpers.TextoRol(usuario.Rol)</td>
+                    <td>
+                        <span class="label-estado @(usuario.Estado == ConstantHelpers.ESTADO.ACTIVO ? "completado" : usuario.Estado  == ConstantHelpers.ESTADO.PENDIENTE ? "pendiente" : "inactivo"  )">@(usuario.Estado == ConstantHelpers.ESTADO.ACTIVO ? "Activo" : usuario.Estado == ConstantHelpers.ESTADO.PENDIENTE ? "Pendiente" : "Inactivo")</span>
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                Acciones
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item" href="@Url.Action("EditUsuario", "User", new { UsuarioId = usuario.UsuarioId })">Editar Usuario</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="@Url.Action("ChangeStateUsuario", "User", new { UsuarioId = usuario.UsuarioId })">
+                                        @if (usuario.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                                        {
+                                            <text>Activar a Usuario</text> }
+                                        else
+                                        {
+                                            <text>Desactivar Usuario</text>}
+                                    </a>
+
+                                </li>
+                                <li><a class="dropdown-item" href="@Url.Action("ListAlumnoCursoOnline", "Course", new { UsuarioId = usuario.UsuarioId })">Ver Cursos</a></li>
+
+                                @if (Session.GetRol() == AppRol.Administrador && !usuario.Estado.Equals(ConstantHelpers.ESTADO.PENDIENTE))
+                                {
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("ViewAccesos", new { UsuarioId = usuario.UsuarioId })">Ver Accesos</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("HistoryMatriculaCursoOnline", "Course", new { UsuarioId = usuario.UsuarioId })">Ver Matrículas</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" data-type="modal-link" style="overflow: hidden;" data-source-url="@Url.Action("_AddGrupo", "User", new { UsuarioId = usuario.UsuarioId })">Asignar Grupo</a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    @Html.PagedListPager(Model.LstUsuario, page => Url.Action("ListUsuario", "User", new { p = page, CadenaBuscar = Model.CadenaBuscar, EmpresaId = Model.EmpresaId }), ConstantHelpers.Bootstrap3Pager)
+</div>
+</div>

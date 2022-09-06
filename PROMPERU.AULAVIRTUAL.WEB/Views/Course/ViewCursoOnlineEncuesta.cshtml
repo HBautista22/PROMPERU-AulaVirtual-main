@@ -1,0 +1,186 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ViewCursoOnlineEncuestaViewModel
+@{
+    ViewBag.Title = "ViewCursoOnlineEncuesta";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+<div class="row">
+    <!-- Left col -->
+    <section class="col-sm-8">
+        <div class="info-content">
+            <h2>@Model.CursoOnline.Nombre</h2>
+            <div class="calification">
+                <p>
+                    <i class="@(Model.CursoOnline.Calificacion  >= 1 ? "fas" : "far"  ) fa-star"></i>
+                    <i class="@(Model.CursoOnline.Calificacion  >= 2 ? "fas" : "far"  ) fa-star"></i>
+                    <i class="@(Model.CursoOnline.Calificacion  >= 3 ? "fas" : "far"  ) fa-star"></i>
+                    <i class="@(Model.CursoOnline.Calificacion  >= 4 ? "fas" : "far"  ) fa-star"></i>
+                    <i class="@(Model.CursoOnline.Calificacion  >= 5 ? "fas" : "far"  ) fa-star"></i>
+                </p>
+                <strong>@Model.CursoOnline.Calificacion</strong>
+                <span>@Model.CursoOnline.CantidadCalificacion calificaciones</span>
+            </div>
+        </div>
+    </section>
+</div>
+<div class="row encuesta">
+    <div class="col-sm-12">
+        <h2>@Model.Nombre</h2>
+        <p class="col-sm-6 encuesta-bajada">@Model.Descripcion</p>
+
+        
+
+        @if (Model.CursoOnlineEncuestaRespuestaId > 0)
+        {
+            <div id="gracias" class="gracias" >
+                <p>Gracias por responder la encuesta</p>
+                <a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = @Model.CursoOnline.CursoOnlineId, MatriculaCursoOnlineId=Model.MatriculaCursoOnlineId })" class="bnt btn-primary">Regresar</a>
+            </div>
+        }
+        
+        else
+        {
+            <div class="form-encuesta">
+                <form method="post" class="form">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="MatriculaCursoOnlineId" name="MatriculaCursoOnlineId" value="@Model.MatriculaCursoOnlineId" />
+                    
+                    @foreach (var pregunta in Model.DetalleCursoOnlineEncuesta)
+                    {
+                        <input type="hidden" name="preguntas[@pregunta.CursoOnlineEncuestaDetalleId]" value="@pregunta.Pregunta" />
+
+                        if (pregunta.TipoPregunta == 1)
+                        {
+                            <input type="hidden" name="respuestas[@pregunta.CursoOnlineEncuestaDetalleId]" id="hfrespuesta-@pregunta.CursoOnlineEncuestaDetalleId" />
+                            <div class="custom-question">
+                                <p>@pregunta.Pregunta</p>
+                                <div class="custom-answer">
+                                    <div class="answer-radio tipo-1">
+                                        <input id="question1-0" type="radio" name="anwer-1" tag="@pregunta.CursoOnlineEncuestaDetalleId" value="0">
+                                        <label for="question1-0">0</label>
+                                    </div>
+                                    <div class="answer-radio tipo-1">
+                                        <input id="question1-1" type="radio" name="anwer-1" tag="@pregunta.CursoOnlineEncuestaDetalleId" value="1">
+                                        <label for="question1-1">1</label>
+                                    </div>
+                                    <div class="answer-radio tipo-1">
+                                        <input id="question1-2" type="radio" name="anwer-1" tag="@pregunta.CursoOnlineEncuestaDetalleId" value="2">
+                                        <label for="question1-2">2</label>
+                                    </div>
+                                    <div class="answer-radio tipo-1">
+                                        <input id="question1-3" type="radio" name="anwer-1" tag="@pregunta.CursoOnlineEncuestaDetalleId" value="3">
+                                        <label for="question1-3">3</label>
+                                    </div>
+                                    <div class="answer-radio tipo-1">
+                                        <input id="question1-4" type="radio" name="anwer-1" tag="@pregunta.CursoOnlineEncuestaDetalleId" value="4">
+                                        <label for="question1-4">4</label>
+                                    </div>
+                                    <div class="answer-radio tipo-1">
+                                        <input id="question1-5" type="radio" name="anwer-1" tag="@pregunta.CursoOnlineEncuestaDetalleId" value="5">
+                                        <label for="question1-5">5</label>
+                                    </div>
+                                    <div class="answer-radio tipo-1">
+                                        <input id="question1-6" type="radio" name="anwer-1" tag="@pregunta.CursoOnlineEncuestaDetalleId" value="6">
+                                        <label for="question1-6">6</label>
+                                    </div>
+                                    <div class="answer-radio tipo-1">
+                                        <input id="question1-7" type="radio" name="anwer-1" tag="@pregunta.CursoOnlineEncuestaDetalleId" value="7">
+                                        <label for="question1-7">7</label>
+                                    </div>
+                                    <div class="answer-radio tipo-1">
+                                        <input id="question1-8" type="radio" name="anwer-1" tag="@pregunta.CursoOnlineEncuestaDetalleId" value="8">
+                                        <label for="question1-8">8</label>
+                                    </div>
+                                    <div class="answer-radio tipo-1">
+                                        <input id="question1-9" type="radio" name="anwer-1" tag="@pregunta.CursoOnlineEncuestaDetalleId" value="9">
+                                        <label for="question1-9">9</label>
+                                    </div>
+                                    <div class="answer-radio tipo-1">
+                                        <input id="question1-10" type="radio" name="anwer-1" tag="@pregunta.CursoOnlineEncuestaDetalleId" value="10">
+                                        <label for="question1-10">10</label>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        if (pregunta.TipoPregunta == 2)
+                        {
+                            <input type="hidden" name="respuestas[@pregunta.CursoOnlineEncuestaDetalleId]" id="hfrespuesta-@pregunta.CursoOnlineEncuestaDetalleId" />
+                            <div class="custom-question">
+                                <p> @pregunta.Pregunta</p>
+                                <div class="custom-answer tipo-2">
+                                    @{
+                                        var OpcionesPregunta = pregunta.Opciones.Split(',');
+                                    }
+                                    @foreach (var opciones in OpcionesPregunta)
+                                    {
+                                        <div class="answer-radio tipo-2">
+
+                                            <label for="question3-@opciones">
+                                                <input id="question3-@opciones" type="radio" tag="@pregunta.CursoOnlineEncuestaDetalleId" name="anwer-3" value="@opciones" />
+                                                <span>@opciones</span>
+                                            </label>
+                                        </div>
+                                    }
+
+
+                                </div>
+                            </div>
+                        }
+                        if (pregunta.TipoPregunta == 3)
+                        {
+                            <div class="custom-question">
+                                <p>@pregunta.Pregunta</p>
+                                <div class="custom-answer">
+                                    <textarea name="respuestas[@pregunta.CursoOnlineEncuestaDetalleId]" id="" cols="30" rows="10"></textarea>
+                                </div>
+                            </div>
+                        }
+                    }
+                    <div class="custom-question">
+                        <p>¿Qué calificación le darías al curso?</p>
+                        <input type="hidden" name="Calificacion" id="Calificacion" />
+                        <div class="custom-answer rating">
+                            <input class="star" type="radio" id="star5" name="rating" value="5" /><label class="full" for="star5"></label>
+                            <input class="star" type="radio" id="star4" name="rating" value="4" /><label class="full" for="star4"></label>
+                            <input class="star" type="radio" id="star3" name="rating" value="3" /><label class="full" for="star3"></label>
+                            <input class="star" type="radio" id="star2" name="rating" value="2" /><label class="full" for="star2"></label>
+                            <input class="star" type="radio" id="star1" name="rating" value="1" /><label class="full" for="star1"></label>
+                        </div>
+                    </div>
+                    <div class="btns-cta">
+                        <input type="submit" value="Enviar" class="btn btn-primary ">
+                        
+                        <a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = @Model.CursoOnline.CursoOnlineId, MatriculaCursoOnlineId=Model.MatriculaCursoOnlineId })">Regresar</a>
+                    </div>
+
+
+                </form>
+            </div>
+        }
+
+
+
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.tipo-1 input').on('change', function () {
+                var id = $(this).attr('tag');
+                $('#hfrespuesta-' + id).val($(this).val())
+            })
+            $('.tipo-2 input').on('change', function () {
+                var id = $(this).attr('tag');
+                $('#hfrespuesta-' + id).val($(this).val())
+            })
+            $('.rating input').on('change', function () {
+                $('#Calificacion').val($(this).val())
+            })
+        });
+
+
+    </script>
+
+}

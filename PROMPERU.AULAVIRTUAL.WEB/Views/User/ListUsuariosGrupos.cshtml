@@ -1,0 +1,192 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.ListUsuariosGruposViewModel
+
+@{ ViewBag.Title = "Grupos";
+                ViewBag.Icon = "users";
+                ViewBag.Seccion = "Grupos";
+                ViewBag.SubSeccion = "UsuariosGrupos";
+
+                var ii = 0; }
+
+@section Breadcrumbs{
+
+}
+
+
+@section Jumbotron{
+    <div class="container-fluid container-lg sm-p-l-20 sm-p-r-20 full-height">
+        <div class="inner full-height" style="transform: translateY(0px); opacity: 1;">
+
+            <form class="form row" method="post">
+
+                <div class="col-md-8 m-b-30">
+                    <div class="form-group form-group-default input-group transparent center-margin">
+                        @Html.LabelFor(x => x.CadenaBuscar)
+                        @Html.TextBoxFor(x => x.CadenaBuscar, new { @class = "form-control" })
+                        <span class="input-group-addon"><i class="pg-search"></i></span>
+                    </div>
+                </div>
+                <div class="col-md-4 m-b-30">
+                    <button type="submit" class="btn btn-block btn-lg btn-primary m-t-5"><i class="fa fa-search"></i>&nbsp;Buscar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+}
+
+<div class="container-fluid container-fixed-lg">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4 class="m-t-0 m-b-0"><i class="fa fa-@ViewBag.Icon"></i>&nbsp;@ViewBag.Title</h4>
+            </div>
+            <div class="btn-group pull-right m-b-10">
+                @if (Session.GetRol() == AppRol.Administrador)
+                {
+    <div class="pull-right m-t-10 m-l-20"> <a class="btn btn-course-enable" href="@Url.Action("EditGrupo", "User")">Agregar Grupo <i class="pg-plus"></i></a></div>}
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline no-footer" id="basicTable_wrapper">
+                    <table role="grid" class="table table-hover dataTable no-footer" id="basicTable">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-7 title-table">Descripcion</th>
+                                <th class="col-sm-1 text-center title-table"># Usuarios</th>
+                                <th class="text-center title-table">Proceso</th>
+                                <th class="text-center title-table">Estado</th>
+                                <th class="text-center title-table" style="min-width: 9.3em">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody-curso">
+
+                            @foreach (var grupo in Model.LstUsuario)
+                            {
+                                var cantidad = @Model.CantidadRegistros[grupo.GrupoId];
+                <tr>
+                    <td class="text-table">@grupo.Descripcion</td>
+                    <td class="text-table text-right">@cantidad</td>
+                    <td class="text-center text-table"><span class="label @(grupo.Aforo == 1 ? "label-success" : "label-default")">@(grupo.Aforo == 1 ? "Automatico" : "Manual")</span></td>
+                    <td class="text-center text-table"><span class="label @(grupo.Estado == ConstantHelpers.ESTADO.ACTIVO ? "label-success" : "label-important")">@(grupo.Estado == ConstantHelpers.ESTADO.ACTIVO ? "Activo" : "Inactivo")</span></td>
+                    <td class="text-right text-table">
+
+                        <div class='btn-group dropdown base'>
+                            <a class='base m-r-60 dropdown-toggle' href="#" data-boundary="window" data-toggle='dropdown'>Opciones</a>
+                            <i class='fa fa-chevron-down dropdown-toggle m-r-10 p-t-5' data-toggle='dropdown' data-boundary="window" style="cursor:pointer"></i>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="btn-xs" href="@Url.Action("EditGrupo", "User", new { GrupoId = grupo.GrupoId })"><i class="fa fa-edit"></i>&nbsp;Editar Grupo</a>
+                                </li>
+                                <li>
+                                    @*<a class="btn-xs" href="@Url.Action("EditUnidadCursoOnline", "Course", new { CursoOnlineId = Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })"><i class="fa fa-pencil-square-o"></i>&nbsp;Editar</a>*@
+                                    <a class="btn-xs" data-type="modal-link" style="overflow: hidden;" data-source-url="@Url.Action("_AddCursoMaestroOnline", "User", new { CursoOnlineMaestroId = grupo.GrupoId })"><i class="fa fa-list-alt"></i>&nbsp;Ver Cursos Asignados</a>
+                                </li>
+                                <li>
+                                    @if (grupo.Aforo == 0)
+                                    {
+                    <a class="btn-xs" data-type="modal-link" style="overflow: hidden;" data-source-url="@Url.Action("_AddUsuario", "User", new { GrupoId = grupo.GrupoId })"><i class="fa fa-plus"></i>&nbsp;Activar Registro Automatico</a> }
+                                    else
+                                    {
+                    <a class="btn-xs" data-type="modal-link" style="overflow: hidden;" data-source-url="@Url.Action("_AddUsuario", "User", new { GrupoId = grupo.GrupoId })"><i class="fa fa-times"></i>&nbsp;Desactivar Registro Automatico</a>}
+                                </li>
+                                <li>
+                                    <a class="btn-xs" data-type="modal-link" style="overflow: hidden;" data-source-url="@Url.Action("_SendMensaje", "User", new { GrupoId = grupo.GrupoId })"><i class="fa fa-send"></i>&nbsp;Enviar Notificaciones</a>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </td>
+                </tr>}
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model.LstUsuario, page => Url.Action("ListUsuariosEmpresa", new { p = page, CadenaBuscar = Model.CadenaBuscar }), ConstantHelpers.Bootstrap3Pager)
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal modal-2 fade" id="editGroup" tabindex="-1" aria-labelledby="editGroupLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Grupo</h5>
+            </div>
+            <div class="modal-body">
+                <form action="" id="">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="">Nombre</label>
+                                <input type="text" class="form-control" name="nombreGrupo" value="Grupo Emprendedores">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="">Seleccione Tipo de Grupo</label>
+                                <select name="tipo-grupo" class="tipo-grupo form-control form-control-select form-select">
+                                    <option value="">Seleccione</option>
+                                    <option value="1" selected>Empresas</option>
+                                    <option value="2">Alumnos</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="icheck-primary activo-2">
+                                    <input type="checkbox" id="activo" name="activo">
+                                    <label for="activo">
+                                        ¿Está activo?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-2 fade" id="addEditCourses" tabindex="-1" aria-labelledby="addEditCoursesLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar y/o Retirar Cursos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="../../assets/images/iconos/menu_close_blue.png">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="content-drag-drop">
+                    <div class="box">
+                        <div class="container agregados">
+                            <h3><img src="../../assets/images/iconos/cursos-agregados.png"> Cursos Agregados</h3>
+                            <ul class="list one" id="agregadosList" data-type="agregados">
+                                <li draggable="true" data-type="agregados">7 claves para exportar con éxito</li>
+                            </ul>
+                        </div>
+                        <div class="container bucket disponibles">
+                            <h3><img src="../../assets/images/iconos/cursos_disponibles.png"> Cursos Disponibles</h3>
+                            <ul class="list one">
+                                <li draggable="true" data-type="agregados">Identidad corporativa en empresas turisticas - Cusco</li>
+                                <li draggable="true" data-type="agregados">Identidad Corporativa para empresas turísticas - Arequipa</li>
+                                <li draggable="true" data-type="agregados">Habilidades Interpersonales y Creatividad</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>

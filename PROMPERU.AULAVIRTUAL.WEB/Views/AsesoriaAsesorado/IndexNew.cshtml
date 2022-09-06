@@ -1,0 +1,621 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Asesoria.AsesoriaAsesoradoViewModel
+@using PROMPERU.AULAVIRTUAL.BE.Aesorias
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+            <li class="breadcrumb-item active">Asesorías </li>
+        </ol>
+    </div>
+    <div class="col-sm-6">
+        <h2 class="m-0">Asesorías disponibles</h2>
+    </div>
+}
+@{ ViewBag.Title = "IndexNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+
+    Dictionary<string, string> Estados = new Dictionary<string, string>()
+{
+{ "SOL", "Solicitado" },
+{ "ACE", "Aceptado" },
+{ "REC", "Rechazado" },
+{ "ATE", "Atendido" },
+{ "CAN", "Cancelado" }
+}; }
+
+@section Scripts
+{
+    <link href='~/Scripts/fullcalendar-5.4.0/lib/main.css' rel='stylesheet' />
+    <script src='~/Scripts/fullcalendar-5.4.0/lib/main.js'></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <script src='~/Content/assets/js/Asesoria/AsesoriaAsesorado.js'></script>
+
+    <script>
+
+        var bootstrapButton = $.fn.button.noConflict();
+        $.fn.bootstrapBtn = bootstrapButton;
+
+
+        var initialLocaleCode = 'es';
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl,
+        {
+            initialView: 'timeGridWeek',
+            slotMinTime: '09:00:00',
+            slotMaxTime: '19:00:00',
+            firstDay: @((int)DateTime.Now.AddDays(1).DayOfWeek),
+            weekends:false,
+            height: 'auto',
+            width:'auto',
+            allDaySlot: false,
+            slotLabelFormat: [
+                {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                }
+            ],
+            headerToolbar:
+            {
+                left: 'prev,next',
+                center: 'title',
+                right: '' //'dayGridMonth,dayGridWeek,dayGridDay'
+            },
+            initialDate: '@(DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"))',
+            locale: initialLocaleCode,
+            navLinks: false, // can click day/week names to navigate views
+            editable: false,
+            dayMaxEvents: true, // allow "more" link when too many events
+            eventSources: [
+                {
+                    url: '/AsesoriaAsesorado/AsesoriasRemotasListarBloques',
+                    method: 'GET',
+                    //extraParams: {
+                    //    custom_param1: 'something',
+                    //    custom_param2: 'somethingelse'
+                    //},
+                    failure: function ()
+                    {
+                        alert('there was an error while fetching events!');
+                    }
+                }
+
+            ]
+        });
+
+        document.addEventListener('DOMContentLoaded', function ()
+        {
+
+            calendar.render();
+
+            setTimeout(function () { updateCalendar(); }, 5000);
+        });
+
+        function updateCalendar()
+        {
+            calendar.refetchEvents();
+            setTimeout(function () { updateCalendar(); }, 5000);
+        }
+
+    </script>
+}
+<div class="row mb-2">
+
+    <div class="container-fluid">
+        <!-- Main row -->
+        <div class="row">
+            <section class="col-lg-12 table-content">
+            <div class="container-fluid container-table-responsive d-flex content-asesorias">
+            @*<div class="col-sm-12">
+                            <h3>Asesorías disponibles</h3>
+                        </div>*@
+            <div id="calendar"></div>
+
+            <!--<div class="col-sm-12">
+                <div class="paginador-calendar">
+                    <button name="prevWeek" class="btn-pag pag-prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <p>20 – 26 oct 2021</p>
+                    <button name="nextvWeek" class="btn-pag pag-next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-1 horario">
+                <div class="horario-content">
+                    <div class="esquina"></div>
+                    <div class="hora">
+                        <span>9:00</span>
+                    </div>
+                    <div class="hora">
+                        <span>10:00</span>
+                    </div>
+                    <div class="hora">
+                        <span>11:00</span>
+                    </div>
+                    <div class="hora">
+                        <span>12:00</span>
+                    </div>
+                    <div class="hora">
+                        <span>13:00</span>
+                    </div>
+                    <div class="hora">
+                        <span>14:00</span>
+                    </div>
+                    <div class="hora">
+                        <span>15:00</span>
+                    </div>
+                    <div class="hora">
+                        <span>16:00</span>
+                    </div>
+                    <div class="hora">
+                        <span>17:00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row col-lg-11 table-responsive tabla-asesorias">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list text-nowrap asesorias">
+            <thead>
+            <tr>
+                <th width="20%" align="center">
+                    <span>Lunes</span>
+                </th>
+                <th width="20%" align="center">
+                    <span>Martes</span>
+                </th>
+                <th width="20%" align="center">
+                    <span>Miércoles</span>
+                </th>
+                <th width="20%" align="center">
+                    <span>Jueves</span>
+                </th>
+                <th width="20%" align="center">
+                    <span>Viernes</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>9:00 - 10:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>9:00 - 10:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>9:00 - 10:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>9:00 - 10:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>9:00 - 10:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>10:00-11:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>10:00-11:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>10:00-11:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>10:00-11:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>10:00-11:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>11:00-12:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>11:00-12:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>11:00-12:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria agendado full-time">
+                        <span>11:00-12:00</span>
+                        <a href="javascript:void(0)">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>11:00-12:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="asesoria agendado half-time">
+                        <span>11:00-11:30</span>
+                        <a href="javascript:void(0)">Solicitar</a>
+                    </div>
+                    <div class="asesoria disponible half-time">
+                        <span>11:30-12:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria agendado full-time">
+                        <span>12:00-13:00</span>
+                        <a href="javascript:void(0)">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria agendado full-time">
+                        <span>12:00-13:00</span>
+                        <a href="javascript:void(0)">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>12:00-13:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>12:00-13:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="asesoria agendado full-time">
+                        <span>13:00-14:00</span>
+                        <a href="javascript:void(0)">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria agendado full-time">
+                        <span>13:00-14:00</span>
+                        <a href="javascript:void(0)">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>13:00-14:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>13:00-14:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>13:00-14:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>14:00-15:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>14:00-15:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>14:00-15:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria agendado full-time">
+                        <span>14:00-15:00</span>
+                        <a href="javascript:void(0)">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>14:00-15:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>15:00 -16:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>15:00 -16:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>15:00 -16:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>15:00 -16:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>15:00 -16:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>16:00-17:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria agendado full-time">
+                        <span>16:00-17:00</span>
+                        <a href="javascript:void(0)">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria agendado full-time">
+                        <span>16:00-17:00</span>
+                        <a href="javascript:void(0)">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>16:00-17:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>16:00-17:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>17:00-18:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>17:00-18:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>17:00-18:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>17:00-18:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="asesoria disponible full-time">
+                        <span>17:00-18:00</span>
+                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#formAsesoria">Solicitar</a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+            </table>
+            </div>-->
+            <!-- /.row -->
+            </div>
+            </section>
+        </div>
+        <div class="row mis-solicitudes table-content">
+            <div class="col-sm-12 ">
+                <h3>Mis solicitudes</h3>
+            </div>
+            <div class="col-sm-12 table-responsive altomin">
+                <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list asesorias">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Fecha</th>
+                            <th>Enlace</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (AsesoriaAsesoradoSolicitud ase in Model.AsesoriasSolicitadas)
+                        {
+            <tr>
+                <td>
+                    @ase.Asre_Nombre
+                </td>
+                <td>@ase.Asre_Inicio</td>
+                <td>
+
+                    @if (ase.Sola_Estado == "ACE")
+                    {
+                <a href="/conferencia?RoomName=@ase.Asre_ConferenciaId">Ingresar a la Videoconferencia</a>}
+                            </td>
+                            <td>
+                    <span class="label-estado @Html.Raw(Estados[ase.Sola_Estado] == "Aceptado" ? "bg-info" : (Estados[ase.Sola_Estado] == "Atendido" ? "bg-success" : ""))">
+                        @Estados[ase.Sola_Estado]
+                    </span>
+                </td>
+            </tr>}
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="formAsesoria" class="msjAsesoria modal fade" tabindex="-1" aria-labelledby="formAsesoriaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <img src="../../assets/images/iconos/menu_close_blue.png">
+                    </span>
+                    <h5 class="modal-title" id="formAsesoriaLabel">Solicitar Asesoría</h5>
+                </div>
+                <div class="modal-body">
+                    <p class="date">Fecha:20 Octubre 2021</p>
+                    <form action="" id="asesoria" class="asesoria">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group flex-asesoria">
+                                    <label for="horario">Horario:</label>
+                                    <select name="horario" class="horario form-control form-control-select form-select">
+                                        <option value="">09:00</option>
+                                        <option value="">10:00</option>
+                                        <option value="">11:00</option>
+                                        <option value="">12:00</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group flex-asesoria">
+                                    <label for="duracion">Duración:</label>
+                                    <select name="duracion" class="duracion form-control form-control-select form-select">
+                                        <option value="">30 minutos</option>
+                                        <option value="">60 minutos</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group flex-asesoria">
+                                    <label for="asesor">Seleccione con quien desea la entrevista:</label>
+                                    <select name="asesor" class="asesor form-control form-control-select form-select">
+                                        <option value="">Pedro Pérez</option>
+                                        <option value="">Juan Gómez</option>
+                                        <option value="">Ana Díaz</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group flex-asesoria">
+                                    <label for="mensaje">Escriba por qué desea recibir la asesoría / Escriba el motivo de su consulta: </label>
+                                    <textarea name="mensaje" id="mensaje" cols="30" rows="10" class="mensaje form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-target="#asesoriaConfirm" data-bs-toggle="modal" data-bs-dismiss="modal">Aceptar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="asesoriaConfirm" class="msjAsesoria modal fade" tabindex="-1" aria-labelledby="formAsesoriaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <img src="../../assets/images/iconos/menu_close_blue.png">
+                    </span>
+                    <h5 class="modal-title" id="formAsesoriaLabel">Solicitar Asesoría</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Asesoría agregada: </p>
+                    <p class="date">Fecha: 20 Octubre 2021</p>
+                    <p class="date">Horario: 12:00 - 12:30 (30 minutos)</p>
+                    <div class="msjEnviado">
+                        <p>Lacus elit libero scelerisque nunc amet. Id fringilla amet diam, pulvinar porttitor massa vel, tortor a. Netus elementum vitae nunc neque. Feugiat enim arcu dolor, lacus non tempus tincidunt. Placerat lectus a, quis risus, fringilla tortor, pretium sagittis a. Et, mus pellentesque tellus feugiat quis id vestibulum, velit. Enim, ut diam mauris consequat. Adipiscing bibendum malesuada tincidunt sit.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="dialog-confirm" title="Solicitar Entrevista?" class="form-group" style="display:none;">
+    <p>Seleccione con quien desea la entrevista:</p>
+    <p>
+        <select class="form-control" id="Asesores" name="Asesores"></select>
+    </p>
+    <p>
+        Escriba por qué desea recibir la asesoría / Escriba el motivo de su consulta:
+    </p>
+    <p>
+        <textarea class="form-control" id="Consulta" name="Consulta" required></textarea>
+    </p>
+</div>

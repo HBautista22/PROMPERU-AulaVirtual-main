@@ -1,0 +1,97 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.HistoryMatriculaCursoOnlineViewModel
+@{
+    ViewBag.Title = "HistoryMatriculaCursoOnlineNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+    ViewBag.SubSeccion = "HistoryMatriculaCursoOnline";
+    ViewBag.Header = "<div class='col-sm-12'><ol class='breadcrumb float-sm - left'><li class='breadcrumb-item'><a href='#'>Inicio</a></li><li class='breadcrumb-item active'>Mis Calificaciones</li></ol></div><div class='col-sm-6'><h2 class='m-0'>Mis Calificaciones</h2></div>";
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+            <li class="breadcrumb-item active">Mis calificaciones</li>
+        </ol>
+    </div>
+    <div class="col-sm-6">
+        <h2 class="m-0">Mis calificaciones</h2>
+    </div>
+}
+
+<div class="row mb-2">
+
+    <section class="col-lg-12 table-content">
+        <div class="container-fluid container-table-responsive">
+            <div class="col-sm-12 btns-table">
+                <a href="@Url.Action("ListUsuario", "User")" class="btn btn-secondary">Regresar</a>
+            </div>
+            <div class="row table-responsive">
+                <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list text-nowrap mis-calificaciones">
+                    <thead>
+                        <tr>
+                            <th align="center">Estado</th>
+                            <th align="center">Curso</th>
+                            <th align="center">Nota</th>
+                            <th align="center">% obtenido</th>
+                            <th align="center">Fecha inicio</th>
+                            <th align="center">Fecha aprobado</th>
+                            <th align="center">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.LstMatriculaCursoOnline)
+                        {
+                            var curso = item.CursoOnline;
+                            var caterogria = item.CursoOnline.CategoriaCursoOnline;
+                            var puedeDescargarCertificado = (item.Nota.HasValue && item.Estado == ConstantHelpers.ESTADO_MATRICULA.APROBADO);
+
+
+                            <tr>
+                                <td align="center">
+                                    <span class="label-estado @ConstantHelpers.TextoColorEstado(item.Estado)">
+                                        @ConstantHelpers.TextoEstado(item.Estado)
+                                    </span>
+                                </td>
+                                <td>
+                                    <p>@curso.Nombre</p>
+                                </td>
+                                <td>@(item.Nota == null ? "--" : item.Nota.ToString() )</td>
+                                <td>@(item.PorcentajeObtenido != null ? item.PorcentajeObtenido + " %" : "--")</td>
+                                <td>@item.FechaMatricula.ToShortDateString()</td>
+                                <td>@(item.FechaAprobado != null ? String.Format("{0:d MMMM, yyyy}", item.FechaAprobado) : "-")</td>
+                                <td>
+                                    <div class="dropdown">
+                                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Acciones
+                                        </a>
+
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
+
+
+                                            <li>
+                                                @if (puedeDescargarCertificado)
+                                                {<!--<a class="btn-xs" href="@(puedeDescargarCertificado ? Url.Action("DownloadCertificadoAlumno", "Document", new { MatriculaCursoOnlineId = item.MatriculaCursoOnlineId, CursoOnlineId = curso.CursoOnlineId, UsuarioId = Model.UsuarioId }) : "#")"><i class="fa fa-download"></i>&nbsp;Descargar Certificado</a>--> }
+                                                else
+                                                { <!--<a class="btn-xs" @Data.ModalDialog(ConstantHelpers.MENSAJE_CURSO.CARTIFICADO, "Regresar", String.Empty)><i class="fa fa-lock"></i>&nbsp;Descargar Certificado</a>-->}
+                                                @if (Session.GetRol() == AppRol.Administrador && item.Estado.Equals(ConstantHelpers.ESTADO_MATRICULA.PENDIENTE))
+                                                {
+                                                    <a class="dropdown-item" href="@Url.Action("DisableMatricula", new { MatriculaCursoOnlineId = item.MatriculaCursoOnlineId })">Desactivar Matrícula</a>}
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="@Url.Action("ViewHistorialEvaluacion", "Evaluation", new { MatriculaCursoOnlineId = item.MatriculaCursoOnlineId })">Ver Evaluaciones</a>
+                                            </li>
+
+
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        }
+
+                    </tbody>
+                </table>
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+</div>

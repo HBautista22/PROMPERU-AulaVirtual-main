@@ -1,0 +1,45 @@
+﻿@model PROMPERU.AULAVIRTUAL.BE.USUARIO.TipoEmpresa
+@{ ViewBag.Title = "EditTipoEmpresa";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Tipo de Empresa</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Tipo de Empresa</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<form method="post" id="searchUser">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.TipoEmpresaId)
+    <div class="row">
+        <div class="col-lg-12 box-grey-content">
+            <h2>Agregar Tipo de Empresa</h2>
+            <div class="content-form-grey">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Tipo de Empresa</label>
+                            @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Ingresar Tipo de Empresa" })
+                            @Html.ValidationMessageFor(x => x.Nombre)
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-btn">
+            <input type="submit" class="btn btn-primary" value="Guardar">
+            <a href="@Url.Action("ListTipoEmpresaAdmin","TipoEmpresa")" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </div>
+</form>

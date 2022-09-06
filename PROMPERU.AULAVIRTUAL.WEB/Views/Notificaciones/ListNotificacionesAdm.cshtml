@@ -1,0 +1,113 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Notificaciones.ListNotificacionesAdmViewModel
+@{
+    ViewBag.Title = "ListNotificacionesAdm";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Notificaciones</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Notificaciones</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row">
+    <div class="col-lg-12 box-grey-content">
+        <div class="content-form-grey">
+            <form action="@Url.Action("ListNotificacionesAdm","Notificaciones",new { p = 1 })" id="searchUser">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Buscar Notificación</label>
+                            @Html.TextBoxFor(x => x.CadenaBuscar, new { @class = "form-control", @placeholder = "Buscar Notificación", @autocomplete = "off" })
+                        </div>
+                    </div>
+     
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-btn">
+                        <input type="submit" class="btn btn-primary" value="Filtrar">
+                        <a class="btn btn-secondary" href="@Url.Action("ListNotificacionesAdm", "Notificaciones")">Limpiar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@if (Session.GetRol() == AppRol.Administrador || Session.GetRol() == AppRol.Profesor)
+{
+    <div class="row table-acciones table-content">
+        <div class="col-sm-12 btns-table">
+            <a class="btn btn-primary" href="@Url.Action("EditAddNotificacionCurso", "Notificaciones")">Agregar Notificación</a>
+        </div>
+    </div>
+}
+<div class="row mis-solicitudes table-content">
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list asesorias">
+            <thead>
+                <tr>
+                    <th>Titulo</th>
+                 
+                    <th>Estado</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var notificacion in Model.LstNotificaciones)
+                {
+                    <tr>
+
+                        <td>@notificacion.Titulo</td>
+                        
+                        <td>
+                            @if (notificacion.Estado == ConstantHelpers.ESTADO.ACTIVO)
+                            {
+                                <span class="label-estado completado">Activo</span>
+                            }
+                            else if (notificacion.Estado == ConstantHelpers.ESTADO.PENDIENTE)
+                            {
+                                <span class="label-estado pendiente">Pendiente</span>
+                            }
+                            else
+                            {
+                                <span class="label-estado inactivo">Inactivo</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Acciones
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
+
+                                    <li><a class="dropdown-item" href="@Url.Action("EditAddNotificacionCurso", "Notificaciones", new {NotificacionId = notificacion.NotificacionId })">Editar</a></li>
+                                    <li>
+                                        <a class="btn-xs" href="@Url.Action("ChangeStateNotificacion", "Notificaciones", new { NotificacionId = notificacion.NotificacionId })">
+                                            @if (notificacion.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                                            {
+                                                <text>Activar </text> }
+                                            else
+                                            {
+                                                <text>Desactivar </text>}
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

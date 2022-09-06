@@ -1,0 +1,174 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.EditUsuarioViewModel
+@{
+    ViewBag.Title = "EditUsuarioNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Usuario</li>
+            </ol>
+        </div>
+       
+    </div><!-- /.row -->
+}
+<form method="post" id="searchUser">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.UsuarioId)
+    <div class="row">
+        <div class="col-lg-12 box-grey-content">
+            <h2>Editar Usuario</h2>
+            <div class="content-form-grey">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @*<label for="">Tipo de Empresa</label>*@
+                            @Html.LabelFor(x => x.Nombre)
+                            @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Ingresar Tipo de Empresa" })
+                            @Html.ValidationMessageFor(x => x.Nombre)
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @*<label for="">Tipo de Empresa</label>*@
+                            @Html.LabelFor(x => x.Apellido)
+                            @Html.TextBoxFor(x => x.Apellido, new { @class = "form-control", @placeholder = "Ingresar Apellido" })
+                            @Html.ValidationMessageFor(x => x.Apellido)
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @*<label for="">Tipo de Empresa</label>*@
+                            @Html.LabelFor(x => x.Codigo)
+                            @Html.TextBoxFor(x => x.Codigo, new { @class = "form-control", @placeholder = "Ingresar Codigo" })
+                            @Html.ValidationMessageFor(x => x.Codigo)
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @*<label for="">Tipo de Empresa</label>*@
+                            @Html.LabelFor(x => x.Cargo)
+                            @Html.TextBoxFor(x => x.Cargo, new { @class = "form-control", @placeholder = "Ingresar Cargo" })
+                            @Html.ValidationMessageFor(x => x.Cargo)
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @*<label for="">Tipo de Empresa</label>*@
+                            @Html.LabelFor(x => x.GrupoId)
+                            @Html.DropDownListFor(x => x.GrupoId, new SelectList(Model.LstGrupo, "GrupoId", "Descripcion", Model.GrupoId), "[- Seleccionar -]", new { @class = "form-control ", @name = "Grupo" })
+                            @Html.ValidationMessageFor(x => x.GrupoId)
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @*<label for="">Tipo de Empresa</label>*@
+                            @Html.LabelFor(x => x.Password)
+                            @Html.TextBoxFor(x => x.Password, new { @class = "form-control", @placeholder = "Ingresar Password" })
+                            @Html.ValidationMessageFor(x => x.Password)
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @*<label for="">Tipo de Empresa</label>*@
+                            @Html.LabelFor(x => x.Rol)
+                            @Html.DropDownListFor(x => x.Rol, Model.LstRol, "[- Seleccionar -]", new { @class = "form-control bg" })
+                            @Html.ValidationMessageFor(x => x.Rol)
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Género</label>
+                            
+                            @Html.DropDownListFor(x => x.SexoId, Model.LstSexo, "[- Seleccionar -]", new { @class = "form-control bg" })
+                            @Html.ValidationMessageFor(x => x.SexoId)
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @*<label for="">Tipo de Empresa</label>*@
+                            @if (Session.GetRolCompleto() == ConstantHelpers.ROL.SUPERVISOR)
+                            {@Html.LabelFor(x => x.EmpresaId)}
+                            @if (Session.GetRolCompleto() == ConstantHelpers.ROL.SUPERVISOR)
+                            {@Html.DropDownListFor(x => x.EmpresaId, new SelectList(Model.LstEmpresa, "EmpresaId", "RazonSocial", Model.EmpresaId), "[- Seleccionar -]", new { @class = "form-control", @readonly = (Session.GetRolCompleto() == ConstantHelpers.ROL.SUPERVISOR ? "true" : "false") })}
+                        else
+                        {
+                            @Html.HiddenFor(x => x.EmpresaId)}
+
+                            @Html.ValidationMessageFor(x => x.EmpresaId)
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @*<label for="">Tipo de Empresa</label>*@
+                            @Html.LabelFor(x => x.Email)
+                            @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.Email)
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="icheck-primary activo-2">
+                                @Html.CheckBoxFor(m => m.Estado, new { @checked = "checked" })
+                                <label for="Estado">
+                                    ¿Está activo?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-btn">
+            <input type="submit" class="btn btn-primary" value="Guardar">
+            <a href="@Url.Action("ListUsuario","User")" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </div>
+</form>

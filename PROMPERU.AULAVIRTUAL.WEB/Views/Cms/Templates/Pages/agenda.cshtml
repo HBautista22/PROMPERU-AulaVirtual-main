@@ -1,0 +1,91 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Cms.ViewPaginaViewModel
+@{
+    var model = Model;
+    var agendas = model.Agendas;
+    var minFecha = agendas.Where(x => x.FechaInicio.HasValue).Min(x => x.FechaInicio) ?? DateTime.Now;
+    var maxFecha = agendas.Where(x => x.FechaFin.HasValue).Max(x => x.FechaFin) ?? DateTime.Now;
+    var filtro = Request.QueryString["filtro"] ?? "";
+    if (filtro.IndexOf("-") >= 0)
+    {
+        var fechaFiltro = new DateTime(Convert.ToInt32(filtro.Split('-')[0]), Convert.ToInt32(filtro.Split('-')[1]), 1);
+
+        agendas = agendas.Where(x => (x.FechaInicio.HasValue && x.FechaInicio.Value.Year == fechaFiltro.Year && x.FechaInicio.Value.Month == fechaFiltro.Month) ||
+        (x.FechaFin.HasValue && x.FechaFin.Value.Year == fechaFiltro.Year && x.FechaFin.Value.Month == fechaFiltro.Month)).ToList();
+    }
+}
+<!-- Jumbotron -->
+<div class="card card-image" style="background-image: url('@Url.GetCmsResourceUrl("img/banner-agenda.png")'); background-repeat: no-repeat; background-size: cover;">
+    <div class="text-white text-center rgba-stylish-strong py-55 px-4">
+        <div class="py-55">
+            <h2 class="agenda">Agenda</h2>
+        </div>
+    </div>
+</div>
+<!-- Jumbotron -->
+<section class="page-section" style="padding: 30px 0; background-color: #f7f7f7">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb d-inline-flex pl-4 pt-0 ml-5">
+            <li class="breadcrumb-item pr-2"><a href="/">Inicio</a></li>
+            <li class="breadcrumb-item active"><a class="pl-2" href="#!">Agenda</a></li>
+        </ol>
+    </nav>
+    <div class="container-fluid">
+        <div class="row mw-none">
+            <div class="col-md-12">
+                <form class="form-inline" method="get" id="frm-agenda">
+                    <div class="form-group mb-1">
+                        <h1 class="agenda-de-actividade mt-0 ml-5">Agenda de Actividades</h1>
+                    </div>
+                    <div class="form-group mx-sm-5 mb-3">
+                        <select class="rectangle-4 pl-4" name="filtro" onchange="this.form.submit()">
+                            <option value="">Todos</option>
+                            @for (int year = minFecha.Year; year <= maxFecha.Year; year++)
+                            {
+                                for (int month = year == minFecha.Year ? minFecha.Month : 1; month <= (year == maxFecha.Year ? maxFecha.Month : 1); month++)
+                                {
+                                    var fecha = new DateTime(year, month, 1);
+                                    var fechaStr = fecha.ToString("MMMM yyyy");
+                                    var fechaKey = fecha.ToString("yyyy-MM");
+
+                                    <option value="@fechaKey" @(fechaKey == filtro ? "selected" : "")>@(char.ToUpper(fechaStr[0]) + fechaStr.Substring(1))</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-10 offset-md-1 mb-5">
+                <div class="alert alert-primary text-center revisa-aqui-las-noti" role="alert">
+                    <h3 style="padding: 0 100px;">
+                        @("agenda_texto".Label())
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-12 pl-5 mr-5 pr-5">
+                <div class="row">
+                    @foreach (var item in agendas)
+                    {
+                        <div class="col-md-4 pl-5 pr-5">
+                            <div class="card d-block">
+                                <div class="card-img-top">
+                                    <img src="@Url.Content(item.Imagen)" class="w-100 borde-img-radius-agenda" alt="Card image cap">
+                                    <div class="badges badges-right">
+                                        <a class="badge badge-warning" href="#">@(item.FechaInicio != null ? item.FechaInicio.Value.ToString("dd \\de MMM") : "") @(item.FechaFin != null ? " al " + item.FechaFin.Value.ToString("dd \\de MMM") : "")</a>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3">
+                                    <h5 class="card-title">@item.Nombre</h5>
+                                    <p class="text-ageda">@item.Sumilla</p>
+                                    @{ 
+                                        <a class="fs-13 fw-600" href="@item.RutaInscripcion" target="_blank">Leer más <i class="fa fa-angle-right pl-1"></i></a>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

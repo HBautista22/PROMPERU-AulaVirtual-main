@@ -1,0 +1,342 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ViewUnidadCursoOnlineViewModel
+
+@{
+    ViewBag.Title = "ViewUnidadCursoOnlineNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+
+    ViewBag.Title = Model.UnidadCursoOnline.Nombre;
+    ViewBag.Seccion = "Cursos";
+    ViewBag.SubSeccion = "CursosAlumno";
+
+    var puedeReiniciar = Model.CursoOnline.PermiteReinicioScorm.HasValue ? Model.CursoOnline.PermiteReinicioScorm.Value : false;
+    var tieneAvance = Model.AvanceMatriculaCursoOnline != null ? Model.AvanceMatriculaCursoOnline.FechaFin.HasValue : false;
+    var puedeReiniciarUnidad = Model.UnidadCursoOnline.TipoUnidad == ConstantHelpers.TIPO_UNIDAD.SCORM && puedeReiniciar && !tieneAvance;
+    var esAdministrador = Session.GetRol() == AppRol.Administrador;
+    var i = 1;
+}
+
+@helper VerHijo(PROMPERU.AULAVIRTUAL.BE.CURSOS.UnidadCursoOnline unidad, int index, int level = 0, string sufijo = "")
+{
+    var contenidoId = unidad.UnidadCursoOnlineId;
+    var parentId = unidad.UnidadCursoOnlinePadreId ?? 0;
+    var indexHijo = 1;
+    var sufijoActual = sufijo + index;
+    var contenidosHijos = unidad.UnidadCursoOnline1.Where(x => !x.Estado.Equals(ConstantHelpers.ESTADO.ELIMINADO)).OrderBy(x => x.Orden).ToList();
+    var inactive = unidad.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO) ? "danger c-white" : string.Empty;
+    var hasOptions = false;
+    var hasFile = false;
+
+    <tr class="@inactive" data-id="@contenidoId" data-parent="@parentId" data-level="@level" data-status-id="@unidad.Estado.Equals(ConstantHelpers.ESTADO.ACTIVO)">
+        <td>
+            @unidad.Nombre
+        </td>
+        <td class="text-right">
+            @if (!string.IsNullOrEmpty(unidad.RutaArchivoAdicional))
+            {
+                hasFile = true;
+                <a href="#" class="btn btn-xs btn-promperu-default btn-icon" @Data.ModalLink("_ViewContentAdditionalFile", new { UnidadCursoOnlineId = unidad.UnidadCursoOnlineId, hasFile })>
+                    <span class="icon">
+                        
+                    </span>
+                    <span class="text">
+                        Ver archivo
+                    </span>
+                </a>
+                hasOptions = true;
+            }
+
+            @if (unidad.HasTarea)
+            {
+                <a href="#" class="btn btn-xs btn-promperu-default btn-icon @(DateTime.Now > unidad.TareaFechaLimite ? "disabled" : String.Empty)" @Data.ModalLink("ViewUploadTask", "Course", new { CursoOnlineId = unidad.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId, ParentUnidadCursoOnlineId = Model.UnidadCursoOnlineId })>
+                    <span class="icon">
+                        <img src="~/Content/assets/img/icon_upload_gray.png"/>
+                    </span>
+                    <span class="text">
+                        Subir tarea
+                    </span>
+                </a>
+                <a href="@Url.Action("TareaUnidadCursoOnline", "Course", new { UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })" class="btn btn-xs btn-promperu-default">
+                    <i class="fa fa-tasks fa-fw"></i> Ver mis tareas
+                </a>
+                hasOptions = true;
+            }
+
+            @if (!hasOptions)
+            {
+                <p>Sin opciones a mostrar</p>
+            }
+        </td>
+    </tr>
+    if (unidad.TipoUnidadId == ConstantHelpers.TIPO_UNIDAD.DB_CONTENIDO)
+    {
+        return;
+    }
+    else if (contenidosHijos.Count() > 0)
+    {
+        level++;
+        foreach (var item in contenidosHijos)
+        {
+            <text>@VerHijo(item, indexHijo++, level, $"{sufijoActual}.")</text>
+        }
+    }
+}
+
+<div class="row">
+    <!-- Left col -->
+    <section class="col-sm-6">
+        <div class="info-content">
+            <h2>@Model.CursoOnline.Nombre</h2>
+        </div>
+    </section>
+</div>
+<div class="row detalle-videos">
+    <section class="col-sm-6">
+        <div class="info-video">
+            <h2>@Model.CursoOnline.Nombre</h2>
+            <p>@Model.CursoOnline.Descripcion</p>
+        </div>
+    </section>
+    <section class="col-sm-6">
+        <div class="navigation-video">
+            @*<a href="#" class="btn-navigation disable"><i class="right fas fa-angle-left"></i> Anterior</a>*@
+            <a href="@Url.Action("ViewSiguienteUnidadCursoOnline", new { UnidadCursoOnlineId = Model.UnidadCursoOnlineId })" class="btn-next btn-navigation @(Model.AvanceMatriculaCursoOnline != null && Model.AvanceMatriculaCursoOnline.FechaFin == null ? "disable" : String.Empty)">Siguiente <i class="right fas fa-angle-right"></i></a>
+        </div>
+    </section>
+</div>
+
+<section class="col-lg-12 detalle-evaluacion">
+    <div class="row content-nav-evaluacion">
+        <ul class="col-lg-2 col-sm-12 tabs-navigation nav flex-column nav-pills tabs-menu-video" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+            @if (Model.LstVideos.Count() > 0)
+            {
+                var videotiem = 0;
+                foreach (var video in Model.LstVideos)
+                {
+                    if (video.Estado == ConstantHelpers.ESTADO.ACTIVO)
+                    {
+                        videotiem++;
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link @(videotiem == 1 ? "active" : "")" id="vv-item-@video.VideoUnidadCursoOnlineId-tab" data-bs-toggle="pill" data-bs-target="#vv-item-@video.VideoUnidadCursoOnlineId" type="button" role="tab" aria-controls="vv-item-@video.VideoUnidadCursoOnlineId" aria-selected="true">
+                                <span>Videos @videotiem</span> <i class="right fas fa-angle-right"></i>
+                            </button>
+                        </li>
+                    }
+                }
+            }
+
+            @if (Model.LstTemas.Count > 0)
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="v-item-2-tab" data-bs-toggle="pill" data-bs-target="#v-item-2" type="button" role="tab" aria-controls="v-item-2" aria-selected="false">
+                        <span>Materiales</span> <i class="right fas fa-angle-right"></i>
+                    </button>
+                </li>
+            }
+            @if (Model.UnidadCursoOnline.HasTarea)
+            {
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="v-item-3-tab" data-bs-toggle="pill" data-bs-target="#v-item-3" type="button" role="tab" aria-controls="v-item-3" aria-selected="false">
+                        <span>Tareas</span> <i class="right fas fa-angle-right"></i>
+                    </button>
+                </li>
+            }
+
+        </ul>
+        <div class="col-lg-10 col-sm-12 tab-content tab-content-videos" id="v-pills-tabContent">
+
+            @if (Model.LstVideos.Count() > 0)
+            {
+                var tabindex = 0;
+                foreach (var video in Model.LstVideos)
+                {
+                    if (video.Estado == ConstantHelpers.ESTADO.ACTIVO)
+                    {
+                        tabindex++;
+                        <div class="tab-pane fade active @(tabindex == 1 ? "show" : "")" id="vv-item-@video.VideoUnidadCursoOnlineId" role="tabpanel" aria-labelledby="vv-item-@video.VideoUnidadCursoOnlineId-tab">
+                            <div class="row header-sesion">
+                                <div class="col-sm-8 title-sesion">
+                                    <h2>@Model.UnidadCursoOnline.Nombre</h2>
+                                </div>
+                                <div class="col-sm-4 timer">
+                                    <div class="timer-content">
+                                        <img src="@Url.GetCmsResourceUrl("assets/images/iconos/timer.png")">
+                                        @if (Model.TipoUnidad == ConstantHelpers.TIPO_UNIDAD.TIEMPO)
+                                        {
+                                            <span id="timer"></span>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (video.Tipo == "1")
+                            {
+                                <div class="iframe-video">
+                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/@video.CodigoYoutube" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                                <div class="transcripcion">
+                                    <h2>Transcripción</h2>
+                                    <div class="table-transcription">
+                                        @Html.Raw(video.Transcripcion)
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="body-en-vivo">
+                                    <p class="date-envivo">
+                                        <img src="@Url.GetCmsResourceUrl("assets/images/iconos/envivo.png")">
+                                        Transmisión en vivo: <strong>@video.FechaTransmision.Value.ToLongDateString()</strong>.
+                                    </p>
+                                    <div class="bajada">
+                                        <p>Velit egestas lectus dolor quis. Fermentum mauris bibendum placerat vel. Iaculis volutpat fermentum ut ullamcorper leo sem scelerisque a porttitor. Pharetra viverra augue imperdiet proin facilisis aliquet sed neque.</p>
+                                    </div>
+                                    <div class="alert-envivo">
+                                        <img src="@Url.GetCmsResourceUrl("assets/images/iconos/icon_zoom.png")">
+                                        <a href="@video.CodigoYoutube" target="_blank">@video.CodigoYoutube</a>
+                                    </div>
+                                    <p class="note">El video de esta sesión sera incluido en el plazo máximo de 2 días.</p>
+                                </div>
+                            }
+
+
+                            <div class="calificacion">
+                                <div class="calification">
+                                    <p>
+                                        <i class="@(Model.CursoOnline.Calificacion >= 1 ? "fas" : "far") fa-star"></i>
+                                        <i class="@(Model.CursoOnline.Calificacion >= 2 ? "fas" : "far") fa-star"></i>
+                                        <i class="@(Model.CursoOnline.Calificacion >= 3 ? "fas" : "far") fa-star"></i>
+                                        <i class="@(Model.CursoOnline.Calificacion >= 4 ? "fas" : "far") fa-star"></i>
+                                        <i class="@(Model.CursoOnline.Calificacion >= 5 ? "fas" : "far") fa-star"></i>
+                                    </p>
+                                    <strong>@Model.CursoOnline.Calificacion</strong>
+                                    <span>@Model.CursoOnline.CantidadCalificacion calificaciones</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+            <div class="tab-pane fade" id="v-item-2" role="tabpanel" aria-labelledby="v-item-2-tab">
+                <h2>Materiales</h2>
+                @if (Model.LstTemas.Count > 0)
+                {
+                    <table id="collaptable" class="table table-condensed table-promperu">
+                        <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th class="text-right">Opciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if (Model.LstTemas.Count() > 0)
+                        {
+                            foreach (var item in Model.LstTemas)
+                            {
+                                <text>@VerHijo(item, i++)</text>
+                            }
+                        }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="noevaluaciones"><img src="../../../assets/images/iconos/alert_azul_msj.png"> No se encontraron materiales.</p>
+                }
+
+
+
+
+
+            </div>
+            <div class="tab-pane fade" id="v-item-3" role="tabpanel" aria-labelledby="v-item-3-tab">
+                <h2>Tareas</h2>
+                <p class="noevaluaciones"><img src="../../../assets/images/iconos/alert_azul_msj.png"> No se encontraron tareas.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts{
+
+    @if (Model.TipoUnidad == ConstantHelpers.TIPO_UNIDAD.TIEMPO)
+    {
+        <script>
+
+            var finalized = false;
+
+            function pad(n, width, z) {
+                z = z || '0';
+                n = n + '';
+                return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+            }
+
+            Date.prototype.addSeconds = function(h) {
+                this.setSeconds(this.getSeconds() + h);
+                return this;
+            }
+
+            var countDownDate = new Date().addSeconds(60 * '@Model.TiempoPermanencia').getTime();
+
+            var timer = setInterval(function() {
+                    var now = new Date().getTime();
+
+                    var difference = countDownDate - now;
+
+                    //var days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                    //var hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    var minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                    document.getElementById("timer").innerHTML = pad(minutes, 2) + " : " + pad(seconds, 2);
+
+                    if (difference < 0) {
+                        clearInterval(timer);
+                        document.getElementById("timer").innerHTML = "00 : 00";
+                        if (!finalized) {
+                            finalized = true;
+                            document.getElementById("timer").innerHTML = '';
+                            $.ajax({
+                                url: '@(Html.Raw(Url.Action("_UpdateAvanceMatriculaCursoOnline", "Course", new { MatriculaCursoOnlineId = Model.MatriculaCursoOnlineId, UnidadCursoOnlineId = Model.UnidadCursoOnlineId })))',
+                                success: function(data) {
+                                    $('.btn-next').removeClass('disable');
+                                    //$('.btn-next').find('i').remove();
+                                    console.log(data);
+                                }
+                            })
+                        }
+                    }
+                },
+                1000);
+
+        </script>
+        <script>
+            const params = new Proxy(new URLSearchParams(window.location.search),
+                {
+                    get: (searchParams, prop) => searchParams.get(prop)
+                });
+
+            let value = params.t;
+
+            var element = document.querySelector("#v-item-2-tab");
+            var paneElement = document.querySelector("#v-item-2");
+
+            if (value === "materiales") {
+
+                element.classList.add("active");
+                element.parentElement.classList.add("active");
+
+                paneElement.classList.add("active");
+                paneElement.classList.add("show");
+            } else {
+                element.classList.remove("active");
+                element.parentElement.classList.remove("active");
+
+                paneElement.classList.remove("active");
+                paneElement.classList.remove("show");
+            }
+        </script>
+    }
+
+}

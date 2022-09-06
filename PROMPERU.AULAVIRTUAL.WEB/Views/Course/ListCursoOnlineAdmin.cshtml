@@ -1,0 +1,72 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ListCursoOnlineAdminViewModel
+@{
+    ViewBag.Title = "Cursos";
+    ViewBag.Icon = "book";
+    ViewBag.Seccion = "Cursos";
+    ViewBag.SubSeccion = "Cursos";
+}
+
+@*@section Breadcrumbs{}*@
+
+@section Jumbotron{
+<div class="container-fluid container-lg sm-p-l-20 sm-p-r-20 full-height p-t-30">
+    <div class="btn-group pull-left m-b-10">
+        <div class="pull-left"><h4 class="m-b-20 usuarios">@ViewBag.Title</h4></div>
+        @if (Session.GetRol() == AppRol.Administrador)
+        {
+            <div class="pull-right m-t-10 m-l-20"> <a class="btn btn-course-enable" href="@Url.Action("EditCursoOnline", "Course")">Agregar Curso</a></div>
+        }
+    </div>
+    <div class="inner full-height" style="transform: translateY(0px); opacity: 1;">
+        <form class="form" method="POST" action="@Url.Action("ListCursoOnlineAdmin", "Course")">
+            <div class="col-md-10 m-b-30">
+                <div class="form-group form-group-default input-group transparent center-margin rectangle-31">
+                    @*@Html.LabelFor(x => x.CadenaBuscar, new { @class = "buscar-usuario" })*@
+                    @Html.TextBoxFor(x => x.NombreCurso, new { @class = "form-control input-group-addon text-left", @placeholder = "Buscar Curso", @autocomplete = "off" })
+                    <span class="input-group-addon"><i class="pg-search"></i></span>
+                </div>
+            </div>
+            <div class="col-md-2 m-b-30">
+                <button type="submit" class="btn btn-filtrar-usuario  btn-lg m-t-5 filtrar">&nbsp;FILTRAR</button>
+            </div>
+        </form>
+    </div>
+</div>
+}
+<div class="container-fluid container-fixed-lg">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline no-footer" id="basicTable_wrapper">
+                    <table role="grid" class="table table-hover dataTable no-footer">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-11 title-table">Nombres</th>
+                                <th class="text-center title-table">Estado</th>
+                                <th class="text-center title-table">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody-curso">
+                            
+                            @foreach (var curso in Model.LstCursoOnline)
+                            {
+                                <tr id="@curso.CursoOnlineId">
+                                    <td class="text-table"  title="@( !Model.DictCursoDisponibilidad.FirstOrDefault(x => x.Key == curso.CursoOnlineId).Value ? "No Disponible" :  "Disponible")"><i class="fa fa-circle@( !Model.DictCursoDisponibilidad.FirstOrDefault(x => x.Key == curso.CursoOnlineId).Value ? "-o" :  "")"></i>&nbsp;&nbsp; @curso.Nombre</td>
+                                    <td class="text-center text-table"><span class="label @(curso.Estado == ConstantHelpers.ESTADO.ACTIVO ? "label-success" : "label-important")">@(curso.Estado == ConstantHelpers.ESTADO.ACTIVO ? "Activo" : "Inactivo")</span></td>
+                                    <td class="text-table">
+                                        <div class='btn-group dropdown'>
+                                            <a class="btn base" style="overflow: hidden;" href="@Url.Action("ViewCursoOnlineAdmin", "Course", new { CursoOnlineId = curso.CursoOnlineId })">Seleccionar</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model.LstCursoOnline, page => Url.Action("ListCursoOnlineAdmin", new { p = page }), ConstantHelpers.Bootstrap3Pager)
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

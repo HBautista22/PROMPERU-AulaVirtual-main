@@ -1,0 +1,92 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Report.ReportSolicitudAsesoriaViewModel
+@{
+    ViewBag.Title = "Reporte histórico de Solicitudes de Asesoria";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">@ViewBag.Title</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">@ViewBag.Title</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row table-acciones table-content list-empresa">
+    <div class="col-sm-6">
+        <h2>@ViewBag.Title</h2>
+    </div>
+
+</div>
+<div class="row mis-solicitudes table-content">
+
+
+    @if (Session.GetRol() == AppRol.Administrador)
+    {
+    <div class="col-sm-12 btns-table">
+
+        <a class="btn btn-secondary" href="@Url.Action("DownloadReportSolicitudAsesoria", "Report", new { Type = "EXCEL" })">Descargar</a>
+        
+    </div>
+    }
+
+
+
+
+
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list tipo-empresa" align="center">
+            <thead>
+                <tr>
+
+                    <th class="title-table">Asesoria</th>
+                    <th class="title-table">Asesor</th>
+                    <th class="title-table">Apellido</th>
+                    <th class="title-table">Inicio</th>
+                    <th class="title-table">Fin</th>
+                    <th class="title-table">Estado Asesoria</th>
+                    <th class="title-table">Nombre Asesorado</th>
+                    <th class="title-table">Apellido Asesorado</th>
+                    <th class="title-table">Cargo de Asesorado</th>
+                    <th class="title-table">Email Asesorado</th>
+                    <th class="title-table">Teléfono Asesorado</th>
+                    <th class="title-table">Tipo Documento</th>
+                    <th class="title-table">Número Documento</th>
+                    <th class="title-table">RUC</th>
+                    <th class="title-table">Consulta Solicitud</th>
+                    <th class="title-table">Estado Solicitud</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var registro in Model.LstViewReporteSolicitudAsesoria)
+                {
+                    <tr>
+
+                        <td class="text-table">@registro.Asre_Nombre</td>
+                        <td class="text-table">@registro.Nombre</td>
+                        <td class="text-table">@registro.Apellido</td>
+                        <td class="text-table">@registro.Asre_Inicio</td>
+                        <td class="text-table">@registro.Asre_Fin</td>
+                        <td class="text-table">@registro.Asre_Estado</td>
+                        <td class="text-table">@registro.NombreAsesorado</td>
+                        <td class="text-table">@registro.ApellidoAsesorado</td>
+                        <td class="text-table">@registro.Cargo</td>
+                        <th class="text-table">@registro.EmailAsesorado  </th>
+                        <th class="text-table">@registro.Telefono  </th>
+                        <th class="text-table">@registro.TipoDocumento  </th>
+                        <th class="text-table">@registro.DNI</th>
+                        <th class="text-table">@registro.RUC</th>
+                        <td class="text-table">@registro.Sola_Consulta</td>
+                        <td class="text-table">@registro.Sola_Estado</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @Html.PagedListPager(Model.LstViewReporteSolicitudAsesoria, page => Url.Action("ReportSolicitudAsesoria"), ConstantHelpers.Bootstrap3Pager)
+    </div>
+</div>

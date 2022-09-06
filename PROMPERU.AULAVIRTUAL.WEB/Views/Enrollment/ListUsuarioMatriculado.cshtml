@@ -1,0 +1,100 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Enrollment.ListUsuarioMatriculadoViewModel
+@{
+    ViewBag.Title = "Usuarios Matriculados";
+}
+@section Breadcrumbs{
+<li><a href="@Url.Action("ListCursoOnlineAlumno", "Course")">Cursos</a></li>
+    }
+@section Jumbotron{
+<div class="container-fluid container-lg sm-p-l-20 sm-p-r-20 full-height">
+    <h4 class="usuarios m-b-20"><i class="fa fa-@ViewBag.Icon"></i>&nbsp;@ViewBag.Title</h4>
+    <div class="inner full-height" style="transform: translateY(0px); opacity: 1;">
+        <form class="form" method="POST" action="@Url.Action("ListUsuarioMatriculado", "Enrollment")">
+            @Html.HiddenFor(x => x.CursoOnlineId)
+            <div class="col-md-4 m-b-30">
+                <div class="form-group form-group-default input-group transparent center-margin rectangle-31">
+                    @Html.LabelFor(x => x.Nombre, new { @class = "buscar-usuario" })
+                    @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control" })
+                    <span class="input-group-addon"><i class="pg-search"></i></span>
+                </div>
+            </div>
+            <div class="col-md-4 m-b-30">
+                <div class="form-group form-group-default input-group transparent center-margin rectangle-31">
+                    @Html.LabelFor(x => x.Correo, new { @class = "buscar-usuario" })
+                    @Html.TextBoxFor(x => x.Correo, new { @class = "form-control" })
+                    <span class="input-group-addon"><i class="pg-search"></i></span>
+                </div>
+            </div>
+            <div class="col-md-4 m-b-30">
+                <button type="submit" class="btn btn-filtrar-usuario  btn-lg m-t-5 filtrar">&nbsp;FILTRAR</button>
+            </div>
+        </form>
+    </div>
+</div>
+}
+<div class="container-fluid container-fixed-lg">
+    <div class="panel panel-default">
+        @*<div class="panel-heading">
+            <div class="panel-title">
+                <h4 class="m-t-0 m-b-0 usuarios"><i class="fa fa-@ViewBag.Icon"></i>&nbsp;@ViewBag.Title</h4>
+            </div>
+            <div class="clearfix"></div>
+        </div>*@
+        <div class="panel-body">
+            <div class="">
+                <div class="" id="">
+                    <table  class="table table-hover ">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-2 title-table">Nombre y Apellido</th>
+                                <th class="col-sm-2 title-table">Correo Electrónico</th>
+                                <th class="col-sm-2 title-table">Contraseña</th>
+                                <th class="col-sm-1 title-table">Fecha Mátrícula</th>
+                                <th class="col-sm-1 title-table">Fecha Aprobado</th>
+                                <th class="col-sm-1 title-table">% Avance</th>
+                                <th class="col-sm-1 title-table">Nota</th>
+                                <th class="title-table" style="width:150px">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var matriculaCursoOnline in Model.LstMatriculaCursoOnline)
+                            {
+                                <tr>
+                                    <td class="text-table">@matriculaCursoOnline.Usuario.Apellido, @matriculaCursoOnline.Usuario.Nombre</td>
+                                    <td class="text-table">@matriculaCursoOnline.Usuario.Email</td>
+                                    <td class="text-table">@matriculaCursoOnline.Usuario.Password</td>
+                                    <td class="text-table">@matriculaCursoOnline.FechaMatricula.ToShortDateString()</td>
+                                    <td class="text-table">@(matriculaCursoOnline.FechaAprobado.HasValue ? matriculaCursoOnline.FechaAprobado.Value.ToShortDateString(): "-")</td>
+                                    <td class="text-table">@(matriculaCursoOnline.PorcentajeObtenido.HasValue ? matriculaCursoOnline.PorcentajeObtenido.Value.ToString("#.##") : "-")</td>
+                                    <td class="text-table">@(matriculaCursoOnline.Nota.HasValue ? matriculaCursoOnline.Nota.Value.ToString("#.##") : "-")</td>
+                                    <td class="text-table">
+                                        <div class='btn-group dropdown'>
+                                            <a class="btn btn-xs" @Data.ModalLink("_DeleteMatricula", "Enrollment", new { UsuarioId = matriculaCursoOnline.UsuarioId, MatriculaCursoOnlineId=matriculaCursoOnline.MatriculaCursoOnlineId,CursoOnlineId=matriculaCursoOnline.CursoOnlineId })><i class="fa fa-remove"></i>&nbsp;Eliminar Matrícula</a>
+                                            <button class='btn btn-xs dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+                                            <ul class="dropdown-menu">
+                                                @if (matriculaCursoOnline.Estado == ConstantHelpers.ESTADO_MATRICULA.APROBADO)
+                                                {<li>
+                                                    <!--<a class="btn-xs" href="@Url.Action("DownloadCertificadoAlumno", "Document", new { MatriculaCursoOnlineId = matriculaCursoOnline.MatriculaCursoOnlineId, CursoOnlineId = matriculaCursoOnline.CursoOnlineId, UsuarioId = matriculaCursoOnline.UsuarioId })"><i class="fa fa-download"></i>&nbsp;Descargar Certificado</a>-->
+                                                </li>}
+                                                else {
+                                                 <li class="">
+                                                     <!--<a class="btn-xs" disabled="true" href="#"><i class="fa fa-lock"></i>&nbsp;Descargar Certificado</a>-->
+                                                 </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model.LstMatriculaCursoOnline, page => Url.Action("ListUsuarioMatriculado", new { np = page, CursoOnlineId = Model.CursoOnlineId}), ConstantHelpers.Bootstrap3Pager)
+                </div>
+            </div>
+            <div>
+                <a class="btn btn-info" href="@Url.Action("ViewCursoOnline","Course",new {CursoOnlineId= Model.CursoOnlineId })"><i class="fa fa-arrow-left"></i>&nbsp;Regresar</a>
+            </div>
+        </div>
+    </div>
+</div>

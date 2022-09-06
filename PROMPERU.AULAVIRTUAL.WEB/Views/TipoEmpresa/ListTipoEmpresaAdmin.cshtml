@@ -1,0 +1,77 @@
+﻿
+@model IEnumerable<PROMPERU.AULAVIRTUAL.BE.USUARIO.TipoEmpresa>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Tipo de Empresa</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Tipo de Empresa</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row table-acciones table-content list-empresa">
+    <div class="col-sm-6">
+        <h2>Lista de Tipo de Empresa</h2>
+    </div>
+    <div class="col-sm-6 btns-table">
+        <a class="btn btn-primary" href="@Url.Action("AddEditTipoEmpresa", "TipoEmpresa", new { id = 0 })">Agregar Tipo de Empresa</a>
+    </div>
+</div>
+<div class="row mis-solicitudes table-content">
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list tipo-empresa" align="center">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var tipoEmpresa in Model)
+                {
+                    <tr>
+                        <td>@tipoEmpresa.Nombre</td>
+                        <td>
+                            <span class="label-estado @(tipoEmpresa.Estado == ConstantHelpers.ESTADO.ACTIVO ? "completado" : tipoEmpresa.Estado  == ConstantHelpers.ESTADO.PENDIENTE ? "pendiente" : "inactivo"  )">@tipoEmpresa.Estado</span>
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Acciones
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("AddEditTipoEmpresa", "TipoEmpresa", new { id = tipoEmpresa.TipoEmpresaId })">Editar</a>
+
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("ChangeStateTipoEmpresa", "TipoEmpresa", new { id = tipoEmpresa.TipoEmpresaId })">
+                                            @if (tipoEmpresa.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                                            {
+                                                <text><i class="fa fa-user fa-fw"></i>&nbsp;Activar</text> }
+                                            else
+                                            {
+                                                <text><i class="fa fa-user-times fa-fw"></i>&nbsp;Desactivar</text>}
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+</div>

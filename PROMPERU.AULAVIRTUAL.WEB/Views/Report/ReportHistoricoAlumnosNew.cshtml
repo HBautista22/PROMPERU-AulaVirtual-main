@@ -1,0 +1,159 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Report.ReportHistoricoAlumnosViewModel
+@{
+    ViewBag.Title = "ReportHistoricoAlumnosNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Reporte</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0"> Seguimiento de Alumnos </h2>
+        </div>
+    </div><!-- /.row -->
+}
+
+
+<div class="row">
+    <div class="col-lg-12 box-grey-content">
+        <div class="content-form-grey">
+            <form action="@Url.Action("ReportHistoricoAlumnos", "Report")" id="searchUser" method="post">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Nombre / Código</label>
+
+                            @Html.TextBoxFor(x => x.Codigo, new { @class = "form-control", @placeholder = "Nombre / Código" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Curso</label>
+                            @Html.TextBoxFor(x => x.Curso, new { @class = "form-control", @placeholder = "Curso" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Email</label>
+                            @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "Curso" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Grupo</label>
+                            @Html.TextBoxFor(x => x.Grupo, new { @class = "form-control", @placeholder = "Curso" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Estado</label>
+                            <select name="estado" class="estado form-control form-control-select form-select">
+                                <option value="">[-Todos-]</option>
+                                <option value="@ConstantHelpers.ESTADO_MATRICULA.PENDIENTE" @(Model.Estado == ConstantHelpers.ESTADO_MATRICULA.PENDIENTE ? "selected" : "")>@ConstantHelpers.TextoEstado(ConstantHelpers.ESTADO_MATRICULA.PENDIENTE)</option>
+                                <option value="@ConstantHelpers.ESTADO_MATRICULA.COMPLETADO" @(Model.Estado == ConstantHelpers.ESTADO_MATRICULA.COMPLETADO ? "selected" : "")>@ConstantHelpers.TextoEstado(ConstantHelpers.ESTADO_MATRICULA.COMPLETADO)</option>
+                                <option value="@ConstantHelpers.ESTADO_MATRICULA.APROBADO" @(Model.Estado == ConstantHelpers.ESTADO_MATRICULA.APROBADO ? "selected" : "")>@ConstantHelpers.TextoEstado(ConstantHelpers.ESTADO_MATRICULA.APROBADO)</option>
+                                <option value="@ConstantHelpers.ESTADO_MATRICULA.PENDIENTE" @(Model.Estado == ConstantHelpers.ESTADO_MATRICULA.PENDIENTE ? "selected" : "")>@ConstantHelpers.TextoEstado(ConstantHelpers.ESTADO_MATRICULA.PENDIENTE)</option>
+                                <option value="@ConstantHelpers.ESTADO_MATRICULA.DESAPROBADO" @(Model.Estado == ConstantHelpers.ESTADO_MATRICULA.DESAPROBADO ? "selected" : "")>@ConstantHelpers.TextoEstado(ConstantHelpers.ESTADO_MATRICULA.DESAPROBADO)</option>
+                                <option value="@ConstantHelpers.ESTADO_MATRICULA.INACTIVO" @(Model.Estado == ConstantHelpers.ESTADO_MATRICULA.INACTIVO ? "selected" : "")>@ConstantHelpers.TextoEstado(ConstantHelpers.ESTADO_MATRICULA.INACTIVO)</option>
+                            </select>
+                        </div>
+                    </div>
+                    @if (Session.GetRol() == AppRol.Administrador)
+                    {
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="">Razon Social</label>
+                                @Html.TextBoxFor(x => x.RazonSocial, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    }
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-btn">
+                        <input type="submit" class="btn btn-primary" value="Filtrar">
+                        <input type="submit" class="btn btn-secondary" value="Limpiar">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row table-acciones table-content">
+    <div class="col-sm-12 btns-table">
+
+
+        <a href="@Url.Action("DownloadReportHistoricoAlumnos", "Report", new { Codigo = Model.Codigo, RazonSocial = Model.RazonSocial, Curso = Model.Curso, Cargo = Model.Cargo, Grupo = Model.Grupo, Estado = Model.Estado , Type = "PDF" })" class="btn btn-secondary">PDF</a>
+
+
+        <a href="@Url.Action("DownloadReportHistoricoAlumnos", "Report", new {Codigo = Model.Codigo, RazonSocial = Model.RazonSocial, Curso = Model.Curso, Cargo = Model.Cargo, Grupo = Model.Grupo, Estado = Model.Estado , Type = "EXCEL" })" class="btn btn-secondary">EXCEL</a>
+    </div>
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list text-nowrap table-checkbox">
+            <thead>
+                <tr>
+                    @if (Session.GetRol() == AppRol.Administrador)
+                    {
+                        <th class="title-table">RUC</th>
+                        <th class="title-table">Razón Social</th>
+                    }
+                    <th class="title-table">Nombre</th>
+                    <th class="title-table">Cargo</th>
+                    <th class="title-table">Correo Electrónico</th>
+                    <th class="title-table">Curso</th>
+                    <th class="text-center title-table">Fecha Matrícula</th>
+                    <th class="text-center title-table">Fecha Completado</th>
+                    <th class="text-center title-table">Fecha Aprobado</th>
+                    <th class="text-center title-table">% Avance</th>
+                    <th class="text-center title-table">Nota</th>
+                    <th class="text-center title-table">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var registro in Model.LstViewReporteHistoricoAlumno)
+                {
+                    <tr>
+                        @if (Session.GetRol() == AppRol.Administrador)
+                        {
+                            <td class="text-table">@registro.Empresa_RUC</td>
+                            <td class="text-table">@registro.Empresa_RazonSocial</td>
+                        }
+                        <td class="text-table"><a href="@Url.Action("ViewPerfil","User",new {UsuarioId=registro.Ususario_UsuarioId })">@registro.Usuario_NombreCompleto</a></td>
+                        <td class="text-table">@registro.Usuario_Cargo</td>
+                        <td class="text-table">@registro.Usuario_Email</td>
+                        @if (Session.GetRolCompleto() == ConstantHelpers.ROL.ADMINISTRADOR)
+                        {
+                            <td class="text-table"><a href="@Url.Action("ViewCursoOnlineAdmin", "Course",new {CursoOnlineId=registro.Curso_CursoOnlineId })">@registro.Curso_Nombre</a></td>
+                        }
+                        else
+                        {
+                            <td class="text-table"><a href="@Url.Action("ViewCursoOnline", "Course",new {CursoOnlineId=registro.Curso_CursoOnlineId })" @*class="has-tooltip" data-placement="top" data-html="true" title="Cargo: @registro.Usuario_Cargo<br>Grupo: @registro.Matricula_Grupo"*@>@registro.Curso_Nombre</a></td>
+                        }
+                        <td class="text-center text-table">@registro.Matricula_FechaMatricula.ToLocalDateString()</td>
+                        <td class="text-center text-table">@registro.Matricula_FechaCompletado.ToLocalDateString()</td>
+                        <td class="text-center text-table">@registro.Matricula_FechaAprobado.ToLocalDateString()</td>
+                        <td class="text-center text-table">@(registro.Matricula_PorcentajeAvance > 0 ? registro.Matricula_PorcentajeAvance.ToString() : "")</td>
+                        <td class="text-center text-table">@registro.Matricula_Nota</td>
+                        <td class="text-table">
+                            <span class="text-center label label-@(ConstantHelpers.TextoColorEstado(registro.Matricula_Estado))">
+                                @ConstantHelpers.TextoEstado(registro.Matricula_Estado)
+                            </span>
+                            @if (registro.Matricula_Estado == ConstantHelpers.ESTADO_MATRICULA.APROBADO)
+                            {
+                                <!--<a class="btn btn-link btn-xs" title="Descargar constancia" href="@Url.Action("DownloadCertificadoAlumno","Document",new { MatriculaCursoOnlineId = registro.Matricula_MatriculaCursoOnlineId, CursoOnlineId = registro.Curso_CursoOnlineId,UsuarioId=registro.Ususario_UsuarioId})">
+                                    <i class="fa fa-download"></i>
+                                </a>-->}
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @Html.PagedListPager(Model.LstViewReporteHistoricoAlumno, page => Url.Action("ReportHistoricoAlumnos", "Report", new { np = page, Codigo = Model.Codigo, RazonSocial = Model.RazonSocial, Curso = Model.Curso, Cargo = Model.Cargo, Grupo = Model.Grupo, Estado = Model.Estado, Dni = Model.Dni, Email = Model.Email }), ConstantHelpers.Bootstrap3Pager)
+</div>

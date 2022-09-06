@@ -1,0 +1,1027 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Cms.ViewPaginaViewModel
+@{
+
+
+    var model = Model;// (PROMPERU.AULAVIRTUAL.WEB.ViewModel.Cms.ViewPaginaViewModel)ViewData["ViewPaginaViewModel"];
+
+    var testimonios = model.Testimonios;
+    var certificates = model.Certificates;//   cMSDA.ListarCertificateDisponibles(); //Model.Datos.CMS_Certificate.Where(x => x.EsPublicado).OrderByDescending(x => x.Id).ToList();
+    var banners = model.Banners;// cMSDA.ListarBannerDisponibles();    //Model.Datos.CMS_Banner.Where(x => x.EsPublicado).OrderByDescending(x => x.Id).ToList();
+
+    var url_aula = model.Url_aula; //ConfigurationManager.AppSettings["PORTAL.AbsoluteUrl"].ToString();
+
+}
+<style>
+
+    .line-clamp {
+        display: block;
+        display: -webkit-box;
+        max-width: 100%;
+        height: 74px;
+        margin: 0 auto;
+        font-size: 14px;
+        line-height: 1.7;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+    .nosotros {
+        animation-duration: 6s;
+        animation-delay: 2s;
+    }
+
+    .confian {
+        animation-duration: 6s;
+        animation-delay: 2s;
+    }
+
+    .item-tabProducto {
+        color: #E63528;
+        font-size: 22px;
+    }
+
+        .item-tabProducto:hover {
+            color: #E63528;
+            font-size: 22px;
+            border-bottom: 5px solid #e63528;
+        }
+
+    .nav .nav-item > .active {
+        color: #E63528;
+        border-bottom: 5px solid #e63528;
+    }
+
+    .card-back .card-body .card-back-body-container {
+        background-color: #ffffff;
+        border: 3px solid #e63527;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-flex-wrap: nowrap;
+        -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+        -webkit-justify-content: flex-start;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
+        -webkit-align-content: stretch;
+        -ms-flex-line-pack: stretch;
+        align-content: stretch;
+        -webkit-align-items: flex-start;
+        -ms-flex-align: start;
+        align-items: flex-start;
+        height: 100%;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .card-back .card-body .title {
+        -webkit-order: 0;
+        -ms-flex-order: 0;
+        order: 0;
+        -webkit-flex: 0 1 auto;
+        -ms-flex: 0 1 auto;
+        flex: 0 1 auto;
+        -webkit-align-self: auto;
+        -ms-flex-item-align: auto;
+        align-self: center;
+        height: auto;
+        overflow-x: initial;
+        background-color: inherit;
+        color: #e63527;
+    }
+
+    .card-back .card-body .description {
+        -webkit-order: 0;
+        -ms-flex-order: 0;
+        order: 0;
+        -webkit-flex: 1 1 auto;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        -webkit-align-self: auto;
+        -ms-flex-item-align: auto;
+        align-self: center;
+        overflow-x: hidden;
+    }
+
+    .card-back .card-body .form-group {
+        text-align: center;
+        -webkit-order: 0;
+        -ms-flex-order: 0;
+        order: 0;
+        -webkit-flex: 0 1 auto;
+        -ms-flex: 0 1 auto;
+        flex: 0 1 auto;
+        -webkit-align-self: auto;
+        -ms-flex-item-align: auto;
+        align-self: center;
+        margin-bottom: 0;
+    }
+
+    .card-flip > div {
+        display: flex;
+    }
+
+    .card-front-body-container {
+        border-radius: 10px;
+        background-color: #e63527;
+        padding: 15px;
+    }
+
+
+        .card-front-body-container .service-heading {
+            margin: 15px 0 0 0;
+            color: white;
+        }
+
+    .card-img-top .badges {
+        top: 32px;
+    }
+
+
+    @@media (min-width: 300px) and (max-width: 599px) {
+        .style-min {
+            margin-bottom: 50px;
+        }
+
+        .team-meember {
+            height: auto !important;
+        }
+
+        .alinear {
+            text-align: center !important;
+        }
+    }
+
+    .team-meember {
+        height: auto !important;
+    }
+
+</style>
+
+<!-- Header -->
+<div id="vueApp">
+    @foreach (var item in banners.Where(x=>x.EsPublicado==true))
+    {
+        <!--<header class="masthead" style="background-image: url('@Url.Content(item.Imagen)')">-->
+        <header class="masthead">
+            <div class="container">
+                <div class="intro-text" style="text-align: -webkit-center;">
+                    <div class="intro-lead-in DesignStyleGenerico">@item.TituloSuperior</div>
+                    <div class="intro-heading DesignStyleGenerico">@item.TituloInferior</div>
+                    <div class="col-md-6 col-sm-6 col-12">
+                        <div class="input-group Size_Search">
+                            <input class="form-control input-search py-2 border-right-0 border" type="search" placeholder="Buscar" id="search-input" v-model="filter">
+                            <span class="input-group-append">
+                                <div class="input-group-text bg-white search-icon" v-on:click="mostrarCursos()">
+                                    <a class="" href="#">
+                                        <img src="@Url.GetCmsResourceUrl("img/Fill2_black.svg")" alt="Smiley face" style="width: 30px;height: 19px;">
+                                    </a>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    }
+    <!-- Modulos -->
+    <section class="page-section modulos pulse animated delay-2s animation-element" id="modulos" style="background-color: #eff2f7;">
+        <input type="hidden" id="ancho" /><input type="hidden" id="alto" />
+        <div class="container-fluid flash" id="contenedor-cursos">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">@("curso_destacado".Label())</h2>
+                </div>
+                <div class="col-lg-12 text-center">
+                    <ul class="nav justify-content-center">
+                        <li class="nav-item">
+                            <a class="nav-link item-tabProducto active text-center" data-toggle="tab" href="#home">Más valorados</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link item-tabProducto text-center" data-toggle="tab" href="#menu1">Más recientes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link item-tabProducto text-center" data-toggle="tab" href="#menu2">Eventos Webinar</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <br />
+
+
+            <div class="tab-content">
+
+                <div id="home" class="tab-pane active">
+
+                    <!--PARA PC-->
+                    <div class="row text-center mw-none mb-5" id="subhome1" style="display:none">
+                        <div class="col-md-4" v-for="curso in cursosValoraciones">
+                            <div class="card card-flip h-100">
+                                <div class="card-front">
+                                    <div class="card-body">
+                                        <div class="card-front-body-container">
+                                            <a v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId">
+                                                <img style="border-radius: 5px;width: 100%;" v-bind:src="curso.RutaImagen" alt="">
+                                            </a>
+                                            <a v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId">
+                                                <h4 class="service-heading" style="padding-top: 4px;">
+                                                    {{curso.Nombre}}
+                                                    <img v-if="curso.FechaCreacion > fechaMinimoNuevo" src="@Url.GetCmsResourceUrl("img/new-course.png")" style="height: 20px;position: relative;top: -6px;left: 5px;" />
+                                                </h4>
+                                            </a>
+                                            <div class="card-img-top-2 card-img-top">
+                                                <div class="badges badges-right">
+                                                    <a class="badge badge-warning" href="#"> Valoración: {{curso.Ranking}} <i class="fa fa-star"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-back">
+                                    <div class="card-body">
+                                        <div class="card-back-body-container">
+                                            <h4 class="title">{{curso.Nombre}}</h4>
+                                            <div class="description">{{curso.Descripcion}}</div>
+                                            <div class="form-group">
+                                                <a class="btn btn-promperu-red service-heading" v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId" role="button">Ingresar</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--PARA MOBILE-->
+                    <div class="row text-center mw-none mb-5" id="subhome2" style="display:none">
+                        <div class="col-md-4" v-for="curso in cursosValoraciones">
+                            <div class="card card-flip2 h-100">
+                                <div class="card-front">
+                                    <div class="card-body">
+                                        <div class="card-front-body-container">
+                                            <a v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId">
+                                                <img style="border-radius: 5px;width: 100%;" v-bind:src="curso.RutaImagen" alt="">
+                                            </a>
+                                            <a v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId">
+                                                <h4 class="service-heading" style="padding-top: 4px;">
+                                                    {{curso.Nombre}}
+                                                    <img v-if="curso.FechaCreacion > fechaMinimoNuevo" src="@Url.GetCmsResourceUrl("img/new-course.png")" style="height: 20px;position: relative;top: -6px;left: 5px;" />
+                                                </h4>
+                                            </a>
+
+                                            <div class="description" style="color:#fff">{{curso.Descripcion}}</div>
+
+                                            <div class="card-img-top-2 card-img-top">
+                                                <div class="badges badges-right">
+                                                    <a class="badge badge-warning" href="#"> Valoración: {{curso.Ranking}} <i class="fa fa-star"></i></a>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <a class="btn btn-promperu-White service-heading" v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId" role="button">Ingresar</a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+
+                <div id="menu1" class="tab-pane fade">
+                    <!--para pc-->
+                    <div class="row text-center mw-none mb-5 " id="submenu1" style="display:none">
+                        <div class="col-md-4" v-for="curso in cursosRecientes">
+                            <div class="card card-flip h-100">
+                                <div class="card-front">
+                                    <div class="card-body">
+                                        <div class="card-front-body-container">
+                                            <a v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId">
+                                                <img style="border-radius: 5px;width: 100%;" v-bind:src="curso.RutaImagen" alt="">
+                                            </a>
+                                            <a v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId">
+                                                <h4 class="service-heading" style="padding-top: 4px;">
+                                                    {{curso.Nombre}}
+                                                    <img v-if="curso.FechaCreacion > fechaMinimoNuevo" src="@Url.GetCmsResourceUrl("img/new-course.png")" style="height: 20px;position: relative;top: -6px;left: 5px;" />
+                                                </h4>
+                                            </a>
+                                            <div class="card-img-top-2 card-img-top">
+                                                <div class="badges badges-right">
+                                                    <a class="badge badge-warning" href="#"> Valoración: {{curso.Ranking}} <i class="fa fa-star"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-back">
+                                    <div class="card-body">
+                                        <div class="card-back-body-container">
+                                            <h4 class="title">{{curso.Nombre}}</h4>
+                                            <div class="description">{{curso.Descripcion}}</div>
+                                            <div class="form-group">
+                                                <a class="btn btn-promperu-red service-heading" v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId" role="button">Ingresar</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--para mobile-->
+                    <div class="row text-center mw-none mb-5 " id="submenu2" style="display:none">
+                        <div class="col-md-4" v-for="curso in cursosRecientes">
+                            <div class="card h-100" style="padding-bottom:40px;">
+                                <div class="card-front-body-container">
+                                    <a v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId">
+                                        <img style="border-radius: 5px;width: 100%;" v-bind:src="curso.RutaImagen" alt="">
+                                    </a>
+                                    <a v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId">
+                                        <h4 class="service-heading" style="padding-top: 4px;">
+                                            {{curso.Nombre}}
+                                            <img v-if="curso.FechaCreacion > fechaMinimoNuevo" src="@Url.GetCmsResourceUrl("img/new-course.png")" style="height: 20px;position: relative;top: -6px;left: 5px;" />
+                                        </h4>
+                                    </a>
+
+                                    <div class="description" style="color:#fff">{{curso.Descripcion}}</div>
+
+                                    <div class="card-img-top-2 card-img-top">
+                                        <div class="badges badges-right">
+                                            <a class="badge badge-warning" href="#"> Valoración: {{curso.Ranking}} <i class="fa fa-star"></i></a>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <a class="btn btn-promperu-White service-heading" v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId" role="button">Ingresar</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+                <div id="menu2" class="tab-pane fade">
+                    <!--para pc-->
+                    <div class="row text-center mw-none mb-5 " id="submenu3" style="display:none">
+                        
+
+
+
+                    </div>
+
+                    <!--para mobile-->
+                    <div class="row text-center mw-none mb-5 " id="submenu4" style="display:none">
+                        
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+
+
+            @*
+
+
+
+
+                <div class="tab-content">
+                    <div id="home" class="tab-pane active">
+                        <div class="row text-center mw-none mb-5 ">
+                            <div class="col-md-4" v-for="curso in cursosValoraciones">
+                                <div class="card card-flip2 h-100">
+                                    <div class="card-front">
+                                        <div class="card-body">
+                                            <div class="card-front-body-container">
+                                                <a v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId">
+                                                    <img style="border-radius: 5px;width: 100%;" v-bind:src="curso.RutaImagen" alt="">
+                                                </a>
+                                                <a v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId">
+                                                    <h4 class="service-heading" style="padding-top: 4px;">
+                                                        {{curso.Nombre}}
+                                                        <img v-if="curso.FechaCreacion > fechaMinimoNuevo" src="@Url.GetCmsResourceUrl("img/new-course.png")" style="height: 20px;position: relative;top: -6px;left: 5px;" />
+                                                    </h4>
+                                                </a>
+                                                <div class="card-img-top-2 card-img-top">
+                                                    <div class="badges badges-right">
+                                                        <a class="badge badge-warning" href="#"> Valoración: {{curso.Ranking}} <i class="fa fa-star"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-back">
+                                        <div class="card-body">
+                                            <div class="card-back-body-container">
+                                                <h4 class="title">{{curso.Nombre}}</h4>
+                                                <div class="description">{{curso.Descripcion}}</div>
+                                                <div class="form-group">
+                                                    <a class="btn btn-promperu-red service-heading" v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId" role="button">Ingresar</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="menu1" class="tab-pane fade">
+                        <div class="row text-center mw-none mb-5 ">
+                            <div class="col-md-4" v-for="curso in cursosRecientes">
+                                <div class="card card-flip2 h-100">
+                                    <div class="card-front">
+                                        <div class="card-body">
+                                            <div class="card-front-body-container">
+                                                <a v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId">
+                                                    <img style="border-radius: 5px;width: 100%;" v-bind:src="curso.RutaImagen" alt="">
+                                                </a>
+                                                <a v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId">
+                                                    <h4 class="service-heading" style="padding-top: 4px;">
+                                                        {{curso.Nombre}}
+                                                        <img v-if="curso.FechaCreacion > fechaMinimoNuevo" src="@Url.GetCmsResourceUrl("img/new-course.png")" style="height: 20px;position: relative;top: -6px;left: 5px;" />
+                                                    </h4>
+                                                </a>
+                                                <div class="card-img-top-2 card-img-top">
+                                                    <div class="badges badges-right">
+                                                        <a class="badge badge-warning" href="#"> Valoración: {{curso.Ranking}} <i class="fa fa-star"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-back">
+                                        <div class="card-body">
+                                            <div class="card-back-body-container">
+                                                <h4 class="title">{{curso.Nombre}}</h4>
+                                                <div class="description">{{curso.Descripcion}}</div>
+                                                <div class="form-group">
+                                                    <a class="btn btn-promperu-red service-heading" v-bind:href="'@url_aula/Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId='+curso.CursoOnlineId" role="button">Ingresar</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            *@
+
+
+        </div>
+    </section>
+</div>
+<!-- Nosotros -->
+<section class="page-section animation-element" id="nosotros" style="background-color: #e8eaee;">
+    <div class="container-fluid">
+        <div class="row mw-none">
+            <div class="col-md-6">
+                <h2 class="acerca-de-nosotros">@("nosotros_titulo".Label())</h2>
+                <p class="aula-virtual-es-una">
+                    @("nosotros".Label());
+                </p>
+            </div>
+            <div class="col-md-6 zoom-section">
+                <img src="@Url.GetCmsResourceUrl("assets/sobre-nosotros.jpg")" class="img-fluid" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team -->
+@*<section class="page-section animation-element" id="" style="background-color: #eff2f7;">
+    <div class="container-fluid">
+        <div class="row mw-none">
+            <div class="col-lg-12 text-center">
+                <h2 class="ellos-confian-en-pro">@("confian_en_nosotros".Label())</h2>
+            </div>
+        </div>
+        <div class="row mw-none">
+            <div class="col-sm-4 animatescroll2">
+                <div class="team-member">
+                    <img class="" src="@Url.GetCmsResourceUrl("img/confia/Fill.svg")" alt="">
+                    <h4 class="cursos-homologados-Title">143</h4>
+                    <p class="cursos-homologados">Cursos <br /> Homologados</p>
+                </div>
+            </div>
+            <div class="col-sm-4 animatescroll2">
+                <div class="team-member fadeInUp">
+                    <img class="" src="@Url.GetCmsResourceUrl("img/confia/user.svg")" alt="">
+                    <h4 class="cursos-homologados-Title">823</h4>
+                    <p class="cursos-homologados">Alumnos ya se han <br /> formado con nosotros </p>
+                </div>
+            </div>
+            <div class="col-sm-4 animatescroll2">
+                <div class="team-member fadeInUp">
+                    <img class="" src="@Url.GetCmsResourceUrl("img/confia/medalla.svg")" alt="">
+                    <h4 class="cursos-homologados-Title">10</h4>
+                    <p class="cursos-homologados">Años de <br /> experiencia</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mw-none">
+            @{ var contador = 1; }
+
+            @foreach (var item in testimonios)
+            {
+
+                if (contador == 1)
+                {
+                    @Html.Raw("<div class='row' style='margin-bottom:30px;width:100%'>")
+                }
+
+                <div class="col-md-12 col-sm-12 col-lg-4 style-min">
+                    <div class="item">
+                        <div class="team-meember columnaHeight">
+                            <div class="form-group">
+                                <label>@item.Descripcion</label>
+                            </div>
+                            <div class="row alinear">
+                                <div class="col-md-2">
+                                    <img class="mx-auto rounded-circle" src="@Url.Content(item.Imagen)" alt="@item.Nombre">
+                                </div>
+                                <div class="col-md-5"><p>@item.Nombre</p></div>
+                                <div class="col-md-5"><p class="text-muted">@item.Empresa</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                if (contador % 3 == 0 && !contador.Equals(1))
+                {
+
+                    if (contador == testimonios.Count)
+                    {
+                        @Html.Raw("</div>")
+                    }
+                    else
+                    {
+                        @Html.Raw("</div><div class='row' style='margin-bottom:30px;width:100%'>")
+                    }
+
+                }
+
+                contador++;
+
+            }
+        </div>
+    </div>
+</section>*@
+<!--            SECCION COMENTADA-->
+<section class="page-section sec-certif pulse animated delay-4s animation-element" id="certificate" tabindex="-1" style="background-color: #e8eaee;">
+    <div class="container-fluid">
+        <div class="row mw-none">
+            <div class="col-md-12">
+                <h2 class="certificate text-center">@("certificate_titulo".Label())</h2>
+                <div class="row">
+
+                    @foreach (var item in certificates)
+                    {
+                        <div class="col-md-4 animatescroll">
+                            <div class="col-md-12 text-center">
+                                <img class="mx-auto img_Certificado" src="@Url.Content(item.Imagen)" alt="">
+                            </div>
+                            <div class="col-md-12">
+                                <h2 class="quienes-podran-cert">
+                                    @item.Nombre
+                                </h2>
+                                <p class="quienes-podran-cert_p">
+                                    @item.Sumilla
+                                </p>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 wow slideInRight animation-element">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <p class="recibe-nuestras-ulti">@("recibir_tpq".Label())</p>
+                <label for="">@("recibir_tgr_1".Label()) <br /> @("recibir_tgr_2".Label())</label>
+            </div>
+            <div class="col-md-6 col-sm-6">
+                <div class="input-group md-form form-sm form-2 pl-0" style="padding-top: 3em;">
+                    <input class="form-control my-0 py-1 red-border Espacio-btn" type="text" placeholder="ejemplo@dominio.com" aria-label="Search">
+                    <div class="input-group-append">
+                        <span class="Espacio-btn input-group-text red lighten-3" id="basic-text1" style="overflow: hidden;">@("suscribete")<img class="mx-auto" src="@Url.GetCmsResourceUrl("img/Choose icon.svg")" alt=""></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Contact -->
+<section class="page-section wow slideInRight animation-element" id="contact">
+    <div class="container-fluid">
+        <div class="row mw-none">
+            <div class="col-12">
+                <form id="contactForm" action="Url.FrontUrl().SubmissionUrl("ContactUsFormSubmission")" name="sentMessage">
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        
+                        <div class="col-md-6 text-center">
+                            <div class="form-group">
+                                <h3 class="contactanos">@("contacto_titulo".Label())</h3>
+                                <label class="direccion" for="">@("direccion_titulo".Label())</label>
+                                <label class="san-isidro-lima" for="">@("direccion_1".Label())</label>
+                                <label class="san-isidro-lima mb-60px" for="">@("direccion_2".Label())</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="tu-correo mb-2" for="">@("correo_titulo".Label())</label>
+                                <input type="text" class="form-control mx-auto" placeholder="ejemplo@dominio.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="tu-correo mb-2" for="">@("nombre_titulo".Label())</label>
+                                <input type="text" class="form-control mx-auto" placeholder="">
+                            </div>
+                            <div class=""><label class="tu-correo mb-2" for="">@("mensaje_titulo".Label())</label></div>
+                            <div class="form-group">
+                                <!-- <input type="text" class="form-control txtMensaje" placeholder=""> -->
+                                <textarea name="" id="" cols="30" rows="10" class="mx-auto"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-promperu-red-115px" id="sendMessageButton">@("boton_enviar".Label())</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group"><img class="h-img" src="@Url.GetCmsResourceUrl("assets/mapa-contacto.jpg")" alt=""></div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts{
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js" integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+
+    <script>
+        var $animation_elements = $('.animation-element');
+        var $window = $(window);
+        $window.on('scroll', check_if_in_view);
+        $window.on('scroll resize', check_if_in_view);
+        $window.trigger('scroll');
+
+        function check_if_in_view() {
+            var window_height = $window.height();
+            var window_top_position = $window.scrollTop();
+            var window_bottom_position = (window_top_position + window_height);
+
+            $.each($animation_elements, function () {
+                var $element = $(this);
+                var element_height = $element.outerHeight();
+                var element_top_position = $element.offset().top;
+                var element_bottom_position = (element_top_position + element_height);
+
+                //check to see if this current container is within viewport
+                if ((element_bottom_position >= window_top_position) &&
+                    (element_top_position <= window_bottom_position)) {
+                    $element.addClass('in-view');
+                    $element.find(".animatescroll").addClass("rubberBand");
+                    $element.find(".animatescroll").addClass("animated");
+                    $element.find(".animatescroll").addClass("delay-1s");
+
+                    $element.find(".animatescroll2").addClass("fadeInUp");
+                    $element.find(".animatescroll2").addClass("animated");
+                    $element.find(".animatescroll2").addClass("delay-1s");
+                } else {
+                    $element.removeClass('in-view');
+                    $element.find(".animatescroll").removeClass("rubberBand");
+                    $element.find(".animatescroll").removeClass("animated");
+                    $element.find(".animatescroll").removeClass("delay-1s");
+
+                    $element.find(".animatescroll2").removeClass("fadeInUp");
+                    $element.find(".animatescroll2").removeClass("animated");
+                    $element.find(".animatescroll2").removeClass("delay-1s");
+                }
+            });
+        }
+
+        $(document).ready(function () {
+
+            $("#nosotros").removeAttr("href");
+            $("#modulos").removeAttr("href");
+            $("#certificate").removeAttr("href");
+
+        });
+
+        $(document).ready(function () {
+
+            if ($(window).width() > 767) {
+                $("#subhome1").show();
+                $("#subhome2").hide();
+                $("#submenu1").show();
+                $("#submenu2").hide();
+
+            }
+            else {
+                $("#subhome1").hide();
+                $("#subhome2").show();
+                $("#submenu1").hide();
+                $("#submenu2").show();
+            }
+
+
+            resize_testimonios();
+            
+        });
+
+        $(window).resize(function () {
+            resize_testimonios();
+        });
+
+        function resize_testimonios() {
+
+            var arr_height = [];
+
+            $(".columnaHeight").attr('style', 'height: auto !important');
+
+            if ($(window).width() > 599) {
+                $(".columnaHeight").each(function () {
+
+                    arr_height.push($(this).innerHeight());
+
+                });
+
+                console.log(arr_height);
+
+                $(".columnaHeight").attr('style', 'height: ' + arr_height.sort().reverse()[0] + 'px !important');
+            }
+
+            
+        }
+
+
+
+
+    </script>
+    <script>
+        var currentUrl = '@url_aula';
+        var icononew = "";
+
+        var d = new Date();
+        var dias = 15;
+        d.setDate(d.getDate() - dias);
+
+        month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        var hoy = [year, month, day].join('-');
+
+        function ascrollto(id) {
+            var etop = $('#' + id).offset().top;
+            $('html, body').animate({
+                scrollTop: etop
+            }, 1000);
+        }
+
+        var vueApp = new Vue({
+            el: '#vueApp',
+            data: {
+                message: 'Hello Vue!',
+                fechaMinimoNuevo: hoy,
+                cursos: [],
+                filter: '',
+            },
+            methods: {
+                mostrarCursos: function () {
+                    var vm = this;
+                    $.ajax({
+                        url: currentUrl + '/api/courseapi/lstcursos?filtro=' + this.filter,
+                        success: function (data) {
+                            debugger;
+                            vm.cursos = data;
+                        }
+                    });
+                }
+            },
+            computed: {
+                cursosValoraciones: function () {
+                    debugger;
+                    function compare(a, b) {
+                        if (a.Ranking < b.Ranking)
+                            return 1;
+                        if (a.Ranking > b.Ranking)
+                            return -1;
+                        return 0;
+                    }
+
+                    return this.cursos.slice(0).sort(compare);
+                },
+                cursosRecientes: function () {
+                    debugger;
+                    function compare(a, b) {
+                        if (a.FechaCreacion < b.FechaCreacion)
+                            return 1;
+                        if (a.FechaCreacion > b.FechaCreacion)
+                            return -1;
+                        return 0;
+                    }
+
+                    return this.cursos.slice(0).sort(compare);
+                },
+
+            },
+            mounted: function () {
+                this.mostrarCursos();
+            }
+        });
+
+
+
+        $.ajax({
+            async: false,
+            url: currentUrl + '/api/courseapi/lstcursos',
+
+            success: function (data) {
+                return;
+                _listaMasRecientes = [];
+                _listaMasValoradas = [];
+                _listaRestoCursos = [];
+
+
+                for (i = 0; i < data.length; ++i) {
+
+                    _listaMasRecientes.push(data[i]);
+
+                    _listaMasValoradas.push(data[i]);
+
+                    _listaRestoCursos.push(data[i]);
+
+                }
+
+                _listaMasValoradas.sort(function (a, b) {
+                    if (a.Ranking > b.Ranking) {
+                        return 1;
+                    }
+                    if (a.Ranking < b.Ranking) {
+                        return -1;
+                    }
+                    // a must be equal to b
+                    return 0;
+                });
+
+                _listaMasValoradas.reverse();
+
+                _listaMasRecientes.sort(function (a, b) {
+                    if (a.FechaCreacion > b.FechaCreacion) {
+                        return 1;
+                    }
+                    if (a.FechaCreacion < b.FechaCreacion) {
+                        return -1;
+                    }
+                    // a must be equal to b
+                    return 0;
+                });
+
+                _listaMasRecientes.reverse();
+
+                var html = '';
+
+                html += '<br>';
+
+
+                html += '<div class="tab-content">';
+                ///////////////////Primer Tab////////////////////////////////
+                html += '<div id="home" class="tab-pane active">';
+                html += '<div class="row text-center mw-none mb-5 ">';
+                for (i = 0; i < _listaMasValoradas.length; ++i) {
+
+                    if (_listaMasValoradas[i].FechaCreacion >= hoy) {
+                        icononew = '&nbsp;<i class="fa fa-New"></i>'
+                    }
+                    else {
+                        icononew = "";
+                    }
+
+                    var cursos = currentUrl + 'Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId=' + _listaMasValoradas[i].CursoOnlineId;
+                    html += '<div class="col-md-4">'
+                    html += '<div class="card card-flip h-100">'
+                    html += '<div class="card-front">'
+                    html += '<div class="card-body">'
+                    html += '<a href="' + cursos + '"><img style="border-radius: 5px;width: 100%;" src="' + _listaMasValoradas[i].RutaImagen + '" alt=""></a>'
+                    html += '<a href="' + cursos + '"><h4 class="service-heading">' + _listaMasValoradas[i].Nombre + icononew + '</h4></a>'
+                    html += '<div class="card-img-top-2 card-img-top"><div class="badges badges-right"><a class="badge badge-warning" href="#"> Valoración: ' + _listaMasValoradas[i].Ranking + ' <i class="fa fa-star">						</i></a></div></div>'
+                    html += '</div>'
+                    html += '</div>'
+                    html += '<div class="card-back">'
+                    html += '<div class="card-body">'
+                    html += '<a href="' + cursos + '"><img style="border-radius: 5px;width: 100%;" src="' + _listaMasValoradas[i].RutaImagen + '" alt="">'
+                    html += '<div>' + _listaMasValoradas[i].Nombre + '</div>'
+                    html += '<div>' + _listaMasValoradas[i].Descripcion + '</div>'
+                    html += '<div class="form-group" style="text-align: center;">' +
+                        '      <a class="btn btn-promperu-red service-heading" href="' + cursos + '" role="button">Ingresar</a>' +
+                        '    </div>'
+
+                    html += '</div>'
+                    html += '</div>'
+                    html += '</div>'
+                    html += '</div>'
+                }
+                html += '</div>'
+                html += '</div>'
+                ///////////////////Segundo Tab////////////////////////////////
+                html += '<div id="menu1" class="tab-pane fade">';
+                html += '<div class="row text-center mw-none mb-5 ">';
+                for (i = 0; i < _listaMasRecientes.length; ++i) {
+
+                    if (_listaMasRecientes[i].FechaCreacion >= hoy) {
+                        icononew = '&nbsp;<i class="fa fa-New"></i>'
+                    }
+                    else {
+                        icononew = "";
+                    }
+
+                    var cursos = currentUrl + 'Login/Index?returnUrl=%2FCourse/ViewCursoOnline?CursoOnlineId=' + _listaMasRecientes[i].CursoOnlineId;
+                    html += '<div class="col-md-4">'
+                    html += '<div class="card card-flip h-100">'
+                    html += '<div class="card-front">'
+                    html += '<div class="card-body">'
+                    html += '<a href="' + cursos + '"><img style="border-radius: 5px;width: 100%;" src="' + _listaMasRecientes[i].RutaImagen + '" alt=""></a>'
+                    html += '<a href="' + cursos + '"><h4 class="service-heading">' + _listaMasRecientes[i].Nombre + icononew + '</h4></a>'
+                    html += '<div class="card-img-top-2 card-img-top"><div class="badges badges-right"><a class="badge badge-warning" href="#"> Valoración: ' + _listaMasRecientes[i].Ranking + ' <i class="fa fa-star">						</i></a></div></div>'
+                    html += '</div>'
+                    html += '</div>'
+                    html += '<div class="card-back">'
+                    html += '<div class="card-body">'
+                    html += '<a href="' + cursos + '"><img style="border-radius: 5px;width: 100%;" src="' + _listaMasRecientes[i].RutaImagen + '" alt=""></a>'
+                    html += '<div class="card-img-top-2 card-img-top">'
+                    html += '<div class="badges2 badges-right">'
+                    html += '<p>' + _listaMasRecientes[i].Nombre + " " + _listaMasRecientes[i].FechaCreacion + " " + icononew + '</p>'
+                    html += '<p>' + _listaMasRecientes[i].Descripcion + '</p>'
+                    html += '</div>'
+                    html += '</div>'
+                    html += '<div class="form-group" style="text-align: center;">' +
+                        '      <a class="btn btn-promperu-red service-heading" href="' + cursos + '" role="button">Ingresar</a>' +
+                        '    </div>'
+                    html += '</a>'
+                    html += '</div>'
+                    html += '</div>'
+                    html += '</div>'
+                }
+                html += '</div>'
+
+                html += '</div>'
+                ///////////////////Segundo Tab Fin////////////////////////////////
+                html += '</div>'
+
+                html += '<div class="form-group" style="text-align: center;margin-top: 3em;">' +
+                    '      <a class="btn btn-promperu-red" href="' + currentUrl + 'Login/Index?returnUrl=%2FCourse%2FListCursoOnline" role="button">Ver más cursos</a>' +
+                    '    </div>';
+
+                $('#contenedor-cursos').append(html);
+            },
+            error: function () {
+                console.log('Error');
+            }
+        });
+
+
+
+    </script>
+}

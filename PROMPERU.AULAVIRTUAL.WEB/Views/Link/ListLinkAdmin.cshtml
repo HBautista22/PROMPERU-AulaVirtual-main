@@ -1,0 +1,83 @@
+﻿@model IEnumerable<PROMPERU.AULAVIRTUAL.BE.CURSOS.EnlacesInteres>
+@{
+    ViewBag.Title = "ListLinkAdmin";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Enlaces de Interés</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Enlaces de Interés</h2>
+        </div>
+    </div><!-- /.row -->
+}
+
+<div class="row table-acciones table-content list-empresa">
+    <div class="col-sm-6">
+        <h2>Lista de Enlaces de Interés</h2>
+    </div>
+    <div class="col-sm-6 btns-table">
+        <a class="btn btn-primary" href="@Url.Action("AddEditEnlacesInteres", "Link", new { id = 0 })">Agregar Enlace de Interés</a>
+    </div>
+
+    <div class="content-form-grey w-100">
+        @MessageHelpers.ShowMessages(TempData)
+    </div>
+
+</div>
+<div class="row mis-solicitudes table-content">
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list enlaces-de-interes" align="center">
+            <thead>
+                <tr>
+                    <th>Titulo</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var tipoEmpresa in Model)
+                {
+                    <tr>
+                        <td>@tipoEmpresa.Titulo</td>
+                        <td>@tipoEmpresa.Descripcion</td>
+                        <td>
+                            @*<span class="label-estado completado">@tipoEmpresa.Estado</span>*@
+
+                            <span class="label-estado @(tipoEmpresa.Estado == ConstantHelpers.ESTADO.ACTIVO ? "completado" : tipoEmpresa.Estado  == ConstantHelpers.ESTADO.PENDIENTE ? "pendiente" : "inactivo"  )">@(tipoEmpresa.Estado == ConstantHelpers.ESTADO.ACTIVO ? "Activo" : tipoEmpresa.Estado == ConstantHelpers.ESTADO.PENDIENTE ? "Pendiente" : "Inactivo")</span>
+
+
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Acciones
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li><a class="dropdown-item" href="@Url.Action("AddEditEnlacesInteres", "Link", new { id = tipoEmpresa.EnlaceInteresId })">Editar</a></li>
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("ChangeStateEnlacesInteres", "Link", new { id = tipoEmpresa.EnlaceInteresId })">
+                                            @if (tipoEmpresa.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                                            {
+                                                <text><i class="fa fa-user fa-fw"></i>&nbsp;Activar </text> }
+                                            else
+                                            {
+                                                <text><i class="fa fa-user-times fa-fw"></i>&nbsp;Desactivar </text>}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>

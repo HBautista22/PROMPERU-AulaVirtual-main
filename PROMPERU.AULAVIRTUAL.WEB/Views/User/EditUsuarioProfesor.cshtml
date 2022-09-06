@@ -1,0 +1,160 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.EditUsuarioProfesorViewModel
+
+@{ ViewBag.Title = "EditUsuarioProfesor";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml"; }
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Profesores</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Profesores</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row">
+    <div class="col-lg-12 box-grey-content">
+        <h2>Agregar Profesor</h2>
+        <div class="content-form-grey">
+            <form method="post" id="searchUser">
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(x => x.UsuarioId)
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Nombre(s)</label>
+
+                            @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control", @placeholder = "Ingresar Nombre(s)" })
+                            @Html.ValidationMessageFor(x => x.Nombre)
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Apellidos</label>
+
+                            @Html.TextBoxFor(x => x.Apellido, new { @class = "form-control", @placeholder = "Ingresar Apellidos" })
+                            @Html.ValidationMessageFor(x => x.Apellido)
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Email</label>
+
+                            @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "email@dominio.com" })
+                            @Html.ValidationMessageFor(x => x.Email)
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Contraseña</label>
+
+                            @Html.TextBoxFor(x => x.Password, new { @class = "form-control", @placeholder = "Ingrese contraseña" })
+                            @Html.ValidationMessageFor(x => x.Password)
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Departamento</label>
+
+                            @Html.DropDownListFor(x => x.Departamento, new SelectList(Model.LstDepartamento, "DepartamentoId", "Nombre"), "- Seleccionar -", new { @id = "cbodepartamento", @class = "departamento form-control form-control-select form-select" })
+                            @Html.ValidationMessageFor(x => x.Departamento)
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Provincia</label>
+
+                            @Html.DropDownListFor(x => x.Provincia, new SelectList(Model.LstProvincia, "ProvinciaId", "Nombre"), "- Seleccionar -", new { @id = "cboprovincia", @class = "provincia form-control form-control-select form-select" })
+                            @Html.ValidationMessageFor(x => x.Provincia)
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Distrito</label>
+
+                            @Html.DropDownListFor(x => x.Region, new SelectList(Model.LstDistrito, "DistritoId", "Nombre"), "- Seleccionar -", new { @id = "Region", @class = "distrito form-control form-control-select form-select" })
+                            @Html.ValidationMessageFor(x => x.Region)
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group file-avatar">
+                            <label for="">Avatar</label>
+                            @Html.TextBoxFor(x => x.Avatar, new { @class = "d-none" })
+                            <div class="type2">
+                                <label class="input-file">
+                                    Seleccionar
+                                    <input type="file" id="upload">
+                                    <span class="file-choose-btn">Examinar</span>
+                                </label>
+
+                            </div>
+                            <div id="upload-message"></div>
+                            <p class="note">Tamaño recomendado: 500 px por 500 px (.png / .jpg)</p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="">Descripción</label>
+
+                            @Html.TextAreaFor(x => x.Descripcion, new { @class = "form-control", @rows = "7" })
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="icheck-primary activo-2">
+                                @Html.CheckBoxFor(m => m.Estado, new { @checked = "checked" })
+                                <label for="Estado">
+                                    ¿Está activo?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="col-sm-12">
+                <div class="form-group">
+                    <div class="icheck-primary activo-2">
+                        <input type="checkbox" id="activo" name="activo">
+                        <label for="activo">
+                            ¿Está activo?
+                        </label>
+                    </div>
+                </div>
+            </div>*@
+
+
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-btn">
+                        <input type="submit" class="btn btn-primary" value="Guardar">
+
+                        <a class="btn btn-secondary" href="@Url.Action("ListUsuarioProfesor", "User")">Cancelar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script src="~/Scripts/uploads.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            
+            $("#upload").on("change", function (e) {
+                console.log('change file');
+                upload_image($(this), "#Avatar", "#upload-message");
+            });
+
+          
+        })
+    </script>
+}

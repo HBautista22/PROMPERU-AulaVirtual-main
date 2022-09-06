@@ -1,0 +1,58 @@
+﻿@{
+    var analytics = ConvertHelpers.GetAppSeting("EVOL.Analytics");
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>PROMPERU</title>
+
+    <!-- Bootstrap core CSS -->
+    @RazorHelpers.Content("landing/vendor/bootstrap/css/bootstrap.min.css", Url)
+    @RazorHelpers.Content("landing/vendor/owlcarousel/assets/owl.carousel.min.css", Url)
+    @RazorHelpers.Content("landing/vendor/owlcarousel/assets/owl.theme.default.min.css", Url)
+    @RazorHelpers.Content("landing/css/docs.theme.min.css", Url)
+
+    <!-- Custom fonts for this template -->
+    @RazorHelpers.Content("font/fonts.css", Url)
+    @RazorHelpers.Content("landing/vendor/fontawesome-free/css/all.min.css", Url)
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Karla" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    @RazorHelpers.Content("landing/css/agency.min.css", Url)
+    @RazorHelpers.Content("landing/css/responsive.css", Url)
+    @RenderSection("Styles", false)
+</head>
+
+<body id="page-top">
+    @RenderBody()
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" integrity="sha512-UdIMMlVx0HEynClOIFSyOrPggomfhBKJE28LKl8yR3ghkgugPnG6iLfRfHwushZl1MOPSY6TsuBDGPK2X4zYKg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js" integrity="sha512-EanukVTZc4W9tUCLnDl069Izidg49PcNRKO1upLzKt9ajq66i+bXOtlzXcIbRhb6vVEGF6BCc8wQi5T1ztCpTQ==" crossorigin="anonymous"></script>
+    @RazorHelpers.Content("landing/vendor/bootstrap/js/bootstrap.bundle.min.js", Url)
+    @RazorHelpers.Content("landing/vendor/jquery-easing/jquery.easing.min.js", Url)
+    @RazorHelpers.Content("landing/vendor/owlcarousel/owl.carousel.js", Url)
+    @RazorHelpers.Content("landing/js/jqBootstrapValidation.js", Url)
+    @RazorHelpers.Content("landing/js/contact_me.js", Url)
+    @RazorHelpers.Content("landing/js/agency.min.js", Url)
+
+    <script>
+        $(function ()
+        {
+            setTimeout(function () { $('.alert').hide('slow') }, 3000);
+        })
+    </script>
+    @RenderSection("Scripts", false)
+</body>
+
+</html>

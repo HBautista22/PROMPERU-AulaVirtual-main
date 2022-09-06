@@ -1,0 +1,86 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Evaluation.ResultEvaluacionCursoOnlineViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+    ViewBag.Title = "Resutado de la Pruebas";
+    var porcentajeObtenido = (Model.EvaluacionCursoOnline.PuntajeObtenido / Model.EvaluacionCursoOnline.PuntajeTotal) * 100;
+
+}
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("ListCursoOnline", "Course")">Cursos</a></li>
+                <li class="breadcrumb-item active"><a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = Model.CursoOnline.CursoOnlineId })">@Model.CursoOnline.Nombre</a></li>
+            </ol>
+        </div>
+    </div><!-- /.row -->
+}
+
+<div class="container-fluid container-fixed-lg">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="invoice padding-50 sm-padding-10 border-0">
+                <div>
+                    <div class="pull-left">
+                        <h2><i class="fa fa-file-alt"></i>&nbsp;@Model.UnidadCursoOnline.Nombre</h2>
+                    </div>
+                    <div class="pull-right">
+                        @{var tiempoRealizado = (Model.EvaluacionCursoOnline.FechaFin - Model.EvaluacionCursoOnline.FechaInicio);}
+                        <h3>Tiempo Realizado <span class="time" style="font-size: 120%">@tiempoRealizado.Value.ToString("h\\:mm\\:ss")</span>&nbsp;<i class="fa fa-clock-o"></i></h3>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <br>
+                <div class="container-sm-height">
+                    <div class="row-sm-height">
+                        <div class="col-md-9 col-sm-height sm-no-padding">
+                            <h4 class="semi-bold m-t-0">@Session.GetNombreCompleto()</h4>
+                        </div>
+                        <div class="col col-sm-height col-bottom sm-no-padding sm-p-b-20">
+                            <div class="pull-right">
+                                <h4 class="semi-bold m-t-0 pb-4">Numero de Intentos : @Model.NumeroIntentos</h4>
+                            </div>
+                            <div class="pull-right">
+                                @if (porcentajeObtenido < Model.EvaluacionCursoOnline.PorcentajeAprobacion)
+                                {
+                                    <a class="btn btn-primary" href="@Url.Action("DoEvaluacionCursoOnline", "Evaluation", new { UnidadCursoOnlineId = Model.UnidadCursoOnlineId, CursoOnlineId = Model.CursoOnline.CursoOnlineId })"><i class="fa fa-check"></i>&nbsp;Reintentar</a>
+                                }
+                            </div>
+                            <br />
+                            <br />
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="container-sm-height">
+                    <div class="row row-sm-height b-a b-grey">
+                        <div class="col-sm-4 col-sm-height col-middle p-l-25 sm-p-t-15 sm-p-l-15 clearfix sm-p-b-15">
+                            <h5 class="font-montserrat all-caps small no-margin hint-text bold">Puntaje Total</h5>
+                            <h3 class="no-margin">@Model.EvaluacionCursoOnline.PuntajeObtenido / <strong>@Model.EvaluacionCursoOnline.PuntajeTotal</strong> </h3>
+                        </div>
+                        <div class="col-sm-4 col-sm-height col-middle clearfix sm-p-b-15">
+                            <h5 class="font-montserrat all-caps small no-margin hint-text bold">Porcentaje Obtenido</h5>
+                            <h3 class="no-margin">@(Model.EvaluacionCursoOnline.Nota /*Model.EvaluacionCursoOnline.PorcentajeAprobacion * 100*/) % </h3>
+                        </div>
+                        <div class="col-sm-4 text-right col-sm-height padding-15">
+                            <h5 class="font-montserrat all-caps small no-margin hint-text bold">Resultado</h5>
+
+
+                            <h3 class="p-b-5 label @( porcentajeObtenido >= Model.EvaluacionCursoOnline.PorcentajeAprobacion ? "label-success" : "label-danger")">@( porcentajeObtenido >= Model.EvaluacionCursoOnline.PorcentajeAprobacion ? "Aprobado" : "Desaprobado") </h3>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="pull-right">
+                    <a class="btn btn-primary" href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = Model.CursoOnline.CursoOnlineId, MatriculaCursoOnlineId = Model.MatriculaCursoOnline.MatriculaCursoOnlineId })">Regresar al Curso</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

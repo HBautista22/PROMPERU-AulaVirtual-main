@@ -1,0 +1,86 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Report.ReportAsesoriaRemotaViewModel
+@{
+                /**/
+
+                ViewBag.Title = "Reporte histórico de Asesorias";
+                ViewBag.Seccion = "Reportes";
+                ViewBag.SubSeccion = "Alumnos";
+                var parameters = new RouteValueDictionary(new
+                {
+                    Type = string.Empty
+                });
+}
+@*@section Breadcrumbs{
+    }*@
+@section Jumbotron{
+    <div class="container-fluid container-lg sm-p-l-20 sm-p-r-20 full-height m-b-40">
+        <h4 class="m-b-20 usuarios">@ViewBag.Title</h4>
+        <div class="inner full-height" style="transform: translateY(0px); opacity: 1;">
+            <form class="form" method="POST" action="@Url.Action("ReportAsesoriaRemota", "Report")">
+                <div class="col-md-12 m-b-30 text-right">
+                    <div class="btn-group dropdown-default">
+                        <button type="button" class="btn dropdown-toggle text-center base" data-toggle="dropdown" style="width: 170px !important;height: auto !important;"> DESCARGAR @*<i class='fa fa-chevron-down dropdown-toggle m-l-20' data-toggle="dropdown" style="cursor:pointer"></i>*@</button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="btnGroupOpciones">
+                            <li>
+                                <a href="@Url.Action("DownloadReportAsesoriaRemota", "Report", new { Type = "PDF" })"><i class="fa fa-users"></i>&nbsp;PDF</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("DownloadReportAsesoriaRemota", "Report", new { Type = "EXCEL" })"><i class="fa fa-users"></i>&nbsp;EXCEL</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+<div class="container-fluid container-fixed-lg">
+    <div class="panel panel-default">
+        @*<div class="panel-heading">
+                <div class="panel-title">
+                    <h4 class="m-t-0 m-b-0"><i class="fa fa-@ViewBag.Icon"></i>&nbsp;@ViewBag.Title</h4>
+                </div>
+                <div class="clearfix"></div>
+            </div>*@
+        <div class="panel-body">
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline no-footer" id="basicTable_wrapper">
+                    <table role="grid" class="table table-hover dataTable no-footer">
+                        <thead>
+                            <tr>
+                               
+
+                                <th class="title-table">Asesoria</th>
+                                <th class="title-table">Asesor</th>
+                                <th class="title-table">Apellido</th>
+                                <th class="title-table">Email Asesor</th>
+                                <th class="title-table">Cargo Asesor</th>
+                                <th class="title-table">Inicio</th>
+                                <th class="title-table">Fin</th>
+                                <th class="title-table">Estado Asesoria</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var registro in Model.LstViewReporteAsesoriaRemota)
+                            {
+                            <tr>
+                                <td class="text-table">@registro.Asre_Nombre</td>
+                                <td class="text-table">@registro.Nombre</td>
+                                <td class="text-table">@registro.Apellido</td>
+                                <td class="text-table">@registro.Email</td>
+                                <td class="text-table">@registro.Cargo</td>
+                                <td class="text-table">@registro.Asre_Inicio</td>
+                                <td class="text-table">@registro.Asre_Fin</td>
+                                <td class="text-table">@registro.Asre_Estado</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model.LstViewReporteAsesoriaRemota, page => Url.Action("ReportAsesoriaRemota"), ConstantHelpers.Bootstrap3Pager)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,423 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Home.AlumnoIndexViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+    ViewBag.Header = "<div class='col-sm-6'><h2 class='m-0'>¡Bienvenido!</h2></div>";
+    ViewBag.SubSeccion = "Index";
+}
+
+<div class="row mb-2">
+    <!-- Left col -->
+    <section class="col-lg-12">
+        <div class="card">
+            <div class="card-body info-alumno">
+                <div class="foto-perfil">
+                    <div class="foto">
+                        <img id="profile" src="@Url.GetCmsResourceUrl("assets/images/user.png")" alt="">
+                    </div>
+                </div>
+                <div class="datos-usuario">
+                    <div class="header">
+                        <h2>@Session.GetNombreCompleto()</h2>
+                        <a href="@Url.Action("ViewPerfil", "User", new { UsuarioId = Session.GetUsuarioId() })">
+                            <i class="fas fa-cog"></i>
+                        </a>
+                    </div>
+
+                    @if (Model.Usuario.EmpresaId != 0)
+                    {
+                        <h3 class="empresa">Empresa: @Model.Usuario.Empresa.RazonSocial</h3>
+                    }
+
+                    <p class="perfil">@Html.Raw(Model.Usuario.Rol == "ALU" ? "Alumno" : Html.Raw(Model.Usuario.Rol == "ADM" ? "Administrador" : "Asesor").ToString())</p>
+                </div>
+            </div>
+        </div>
+        <!-- /.card -->
+    </section>
+    <section class="col-lg-12 titular">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6 title-section">
+                    <h2 class="m-0">Mis cursos</h2>
+                </div>
+                <div class="col-sm-6 option-views">
+                    <button type="button" class="btn btn-tool vista-lista">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool vista-grid active">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                </div>
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="col-lg-12">
+        <!-- .card -->
+        <div class="content-mis-cursos">
+            <div class="slider-mis-cursos">
+
+
+
+                @foreach (var matricula in Model.LstMatriculaActual)
+                {
+                    var curso = matricula.CursoOnline;
+                    <div class="item-card mas-valorados eventos-webinar categoria-3">
+                        <div class="favorite-card">
+                            <input id="favorite-@curso.CursoOnlineId" type="checkbox" class="chkfavorito" name="favorito" @(curso.EstadoFavorito == true ? "checked" : "")>
+                            <label for="favorite-@curso.CursoOnlineId">
+                                <i class="far fa-heart"></i>
+                            </label>
+                        </div>
+                        @*<a href="#"></a>*@
+                        <a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = curso.CursoOnlineId,MatriculaCursoOnlineId = matricula.MatriculaCursoOnlineId })"></a>
+                        <div class="image">
+                            @{ var imageOld = Url.Content("~/Content/recursos/" + curso.RutaImagen);
+                                var imageCurso = Url.Content(curso.RutaImagen);
+                                //var image = "https://via.placeholder.com/360x140.png?text=360x140";
+                                var image = Url.Content("~/Content/recursos/default-image-360x140.png");
+                                var absolutePathOld = HttpContext.Current.Server.MapPath(imageOld);
+                                var absolutePathNew = HttpContext.Current.Server.MapPath(imageCurso);
+
+                                if (System.IO.File.Exists(absolutePathOld))
+                                {
+                                    image = imageOld;
+                                }
+                                else if (System.IO.File.Exists(absolutePathNew))
+                                {
+                                    image = imageCurso;
+                                }
+                            }
+
+                            @*<img src="@Url.GetCmsResourceUrl("assets/images/cards/card_curso_1.png")" alt="@curso.Nombre">*@
+
+                            <img src="@image" alt="@curso.Nombre">
+                        </div>
+                        <div class="body-card">
+                            <h2>@curso.Nombre</h2>
+                            <div class="calification">
+                                <p>
+                                    <i class="@(curso.Calificacion  >= 1 ? "fas" : "far"  ) fa-star"></i>
+                                    <i class="@(curso.Calificacion  >= 2 ? "fas" : "far"  ) fa-star"></i>
+                                    <i class="@(curso.Calificacion  >= 3 ? "fas" : "far"  ) fa-star"></i>
+                                    <i class="@(curso.Calificacion  >= 4 ? "fas" : "far"  ) fa-star"></i>
+                                    <i class="@(curso.Calificacion  >= 5 ? "fas" : "far"  ) fa-star"></i>
+                                </p>
+
+
+                                <span>@curso.CantidadCalificacion calificaciones</span>
+                            </div>
+                            <p>
+
+
+
+                                @if (curso.Descripcion.Length > 150)
+                                {
+                                    <text>
+                                        @curso.Descripcion.Substring(0, 150)...
+                                    </text>
+                                }
+                                else
+                                {
+                                    <text>
+                                        @curso.Descripcion.ToString()
+                                    </text>
+                                }
+                            </p>
+                            <div class="footer-card">
+                                <span class="btns-card">Ingresar <i class="fas fa-chevron-right"></i></span>
+                                <div class="porcentaje-avance">
+                                    <span class="num">@matricula.PorcentajeAvance</span>
+                                    <span class="bar bar-50"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                }
+
+
+            </div>
+            <div class="list-cards" style="display: none;">
+                <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tbody>
+
+
+
+                        @foreach (var matricula in Model.LstMatriculaActual)
+                        {
+                            var curso = matricula.CursoOnline;
+
+                            <tr>
+                                <td width="21%">
+                                    <div class="image-curso">
+
+                                        @{ var imageOld = Url.Content("~/Content/recursos/" + curso.RutaImagen);
+                                            var imageCurso = Url.Content(curso.RutaImagen);
+                                            var image = "https://via.placeholder.com/360x140.png?text=360x140";
+                                            var absolutePathOld = HttpContext.Current.Server.MapPath(imageOld);
+                                            var absolutePathNew = HttpContext.Current.Server.MapPath(imageCurso);
+
+                                            if (System.IO.File.Exists(absolutePathOld))
+                                            {
+                                                image = imageOld;
+                                            }
+                                            else if (System.IO.File.Exists(absolutePathNew))
+                                            {
+                                                image = imageCurso;
+                                            }
+                                        }
+
+                                        @*<img src="@Url.GetCmsResourceUrl("assets/images/cards/card_curso_1.png")" alt="@curso.Nombre">*@
+
+                                        <img src="@image" alt="@curso.Nombre">
+
+
+                                    </div>
+                                </td>
+                                <td width="7%">
+                                    <div class="tags">
+                                    </div>
+                                </td>
+                                <td width="19%">
+                                    <h2>@curso.Nombre</h2>
+                                </td>
+                                <td width="30%">
+                                    <p>@curso.Descripcion</p>
+                                </td>
+                                <td width="13%">
+                                    <div class="calification">
+                                        <p>
+                                            <i class="@(curso.Calificacion  >= 1 ? "fas" : "far"  ) fa-star"></i>
+                                            <i class="@(curso.Calificacion  >= 2 ? "fas" : "far"  ) fa-star"></i>
+                                            <i class="@(curso.Calificacion  >= 3 ? "fas" : "far"  ) fa-star"></i>
+                                            <i class="@(curso.Calificacion  >= 4 ? "fas" : "far"  ) fa-star"></i>
+                                            <i class="@(curso.Calificacion  >= 5 ? "fas" : "far"  ) fa-star"></i>
+                                        </p>
+                                    </div>
+                                </td>
+                                <td width="13%">
+                                    <a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = curso.CursoOnlineId,MatriculaCursoOnlineId = matricula.MatriculaCursoOnlineId })" class="btns-card">Ingresar <i class="fas fa-chevron-right"></i></a>
+
+
+
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- /.card -->
+    </section>
+    <!-- /.Left col -->
+    <section class="col-lg-12 section-cards-grey">
+        <div class="row">
+            <div class="col-sm-6 info-cursos grey-box">
+                <div class="header-card">
+                    <h2>Información sobre tus cursos</h2>
+                </div>
+                <div class="body-card">
+                    <div class="card-tabs">
+                        <div class="card-header p-0 pt-1">
+                            <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="curso-proceso-tab" data-toggle="pill" href="#curso-proceso" role="tab" aria-controls="curso-proceso" aria-selected="true">En proceso</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="curso-terminado-tab" data-toggle="pill" href="#curso-terminado" role="tab" aria-controls="curso-terminado" aria-selected="false">Terminados</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link " id="curso-certificado-tab" data-toggle="pill" href="#curso-certificado" role="tab" aria-controls="curso-certificado" aria-selected="false">Certificados</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="custom-tabs-one-tabContent">
+                                <div class="tab-pane fade active show" id="curso-proceso" role="tabpanel" aria-labelledby="curso-proceso-tab">
+                                    <!-- <p class="unfinished">Aún no has iniciado ningún curso</p> -->
+                                    <ul>
+                                        @foreach (var matricula in Model.LstMatriculaActual)
+                                        {
+
+                                            if (matricula.PorcentajeAvance > 0 & matricula.PorcentajeAvance < 100)
+                                            {
+                                                <li>
+                                                    <div class="det-list">
+                                                        <p><a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = matricula.CursoOnline.CursoOnlineId,MatriculaCursoOnlineId = matricula.MatriculaCursoOnlineId })"> @matricula.CursoOnline.Nombre</a></p>
+                                                        <div class="actions">
+                                                            <a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = matricula.CursoOnline.CursoOnlineId,MatriculaCursoOnlineId = matricula.MatriculaCursoOnlineId })" class="btn-list materiales"><span class="icon"></span> Ingresar</a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+
+                                        }
+
+
+                                    </ul>
+                                </div>
+                                <div class="tab-pane fade" id="curso-terminado" role="tabpanel" aria-labelledby="curso-terminado-tab">
+                                    <!-- <p class="unfinished">Aún no finalizado ningún curso</p> -->
+                                    <ul>
+
+                                        @foreach (var matricula in Model.LstMatriculaActual)
+                                        {
+
+                                            if (matricula.PorcentajeAvance == 100)
+                                            {
+                                                <li>
+                                                    <div class="det-list">
+
+                                                        <p><a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = matricula.CursoOnline.CursoOnlineId,MatriculaCursoOnlineId = matricula.MatriculaCursoOnlineId })"> @matricula.CursoOnline.Nombre</a></p>
+                                                        <div class="actions">
+                                                            <a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = matricula.CursoOnline.CursoOnlineId,MatriculaCursoOnlineId = matricula.MatriculaCursoOnlineId })" class="btn-list calificaciones"><span class="icon"></span>Ingresar</a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+
+
+
+                                    </ul>
+                                </div>
+                                <div class="tab-pane fade" id="curso-certificado" role="tabpanel" aria-labelledby="curso-certificado-tab">
+
+                                    @if (Model.certificados.Count() > 0)
+                                    {
+                                        <ul>
+                                            @foreach (var certificado in Model.certificados)
+                                            {
+                                                <li>
+                                                    <div class="det-list">
+                                                        <p><a href="#">@certificado.Nombre</a></p>
+                                                        <div class="actions">
+
+
+
+                                                            @{
+                                                                Boolean puedeDescargarCertificado = false;
+                                                                String Estado = ConstantHelpers.ESTADO_MATRICULA.PENDIENTE;
+
+                                                                if (certificado.PorcentajeAvance == 100)
+                                                                {
+                                                                    Estado = ConstantHelpers.ESTADO_MATRICULA.COMPLETADO;
+                                                                }
+
+                                                                if (certificado.PorcentajeObtenido >= 70)
+                                                                {
+                                                                    puedeDescargarCertificado = true;
+                                                                }
+
+                                                            }
+                                                            @if (puedeDescargarCertificado)
+                                                            {
+
+
+                                                                <a href="@(puedeDescargarCertificado ? Url.Action("DownloadCertificadoAlumno", "Document", new { CursoOnlineMaestroId = certificado.CursoOnlineMaestroId, UsuarioId = Model.UsuarioId }) : "#")" class="btn-list ver-cert" target="_blank"><span class="icon"></span> Ver</a>
+                                                                <a href="@(puedeDescargarCertificado ? Url.Action("DownloadCertificadoAlumno", "Document", new { CursoOnlineMaestroId = certificado.CursoOnlineMaestroId, UsuarioId = Model.UsuarioId }) : "#")" class="btn-list down-cert" target="_blank"><span class="icon"></span> Descargar</a>
+
+                                                            }
+
+
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+
+
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <p class="unfinished">Aún no tienes certificados</p>
+                                    }
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 favoritos grey-box">
+                <div class="header-card">
+                    <h2>Favoritos</h2>
+                </div>
+                <div class="body-card">
+                    <ul>
+                        @foreach (var favorito in Model.oCursoOnlineFavorito)
+                        {
+                            <li>
+                                <div class="det-list">
+                                    <p>@favorito.CursoOnline.Nombre</p>
+                                    <div class="actions">
+                                        <a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = favorito.CursoOnlineId,disponible = true })" class="btn-list materiales"><span class="icon"></span> Ingresar</a>
+                                        <div class="favorite-card">
+                                            <i class="far fa-heart"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+
+
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="col-lg-12">
+
+        <div class="row">
+            <div class="col-sm-6 categorias grey-box">
+                <div class="header-card">
+                    <h2>Categorías</h2>
+                </div>
+                <div class="body-card">
+                    <div class="categorias-actuales">
+                        @foreach (var categoria in Model.CategoriaCurso)
+                        {
+                            <span>@categoria.Nombre</span>
+                            
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-6 ultimos-vistos grey-box">
+                <div class="header-card">
+                    <h2>Últimos cursos vistos</h2>
+                </div>
+                <div class="body-card">
+                    <ul>
+                        @foreach (var cursosVistos in Model.oCursoOnlineVisto)
+                        {
+                            <li>
+                                <div class="det-list card">
+                                    <p>@cursosVistos.CursoOnline.Nombre</p>
+                                    <div class="actions">
+                                        <a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = cursosVistos.CursoOnlineId,disponible = true })" class="btn-list">Ingresar</a>
+                                        <button type="button" class="btn bg-info btn-sm eliminar" data-card-widget="remove">
+                                            <img src="@Url.GetCmsResourceUrl("assets/images/iconos/eliminar.png")">
+                                        </button>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@section Scripts{
+    <script src="~/Content/assets/js/backend/favorito.js"></script>
+}

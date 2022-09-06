@@ -1,0 +1,9 @@
+﻿@model Decimal?
+
+<div class="form-group">
+    @Html.LabelForModel(new { @class="col-sm-3 control-label"})
+    <div class="col-sm-5">
+        @Html.TextBoxFor(x => x, new { @class="form-control"})
+        @Html.ValidationMessageFor(x => x)
+    </div>
+</div>

@@ -1,0 +1,73 @@
+﻿
+@{ ViewBag.GUID = ViewBag.GUID ?? Guid.NewGuid().ToString();
+
+                var hasModalForm = ViewBag.Form != null && ViewBag.Form is ModalFormHelpers;
+                var hasAjaxModalForm = ViewBag.Form != null && ViewBag.Form is ModalAjaxFormHelpers;
+
+                if (hasAjaxModalForm && String.IsNullOrEmpty(ViewBag.Form.AjaxOptions.UpdateTargetId))
+                {
+                    ViewBag.Form.AjaxOptions.UpdateTargetId = ViewBag.GUID;
+                } }
+
+<div id="@ViewBag.GUID">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h5>
+            @if (ViewBag.Icon != null)
+            {
+<i class="@ViewBag.Icon contrast">&nbsp;</i>            }
+            @ViewBag.Title
+        </h5>
+    </div>
+
+    @MessageHelpers.ShowMessages(TempData, "margin-bottom: 0px;")
+
+
+    @if (hasModalForm)
+    {
+<text>@{ViewBag.Form.BeginForm(Html);}</text> }
+            else if (hasAjaxModalForm)
+            {
+<text>@{ViewBag.Form.BeginForm(Ajax);}</text>}
+
+    <div class="modal-body">
+        @RenderBody()
+    </div>
+
+    <div class="modal-footer">
+        @if (ViewBag.DeshabilitarCerrarFooter == null || !ViewBag.DeshabilitarCerrarFooter)
+        {
+<button class="btn" data-dismiss="modal">Cerrar</button>}
+        @RenderSection("Footer", false)
+    </div>
+
+    @if (ViewBag.Form != null || ViewBag.AjaxForm != null)
+    {
+        Html.EndForm();
+    }
+</div>
+
+@RazorHelpers.Content("assets/plugins/dropzone/dropzone.min.js", Url)
+<script id="rebind-jquery-@ViewBag.GUID">
+    RebindJquery($('#rebind-jquery-@ViewBag.GUID').closest('.modal'));
+</script>
+
+@if (ViewBag.ModalDialogClass != null)
+{
+<script id="modal-dialog-class-@ViewBag.GUID">
+        $('#@ViewBag.GUID').closest('.modal-dialog').addClass('@ViewBag.ModalDialogClass');
+</script>}
+
+@if (ViewBag.ModalClass != null)
+{
+<script id="modal-class-@ViewBag.GUID">
+        $('#@ViewBag.GUID').closest('.modal').addClass('@ViewBag.ModalClass');
+</script>}
+
+@if (ViewBag.ModalSize != null)
+{
+<script>
+        $('.modal-dialog').addClass('modal-@ViewBag.ModalSize');
+</script>}
+@RenderSection("Scripts", false)

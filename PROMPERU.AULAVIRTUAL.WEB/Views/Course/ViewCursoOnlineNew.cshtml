@@ -1,0 +1,549 @@
+﻿@using PROMPERU.AULAVIRTUAL.BE.CURSOS
+@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ViewCursoOnlineViewModel
+@{
+    ViewBag.Title = "ViewCursoOnlineNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+
+    bool esAdministrador = Session.GetRol() == AppRol.Administrador;
+    bool esSupervisor = Session.GetRol() == AppRol.Supervisor;
+
+    bool estaDisponible = Model.EstaDisponible;
+    bool estaMatriculado = Model.MatriculaCursoOnline != null;
+    bool puedeDescargarCertificado = false;
+
+    if (Model.CursoOnline.TieneExamen == ConstantHelpers.ESTADO.ACTIVO)
+    {
+        puedeDescargarCertificado = estaMatriculado && Model.SeCompletoEvaluacionesSatisfactoriamente && Model.MatriculaCursoOnline.Estado.Equals(ConstantHelpers.ESTADO_MATRICULA.APROBADO);
+    }
+    else
+    {
+        puedeDescargarCertificado = estaMatriculado && Model.MatriculaCursoOnline.Estado.Equals(ConstantHelpers.ESTADO_MATRICULA.APROBADO);
+    }
+
+    bool puedeHacerEvaluacion = estaMatriculado && Model.MatriculaCursoOnline.PorcentajeAvance >= 100 && !Model.MatriculaCursoOnline.Estado.Equals(ConstantHelpers.ESTADO_MATRICULA.APROBADO);
+
+    DateTime? fechaLimiteMatricula = null;
+
+    if (estaMatriculado)
+    {
+        fechaLimiteMatricula = Model.MatriculaCursoOnline.FechaMatricula.AddDays(60);
+    }
+}
+<div class="row">
+    <!-- Left col -->
+    <section class="col-sm-6">
+        <div class="info-content">
+            <h2>@Model.CursoOnline.Nombre</h2>
+            <div class="content-card solo-mobile">
+                <div class="favorite-card">
+                    <input id="favorite-1" type="checkbox" name="favorito" @(Model.CursoOnline.EstadoFavorito == true ? "checked" : "")>
+                    <label for="favorite-1">
+                        <i class="far fa-heart"></i>
+                    </label>
+                </div>
+                <div class="card-curso">
+                    @{ 
+                        string imageOld = Url.Content("~/Content/recursos/" + Model.CursoOnline.RutaImagen);
+                        string imageCurso = Html.Raw(Model.CursoOnline.RutaImagen != null ? Url.Content(Model.CursoOnline.RutaImagen) : "").ToString() ;
+                        string image = "https://via.placeholder.com/728x180.png?text=Banner";
+
+                        try
+                        {
+                            string absolutePathOld = HttpContext.Current.Server.MapPath(imageOld);
+                            string absolutePathNew = HttpContext.Current.Server.MapPath(imageCurso);
+
+                            if (System.IO.File.Exists(absolutePathOld))
+                            {
+                                image = imageOld;
+                            }
+                            else if (System.IO.File.Exists(absolutePathNew))
+                            {
+                                image = imageCurso;
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            /**/
+                        }
+                    }
+
+                    <img src="@image" alt="">
+                </div>
+            </div>
+            <div class="calification">
+                <p>
+                    <i class="@(Model.CursoOnline.Calificacion  >= 1 ? "fas" : "far"  ) fa-star"></i>
+                    <i class="@(Model.CursoOnline.Calificacion  >= 2 ? "fas" : "far"  ) fa-star"></i>
+                    <i class="@(Model.CursoOnline.Calificacion  >= 3 ? "fas" : "far"  ) fa-star"></i>
+                    <i class="@(Model.CursoOnline.Calificacion  >= 4 ? "fas" : "far"  ) fa-star"></i>
+                    <i class="@(Model.CursoOnline.Calificacion  >= 5 ? "fas" : "far"  ) fa-star"></i>
+                </p>
+                <strong>@Model.CursoOnline.Calificacion</strong>
+                <span>@Model.CursoOnline.CantidadCalificacion calificaciones</span>
+            </div>
+            <div class="descripcion">
+                <span>Descripción</span>
+                <p>@Html.Raw(Model.CursoOnline.Descripcion)</p>
+            </div>
+
+
+            @if (Model.Profesor != null)
+            {
+                <div class="asesor">
+                    <span>Dictado por:</span>
+                    <div class="asesor-content">
+                        <div class="foto-asesor">
+                            @if (string.IsNullOrEmpty(Model.Profesor.Avatar))
+                            {
+                                <img src="@Url.Content("~/Content/assets/images/asesor.png")" alt=""/> }
+                            else
+                            {
+                                <img src="@Url.Content(Model.Profesor.Avatar)" class="img-responsive teacher-avatar" alt=""/>
+                            }
+
+                        </div>
+                        <div class="info-asesor">
+                            <div class="card bg-gradient-info">
+                                <div class="card-header border-0 ui-sortable-handle" style="cursor: move;">
+                                    <h3 class="card-title">
+                                        @Model.Profesor.Nombre
+                                    </h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="card-body" style="display: block;">
+                                    <p>@Model.Profesor.Descripcion</p>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (estaMatriculado)
+            {
+                <span href="#" class="btn btn-primary inscrito">Ya estás inscrito</span>
+
+            }
+            else
+            {
+                <a href="@Url.Action("RegisterUsuarioMatriculaCursoOlnile", "Enrollment", new { CursoOnlineId = Model.CursoOnlineId })" class="btn btn-primary">Inscribirme</a>
+            }
+            @if (estaMatriculado)
+            {
+                <a href="@Url.Action("ViewCursoOnlineEncuesta", "Course", new { CursoOnlineId = @Model.CursoOnlineId, matriculaCursoOnlineId=Model.MatriculaCursoOnlineId })" class="btn btn-primary">Encuesta</a>
+            }
+        </div>
+    </section>
+    <section class="col-sm-6 solo-desktop">
+        <div class="content-card">
+            <div class="favorite-card">
+                <input id="favorite-1" type="checkbox" name="favorito" @(Model.CursoOnline.EstadoFavorito == true ? "checked" : "")>
+                <label for="favorite-1">
+                    <i class="far fa-heart"></i>
+                </label>
+            </div>
+            <div class="card-curso">
+                @*<img src="../../../assets/images/cards/card_curso_1.png">*@
+
+                @{ var imageOld2 = Url.Content("~/Content/recursos/" + Model.CursoOnline.RutaImagen);
+                    var imageCurso2 = Html.Raw(Model.CursoOnline.RutaImagen != null ? Url.Content(Model.CursoOnline.RutaImagen) : "").ToString();
+                    var image2 = "https://via.placeholder.com/728x180.png?text=Banner";
+
+                    try
+                    {
+                        var absolutePathOld = HttpContext.Current.Server.MapPath(imageOld2);
+                        var absolutePathNew = HttpContext.Current.Server.MapPath(imageCurso2);
+
+                        if (System.IO.File.Exists(absolutePathOld))
+                        {
+                            image2 = imageOld2;
+                        }
+                        else if (System.IO.File.Exists(absolutePathNew))
+                        {
+                            image2 = imageCurso2;
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+
+                    }
+                }
+
+                <img src="@image2">
+
+            </div>
+        </div>
+    </section>
+</div>
+<div class="row detail-curso">
+    <div class="col-sm-12">
+        <ul class="nav nav-tabs list-tabs-temario" id="custom-tabs-one-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="temario-tab" data-toggle="pill" href="#temario" role="tab" aria-controls="temario" aria-selected="true">
+                    <span class="icon"></span>
+                    <span class="label">Temario</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="materiales-tab" data-toggle="pill" href="#materiales" role="tab" aria-controls="materiales" aria-selected="false">
+                    <span class="icon"></span>
+                    <span class="label">Materiales</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tareas-tab" data-toggle="pill" href="#tareas" role="tab" aria-controls="tareas" aria-selected="false">
+                    <span class="icon"></span>
+                    <span class="label">Tareas</span>
+                </a>
+            </li>
+        </ul>
+        @MessageHelpers.ShowMessages(TempData)
+        <div class="tab-content list-pane-temario" id="custom-tabs-one-tabContent">
+            <div class="tab-pane fade active show" id="temario" role="tabpanel" aria-labelledby="temario-tab">
+                <h2>Temario</h2>
+                @*<p>5 sesiones onlines (2 horas cada una), distribuidas a lo largo de 2 semanas, entre el 22 de junio y 2 julio del 2021.</p>*@
+                <table cellpadding="0" cellspacing="0" border="0" width="100%" class="list-tareas">
+                    <tbody>
+
+                        @{
+                            int contador = 0;
+                        }
+                        @foreach (var dictUnidad in Model.DictUnidadCursoOnline)
+                        {
+                            contador++;
+                            var unidad = dictUnidad.Key;
+                            var estadoUnidad = String.Empty;
+                            var CulminoUnidad = false;
+
+
+                            switch (dictUnidad.Value)
+                            {
+                                case ConstantHelpers.ESTADO_UNIDAD.COMPLETADO:
+                                    estadoUnidad = "habilitado";
+                                    CulminoUnidad = true;
+                                    break;
+                                case ConstantHelpers.ESTADO_UNIDAD.PENDIENTE:
+                                    estadoUnidad = "Primero";
+                                    break;
+                                default:
+                                    estadoUnidad = "Primero";
+                                    break;
+                            }
+                            <tr>
+
+                                <td class="@estadoUnidad">
+                                    <div class="descripcion">
+                                        <p><strong>Sesión @contador:</strong>@unidad.Nombre </p>
+
+                                    </div>
+                                    <div class="opciones">
+
+                                        @if (unidad.Vivo != null && unidad.Vivo >= 1)
+                                        {
+                                            <a href="@Url.Action("ViewUnidadCursoOnline", "Course", new { CursoOnlineId = @Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })" class="btn-opciones btn-video-live"><span class="icon"></span> Sesión en vivo</a>
+
+                                        }
+
+                                        @if (unidad.Video != null && unidad.Video >= 1)
+                                        {
+                                            <a href="@Url.Action("ViewUnidadCursoOnline", "Course", new { CursoOnlineId = @Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })" class="btn-opciones btn-video"><span class="icon"></span> Videos</a>
+                                        }
+
+
+                                        @if (unidad.RutaArchivoAdicional != null)
+                                        {
+                                            @*<a href="@Url.Action("ViewUnidadCursoOnline", "Course", new { CursoOnlineId = @Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })&t=materiales" class="btn-opciones btn-materiales"><span class="icon"></span> Materiales</a>*@
+                                            <a href="#materiales" class="btn-opciones btn-materiales"><span class="icon"></span> Materiales</a>
+                                        }
+
+                                        @if (puedeHacerEvaluacion && dictUnidad.Value == "INA" && Model.CursoOnline.TieneExamen == ConstantHelpers.ESTADO.ACTIVO)
+                                        {
+                                            <a href="@Url.Action("DoEvaluacionCursoOnline", "Evaluation", new { CursoOnlineId = Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })" class="btn-opciones"><i class="fa fa-check"></i>&nbsp;Iniciar Examen</a>
+                                        }
+
+                                    </div>
+                                </td>
+                            </tr>
+
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="materiales" role="tabpanel" aria-labelledby="materiales-tab">
+                <h2>Materiales</h2>
+                <p style="font-weight: bold;">Podrás descargar los materiales de una sesión siempre y cuando finalices la anterior.</p>
+                <table cellpadding="0" cellspacing="0" border="0" width="100%" class="list-tareas">
+                    <tbody>
+
+
+
+                        @{
+                            int contador2 = 0;
+                        }
+                        @foreach (var dictUnidad in Model.DictUnidadCursoOnline)
+                        {
+                            contador2++;
+                            var unidad = dictUnidad.Key;
+                            var estadoUnidad = String.Empty;
+                            var CulminoUnidad = false;
+
+
+                            switch (dictUnidad.Value)
+                            {
+                                case ConstantHelpers.ESTADO_UNIDAD.COMPLETADO:
+                                    estadoUnidad = "habilitado";
+                                    CulminoUnidad = true;
+                                    break;
+                                case ConstantHelpers.ESTADO_UNIDAD.PENDIENTE:
+                                    estadoUnidad = "Primero";
+                                    break;
+                                default:
+                                    estadoUnidad = "Primero";
+                                    break;
+                            }
+                            <tr>
+                                <td class="@estadoUnidad">
+                                    <div class="descripcion">
+                                        <p><strong>Sesión @contador2:</strong>@unidad.Nombre </p>
+
+
+                                    </div>
+                                    <div class="opciones"></div>
+
+
+                                        @foreach (var material in unidad.UnidadCursoOnline1)
+                                        {
+
+                                            <div class="descripcion">
+                                                <span> @material.Nombre</span>
+
+
+                                            </div>
+
+
+                                            <div class="opciones">
+
+                                                @*@if (material.RutaArchivoAdicional != null && material.RutaArchivoAdicional.Length > 0)*@
+
+                                                @if (!string.IsNullOrEmpty(material.RutaArchivoAdicional))
+                                                {
+                                                    <a href="@Url.Action("RenderAdditionalFile", "Course", new {  UnidadCursoOnlineId = material.UnidadCursoOnlineId })" class="btn-opciones btn-ver" target="_blank"><span class="icon"></span> Ver</a>
+                                                    <a href="@Url.Action("RenderAdditionalFile", "Course", new {  UnidadCursoOnlineId = material.UnidadCursoOnlineId })" class="btn-opciones btn-descargar" download target="_blank"><span class="icon"></span> Descargar</a>
+                                                }
+                                            </div>
+                                        }
+                                </td>
+                            </tr>
+
+                            @*<tr>
+                                    <td class="habilitado">
+                                        <div class="descripcion">
+                                            <p><strong>Sesión 1:</strong> Innovación a través del diseño de experiencia de usuario.</p>
+                                            <span>Presentación.pdf</span>
+                                        </div>
+                                        <div class="opciones">
+                                            <a href="#" class="btn-opciones btn-ver"><span class="icon"></span> Ver</a>
+                                            <a href="#" class="btn-opciones btn-descargar" download><span class="icon"></span> Descargar</a>
+                                        </div>
+                                    </td>
+                                </tr>*@
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="tareas" role="tabpanel" aria-labelledby="tareas-tab">
+                <h2>Tareas</h2>
+                <table cellpadding="0" cellspacing="0" border="0" width="100%" class="list-tareas" id="list-tareas-unidad">
+                    <tbody>
+
+
+                        @{
+                            int contador3 = 0;
+                        }
+                        @foreach (KeyValuePair<UnidadCursoOnline, string> dictUnidad in Model.DictUnidadCursoOnline)
+                        {
+                            contador3++;
+                            UnidadCursoOnline unidad = dictUnidad.Key;
+                            string estadoUnidad;
+                            bool culminoUnidad = false;
+
+
+                            switch (dictUnidad.Value)
+                            {
+                                case ConstantHelpers.ESTADO_UNIDAD.COMPLETADO:
+                                    estadoUnidad = "habilitado";
+                                    culminoUnidad = true;
+                                    break;
+                                case ConstantHelpers.ESTADO_UNIDAD.PENDIENTE:
+                                    estadoUnidad = "Primero";
+                                    break;
+                                default:
+                                    estadoUnidad = "Primero";
+                                    break;
+                            }
+
+                            <tr>
+                                <td class="@estadoUnidad">
+                                    <div class="descripcion">
+                                        <p><strong>Sesión @contador3:</strong>@unidad.Nombre </p>
+                                        @*<span>Presentación.pdf</span>*@
+                                    </div>
+                                    <div class="opciones">
+                                    </div>
+                                    @foreach (UnidadCursoOnline material in unidad.UnidadCursoOnline1)
+                                    {
+                                        if (material.HasTarea)
+                                        {
+                                            <div class="descripcion">
+                                                <span>@material.Nombre</span>
+                                            </div>
+                                            <div class="opciones">
+                                                @*<a href="javascript:void(0)" class="btn-opciones btn-ver"><span class="icon"></span> Ver archivo</a>*@
+                                                <a href="javascript:void(0)" class="btn-opciones btn-upload" data-id="@material.GUID"><span class="icon"></span> Subir tarea</a>
+                                                <a href="javascript:void(0)" class="btn-opciones btn-ver-tareas" data-id="@material.GUID"><span class="icon"></span> Ver mis tareas</a>
+                                            </div>
+                                        }
+                                    }
+
+                                </td>
+                            </tr>
+                        }
+
+
+
+                    </tbody>
+                </table>
+
+                @{
+                    int contadorTareas = 0;
+                }
+
+                @foreach (KeyValuePair<UnidadCursoOnline, string> dictUnidad in Model.DictUnidadCursoOnline)
+                {
+                    contadorTareas++;
+                    UnidadCursoOnline unidad = dictUnidad.Key;
+
+                    foreach (UnidadCursoOnline material in unidad.UnidadCursoOnline1)
+                    {
+                        if (material.HasTarea)
+                        {
+                            <div id="@material.GUID" class="form-tareas" style="display: none;">
+                                <form action="@Url.Action("InsertarTareaUnidadCursoOnline", "Course")" method="post">
+                                    @Html.AntiForgeryToken()
+
+                                    <h2>Sesión @contadorTareas - Tarea @material.Nombre</h2>
+                                    <ul>
+                                        <li>
+                                            <p>Fecha límite: <span>@material.TareaFechaLimite</span></p>
+                                        </li>
+                                        <li>
+                                            <p>Peso máximo del archivo: <span>100 Mb</span></p>
+                                        </li>
+                                        <li>
+                                            <p>Formato aceptado: <span>Excel, Pdf, Word, Power Point, Zip y Rar</span>.</p>
+                                        </li>
+                                    </ul>
+                                    <div class="custom-input">
+                                        <label class="input-file">
+                                            <input name="file" type="file" accept=".doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf, .zip, .rar">
+                                            <span class="file-choose-btn"><img src="/Content/CMS_NEW/Recursos/assets/images/iconos/upload.png" alt=""> Subir tarea</span>
+                                        </label>
+                                    </div>
+                                    <div class="custom-input">
+                                        <span id="message" class="text-sm text-danger text-bold"></span>
+                                        <input type="hidden" name="rutaTarea" id="rutaTarea" />
+                                        <input type="hidden" name="unidadCursoOnlineId" id="unidadCursoOnlineId" value="@unidad.UnidadCursoOnlineId" />
+                                        <input type="hidden" name="cursoOnlineId" id="cursoOnlineId" value="@Context.Request.QueryString["cursoOnlineId"]" />
+                                        <input type="hidden" name="matriculaCursoOnlineId" id="matriculaCursoOnlineId" value="@Context.Request.QueryString["matriculaCursoOnlineId"]" />
+                                    </div>
+                                    <div class="btns-cta">
+                                        <input type="submit" value="Enviar" class="btn btn-primary subir-tarea">
+                                        <a href="#" class="cancelUpload">Cancelar</a>
+                                    </div>
+                                </form>
+                            </div>
+                        }
+                    }
+                }
+
+                @{
+                    int contadorListaTareas = 0;
+                }
+
+                @foreach (KeyValuePair<UnidadCursoOnline, string> dictUnidad in Model.DictUnidadCursoOnline)
+                {
+                    contadorListaTareas++;
+                    UnidadCursoOnline unidad = dictUnidad.Key;
+
+                    foreach (UnidadCursoOnline material in unidad.UnidadCursoOnline1)
+                    {
+                        if (material.HasTarea)
+                        {
+                            <div id="lista-@material.GUID" class="lista-tareas" style="display: none;">
+                                <h2>Sesión @contadorListaTareas - Tarea @material.Nombre</h2>
+                                <p>@material.Descripcion</p>
+                                <h3>Lista de Tareas</h3>
+                                <div class="row col-lg-12 table-responsive lista-tareas-table">
+                                    <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list text-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>Mi Archivo</th>
+                                                <th>Archivo corregido por el docente</th>
+                                                <th>Nota</th>
+                                                <th>Comentarios del docente</th>
+                                                <th>Estado</th>
+                                                <th>Fecha de envío</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach (TareaUnidadCursoOnline tarea in unidad.TareaUnidadCursoOnline.Where(x => x.UnidadCursoOnlineId == unidad.UnidadCursoOnlineId).ToList())
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <a href="@tarea.RutaTarea.Replace("~", "")" class="tarea-enviada" download>Tarea</a>
+                                                </td>
+                                                <td>
+                                                    @(tarea.RutaTareaCorregido != null ? $"<a href='{tarea.RutaTareaCorregido.Replace("~", "")}' class='tarea - recibida' download>Tarea Corregida</a>" : "--")
+                                                    
+                                                </td>
+                                                <td><strong>@(tarea.Nota ?? 0)</strong></td>
+                                                <td>
+                                                    @Html.Raw(tarea.ComentarioProfesor ?? "--")
+                                                </td>
+                                                <td>
+                                                    @if (tarea.Estado == "PEN")
+                                                    {
+                                                        <span class="label-estado en-proceso">En proceso</span>
+                                                    }
+
+                                                    @if (tarea.Estado == "ACT")
+                                                    {
+                                                        <span class="label-estado corregido">Corregido</span>
+                                                    }
+
+                                                </td>
+                                                <td>@tarea.FechaEnvio.ToString("dd MMMM yyyy")</td>
+                                            </tr>
+                                        }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,534 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.ViewPerfilViewModel
+@using PROMPERU.AULAVIRTUAL.BE.CURSOS
+@{
+    ViewBag.Title = Model.Usuario.Nombre + " " + Model.Usuario.Apellido;
+    ViewBag.Seccion = "Perfil";
+}
+@section Styles{
+    @RazorHelpers.Content("pages/css/custom-styles.css", Url)
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        .ui-front {
+            z-index: 200;
+        }
+    </style>
+
+
+}
+@section Breadcrumbs{
+}
+
+@section Jumbotron{
+    <div class="container-fluid container-fixed-lg">
+        <div class="row ">
+            <div class=" col-md-12"><h4 class="m-b-20 usuarios">Mi Perfil</h4></div>
+        </div>
+
+    </div>
+}
+
+<div class="container-fluid container-fixed-lg">
+    <ul class="nav nav-tabs nav-tabs-simple nav-tabs-left bg-white">
+        <li class="nav-item active">
+            <a data-toggle="tab" href="#tab-Datos-Personales">
+                Datos Personales
+            </a>
+        </li>
+        <li class="nav-item">
+            <a data-toggle="tab" href="#tab-Resumen">
+                Resumen Académico
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content bg-white cf-user-profile-panel">
+        @Html.Partial("~/Views/Shared/_UserProfileTopBar.cshtml", Model)
+
+        <div class="tab-pane cf-pane-fix active" id="tab-Datos-Personales">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="usuarios text-center">@ViewBag.Title</h3>
+                </div>
+                <form class="form form-horizontal" method="post">
+                    <div class="panel-body">
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(x => x.UsuarioId)
+
+                        <div class='form-group'>
+                            <div class="row">
+                                @*<div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                        <div class="row">
+                                            <div class="col-sm-12 m-l-20">
+                                                @Html.LabelFor(x => x.Usuario.DNI, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                            </div>
+                                            <div class='col-sm-12'>
+                                                @Html.TextBoxFor(x => x.Usuario.DNI, new { @class = "form-control bg", @disabled = "disabled" })
+                                                @Html.ValidationMessageFor(x => x.Usuario.DNI)
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.LabelFor(x => x.Usuario.Nombre, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.TextBoxFor(x => x.Usuario.Nombre, new { @class = "form-control bg" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.Nombre)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.LabelFor(x => x.Usuario.Apellido, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.TextBoxFor(x => x.Usuario.Apellido, new { @class = "form-control bg" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.Apellido)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.Label("Usuario.Sexo", "Género", new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.DropDownListFor(x => x.Usuario.SexoId, new SelectList(Model.LstSexo, "ParametroId", "Descripcion"), "- Seleccionar -", new { @class = "form-control bg" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.SexoId)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @*<div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                        <div class="row">
+                                            <div class="col-sm-12 m-l-20">
+                                                @Html.LabelFor(x => x.Usuario.Codigo, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                            </div>
+                                            <div class='col-sm-12'>
+                                                @Html.TextBoxFor(x => x.Usuario.Codigo, new { @class = "form-control bg" })
+                                                @Html.ValidationMessageFor(x => x.Usuario.Codigo)
+                                            </div>
+                                        </div>
+                                    </div>*@
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.Label("Usuario.NacionalidadId", "Nacionalidad", new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.DropDownListFor(x => x.Usuario.NacionalidadId, new SelectList(Model.LstNacionalidad, "ParametroId", "Descripcion"), "- Seleccionar -", new { @class = "form-control bg" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.NacionalidadId)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.LabelFor(x => x.Usuario.Email, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.TextBoxFor(x => x.Usuario.Email, new { @class = "form-control bg", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.Email)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.LabelFor(x => x.Usuario.Password, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.PasswordFor(x => x.Usuario.Password, new { @class = "form-control bg" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.Password)
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                @*<div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                        <div class="row">
+                                            <div class="col-sm-12 m-l-20">
+                                                @Html.LabelFor(x => x.Usuario.Grupo, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                            </div>
+                                            <div class='col-sm-12'>
+                                                @Html.TextBoxFor(x => x.Usuario.Grupo, new { @class = "form-control bg" })
+                                                @Html.ValidationMessageFor(x => x.Usuario.Grupo)
+                                            </div>
+                                        </div>
+                                    </div>*@
+                            </div>
+                            <div class="row">
+                                @*<div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                        <div class="row">
+                                            <div class="col-sm-12 m-l-20">
+                                                @Html.LabelFor(x => x.Usuario.Cargo, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                            </div>
+                                            <div class='col-sm-12'>
+                                                @Html.TextBoxFor(x => x.Usuario.Cargo, new { @class = "form-control bg" })
+                                                @Html.ValidationMessageFor(x => x.Usuario.Cargo)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label text-add-categoria" for="Usuario_TestExportador">Test Exportador</label>
+                                            <div class="col-sm-5">
+                                                <div class="checkbox check-info">
+                                                    <input type="checkbox" name="Usuario.TestExportador" value="true" id="Usuario.TestExportador">
+                                                    <label for="Usuario.TestExportador">&nbsp;</label>
+                                                </div>
+                                                <span class="field-validation-valid" data-valmsg-for="Usuario.TestExportador" data-valmsg-replace="true"></span>
+                                            </div>
+                                        </div>
+                                    </div>*@
+
+                            </div>
+                            <div class="row">
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.Label("DepartamentoId", "Departamento", new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.DropDownListFor(x => x.DepartamentoId, new SelectList(Model.LstDepartamento, "DepartamentoId", "Nombre"), "- Seleccionar -", new { @class = "form-control bg", data_type = "cascade-dropdown-list", data_source_url = Url.Action("GetProvinciasPorDepartamento", "Json"), data_filter = "DepartamentoId", data_update_target = "#ProvinciaId" })
+                                            @Html.ValidationMessageFor(x => x.DepartamentoId)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.Label("ProvinciaId", "Provincia", new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.DropDownListFor(x => x.ProvinciaId, new SelectList(Model.LstProvincia, "ProvinciaId", "Nombre"), "- Seleccionar -", new { @class = "form-control bg", data_type = "cascade-dropdown-list", data_source_url = Url.Action("GetDistritoPorProvincia", "Json"), data_filter = "ProvinciaId", data_update_target = "#Usuario_DistritoId", data_value_member = "ProvinciaId", data_text_member = "Nombre" })
+                                            @Html.ValidationMessageFor(x => x.ProvinciaId)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.Label("Usuario.DistritoId", "Distrito", new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.DropDownListFor(x => x.Usuario.DistritoId, new SelectList(Model.LstDistrito, "DistritoId", "Nombre"), "- Seleccionar -", new { @class = "form-control bg", data_value_member = "DistritoId", data_text_member = "Nombre" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.DistritoId)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.Usuario.EmpresaId != null)
+                        {
+
+                            <div class='form-group'>
+                                <h3 class="usuarios text-left">Datos Empresa</h3>
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.LabelFor(x => x.Usuario.Empresa.RazonSocial, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.TextBoxFor(x => x.Usuario.Empresa.RazonSocial, new { @class = "form-control bg", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.Empresa.RazonSocial)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.LabelFor(x => x.Usuario.Empresa.RUC, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.TextBoxFor(x => x.Usuario.Empresa.RUC, new { @class = "form-control bg", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.Empresa.RUC)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.LabelFor(x => x.Usuario.Empresa.Productos, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.TextBoxFor(x => x.Usuario.Empresa.Productos, new { @class = "form-control bg", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.Empresa.Productos)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label text-add-categoria" for="AutoMatriculaHabilitada">Auto Matricula</label>
+                                        <div class="col-sm-5">
+                                            <div class="checkbox check-info">
+                                                <input type="checkbox" name="Usuario.AutoMatriculaHabilitada" disabled="disabled" value="true" id="Usuario.AutoMatriculaHabilitada">
+                                                <label for="Usuario.AutoMatriculaHabilitada">&nbsp;</label>
+                                            </div>
+                                            <span class="field-validation-valid" data-valmsg-for="Usuario.AutoMatriculaHabilitada" data-valmsg-replace="true"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.LabelFor(x => x.Usuario.Empresa.CIIU, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.TextBoxFor(x => x.Usuario.Empresa.CIIU, new { @class = "form-control bg", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.Empresa.CIIU)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 m-t-10 col-md-6 col-lg-4 col-xlg-4">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.LabelFor(x => x.Usuario.Empresa.Email, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.TextBoxFor(x => x.Usuario.Empresa.Email, new { @class = "form-control bg", @disabled = "disabled" })
+                                            @Html.ValidationMessageFor(x => x.Usuario.Empresa.Email)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                        <div class="form-group">
+                            <div class="col-sm-12 col-sm-offset-4">
+                                <button class="btn btn-guardar-matricula pull-center text-btn-generico" type="submit">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+
+            </div>
+
+        </div>
+        <div class="tab-pane cf-pane-fix" id="tab-Resumen">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="panel-heading row text-center">
+                        <div class="col-md-6">
+                            <i class="fa fa-check" style="color:#72E772"></i>
+                            <i class="fa fa-check" style="color:#72E772"></i>
+                            <span>APROBADO</span>
+                        </div>
+                        <div class="col-md-6">
+                            <i class="fa fa-check" style="color:#698FD1"></i>
+                            <span>COMPLETADO</span>
+                        </div>
+                    </div>
+                    <div class="invoice padding-50 sm-padding-10">
+                        <div class="table-responsive">
+                            <div class="col-lg-12">
+                                @if (Model.LstMatriculaCursoOnline.Count() > 0)
+                                {
+                                    <div class="panel panel-transparent">
+                                        <ul class="nav nav-tabs nav-tabs-simple nav-tabs-left bg-white" @*style="width:250px"*@>
+                                            @foreach (var cursoOnline in Model.LstMatriculaCursoOnline.Select(x => x.CursoOnline))
+                                            {
+                                                <li class="@(Model.LstMatriculaCursoOnline.Select(x => x.CursoOnline).First().CursoOnlineId == cursoOnline.CursoOnlineId ? "active" : String.Empty)">
+                                                    <a data-toggle="tab" href="#tabCurso@(cursoOnline.CursoOnlineId)">
+                                                        @if (Model.LstMatriculaCursoOnline.OrderByDescending(x => x.MatriculaCursoOnlineId).FirstOrDefault(x => x.UsuarioId == Model.UsuarioId && x.CursoOnlineId == cursoOnline.CursoOnlineId).Estado == ConstantHelpers.ESTADO_MATRICULA.COMPLETADO)
+                                                        {
+                                                            <i class="fa fa-check" style="color:#698FD1"></i>
+                                                        }
+                                                        @if (Model.LstMatriculaCursoOnline.OrderByDescending(x => x.MatriculaCursoOnlineId).FirstOrDefault(x => x.UsuarioId == Model.UsuarioId && x.CursoOnlineId == cursoOnline.CursoOnlineId).Estado == ConstantHelpers.ESTADO_MATRICULA.APROBADO)
+                                                        {
+                                                            <i class="fa fa-check" style="color:#72E772"></i>
+                                                            <i class="fa fa-check" style="color:#72E772"></i>
+                                                        }
+                                                        @cursoOnline.Nombre
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                        <div class="tab-content bg-white">
+                                            @foreach (var cursoOnline in Model.LstMatriculaCursoOnline.Select(x => x.CursoOnline))
+                                            {
+                                                Int32? matriculaAprobadaId = null;
+
+                                                <div class="tab-pane @(Model.LstMatriculaCursoOnline.Select(x => x.CursoOnline).First().CursoOnlineId == cursoOnline.CursoOnlineId ? "active" : String.Empty)" id="tabCurso@(cursoOnline.CursoOnlineId)">
+
+                                                    <div class="row column-seperation">
+                                                        <div class="col-md-12">
+                                                            <div class="panel-group" id="accordion-@cursoOnline.CursoOnlineId" role="tablist" aria-multiselectable="true">
+                                                                <div class="panel panel-default">
+                                                                    <div class="panel-heading" role="tab" id="headingOne">
+                                                                        <h4 class="panel-title">
+                                                                            <a class="" data-toggle="collapse" href="#matriculas-@cursoOnline.CursoOnlineId" aria-expanded="true" aria-controls="matriculas-@cursoOnline.CursoOnlineId">
+                                                                                Matrículas
+                                                                            </a>
+                                                                        </h4>
+                                                                    </div>
+                                                                    <div id="matriculas-@cursoOnline.CursoOnlineId" class="panel-collapse collapse in " role="tabpanel" aria-labelledby="headingOne">
+                                                                        <div class="panel-body table-responsive">
+
+                                                                            @{
+                                                                                List<MatriculaCursoOnline> matriculasCursoOnline = Model.LstMatriculaCursoOnline.Where(x => x.CursoOnlineId == cursoOnline.CursoOnlineId).ToList();
+                                                                            }
+
+                                                                            @if (matriculasCursoOnline.Count() > 0)
+                                                                            {
+                                                                                <table class="table">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th class="text-center">Número</th>
+                                                                                            <th class="text-center">Fecha Matrícula</th>
+                                                                                            <th class="text-center">Fecha Aprobado</th>
+                                                                                            <th class="text-center">Porcentaje Avance</th>
+                                                                                            <th class="text-center">Nota</th>
+                                                                                            <th class="text-center">Estado</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        @{var i = 0;}
+                                                                                        @foreach (MatriculaCursoOnline matriculaCursoOnline in matriculasCursoOnline)
+                                                                                        {
+                                                                                            i++;
+                                                                                            if (matriculaCursoOnline.FechaAprobado.HasValue)
+                                                                                            {
+                                                                                                matriculaAprobadaId = matriculaCursoOnline.MatriculaCursoOnlineId;
+                                                                                            }
+
+                                                                                            <tr>
+                                                                                                <td class="text-center">@i</td>
+                                                                                                <td class="text-center">@matriculaCursoOnline.FechaMatricula.ToShortDateString() </td>
+                                                                                                <td class="text-center">@(matriculaCursoOnline.FechaAprobado.HasValue ? matriculaCursoOnline.FechaAprobado.Value.ToShortDateString() : "-")</td>
+                                                                                                <td class="text-center">@matriculaCursoOnline.PorcentajeAvance</td>
+                                                                                                <td class="text-center">@matriculaCursoOnline.Nota</td>
+                                                                                                <td class="text-center"><span class="label label-@(ConstantHelpers.TextoColorEstado(matriculaCursoOnline.Estado))">@ConstantHelpers.TextoEstado(matriculaCursoOnline.Estado)</span> </td>
+                                                                                            </tr>
+                                                                                        }
+
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <div class="alert alert-info">
+                                                                                    <i class="fa fa-exclamation-triangle"></i>&nbsp;No se encontraron matrículas.
+                                                                                </div>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="panel panel-default">
+                                                                    <div class="panel-heading" role="tab" id="headingTwo">
+                                                                        <h4 class="panel-title">
+                                                                            <a data-toggle="collapse" href="#evaluaciones-@cursoOnline.CursoOnlineId" aria-expanded="false" aria-controls="evaluaciones-@cursoOnline.CursoOnlineId">
+                                                                                Evaluaciones
+                                                                            </a>
+                                                                        </h4>
+                                                                    </div>
+                                                                    <div id="evaluaciones-@cursoOnline.CursoOnlineId" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+                                                                        <div class="panel-body table-responsive">
+                                                                            @{
+                                                                                var evaluacionesCursoOnline = Model.LstEvaluacionCursoOnline.Where(x => x.MatriculaCursoOnline.CursoOnlineId == cursoOnline.CursoOnlineId).ToList();
+                                                                            }
+                                                                            @if (evaluacionesCursoOnline.Count() > 0)
+                                                                            {
+                                                                                <table class="table">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th class="text-center">Número</th>
+                                                                                            <th class="text-center">Inicio</th>
+                                                                                            <th class="text-center">Fin</th>
+                                                                                            <th class="text-center">Puntaje Obtenido/Total</th>
+                                                                                            <th class="text-center">Estado</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        @{var i = 0;}
+                                                                                        @foreach (var evaluacion in evaluacionesCursoOnline)
+                                                                                        {
+                                                                                            i++;
+                                                                                            /*var porcentajeObtenido = ((evaluacion.PuntajeObtenido) / (evaluacion.PuntajeTotal)).ToDecimal();*/
+
+                                                                                            decimal porcentajeObtenido = 0;
+
+                                                                                            if (evaluacion.PuntajeObtenido > 0 && evaluacion.PuntajeObtenido != null)
+                                                                                            {
+                                                                                                porcentajeObtenido = Decimal.Round((decimal)(evaluacion.PuntajeObtenido) / (evaluacion.PuntajeTotal) * 100, 2);
+                                                                                            }
+
+                                                                                            var Aprobado = porcentajeObtenido >= evaluacion.PorcentajeAprobacion;
+
+                                                                                            <tr class="@(Aprobado ? "success" : String.Empty)">
+                                                                                                <td class="text-center">@i</td>
+                                                                                                <td class="text-center">@evaluacion.FechaInicio </td>
+                                                                                                <td class="text-center">@(evaluacion.FechaFin != null ? evaluacion.FechaFin + "" : "--")</td>
+                                                                                                @*<td class="text-center">@(evaluacion.PuntajeObtenido != null ? evaluacion.PuntajeObtenido.ToString() : "0") / @evaluacion.PuntajeTotal </td>*@
+                                                                                                <td class="text-center">@porcentajeObtenido </td>
+                                                                                                <td class="text-center">
+
+                                                                                                    @* <div class="label label-@(((evaluacion.PuntajeObtenido.HasValue ? evaluacion.PuntajeObtenido : 0) * 100 / evaluacion.PuntajeTotal) < evaluacion.PorcentajeAprobacion ? "danger" : "success")">
+                                                                                                            <i class="fa fa-@( ((evaluacion.PuntajeObtenido.HasValue ? evaluacion.PuntajeObtenido : 0) * 100 / evaluacion.PuntajeTotal) < evaluacion.PorcentajeAprobacion ? "close" : "check")"></i>&nbsp;
+                                                                                                            @( ((evaluacion.PuntajeObtenido.HasValue ? evaluacion.PuntajeObtenido : 0) * 100 / evaluacion.PuntajeTotal) < evaluacion.PorcentajeAprobacion ? "Desaprobado" : "Aprobado")
+                                                                                                        </div>*@
+
+                                                                                                    <div class="label label-@( Aprobado ? "success" : "danger")">
+                                                                                                        <i class="fa fa-@( Aprobado ? "check" : "close")"></i>&nbsp;
+                                                                                                        @( Aprobado ? "Aprobado" : "Desaprobado")
+                                                                                                    </div>
+
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        }
+                                                                                    </tbody>
+                                                                                </table>
+                                                                                if (matriculaAprobadaId != null)
+                                                                                {
+                                                                                    <!--<a class="btn btn-primary" href="@Url.Action("DownloadCertificadoAlumno","Document",new {MatriculaCursoOnlineId = matriculaAprobadaId, CursoOnlineId=cursoOnline.CursoOnlineId,UsuarioId=Model.UsuarioId})"><i class="fa fa-download"></i> Descargar Certificado</a>-->
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <div class="alert alert-info">
+                                                                                    <i class="fa fa-exclamation-triangle"></i>&nbsp;No se encontraron evaluaciones.
+                                                                                </div>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-info">
+                                        <i class="fa fa-exclamation-triangle"></i>&nbsp;Aún no se ha matriculado a ningún curso.
+                                    </div>}
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="pull-right">
+                            <a class="btn btn-info" href="@Model.UrlReferrer"><i class="fa fa-arrow-left"></i>&nbsp;Regresar</a>
+                        </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Enrollment._SetDisponibilidadCursoOnlineViewModel
+@{
+    ViewBag.Title = "DisponibilidadCursoOnline";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Disponibilidad Curso</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Disponibilidad Curso </h2>
+        </div>
+    </div><!-- /.row -->
+}
+<form method="post" id="searchUser">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.DisponibilidadCursoOnlineId)
+    @Html.HiddenFor(x => x.CursoOnlineId)
+    <div class="row">
+        <div class="col-lg-12 box-grey-content">
+            <h2>Editar Disponibilidad Curso </h2>
+            <div class="content-form-grey">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Fecha Inicio</label>
+                            
+                            @Html.TextBoxFor(x => x.FechaInicio, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", required = "required" })
+                            @Html.ValidationMessageFor(x => x.FechaInicio)
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Fecha Fin</label>
+                            @Html.TextBoxFor(x => x.FechaFin , "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date", required = "required" })
+                            @Html.ValidationMessageFor(x => x.FechaFin)
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-btn">
+            <input type="submit" class="btn btn-primary" value="Guardar">
+            <input type="submit" class="btn btn-secondary" value="Cancelar">
+        </div>
+    </div>
+</form>

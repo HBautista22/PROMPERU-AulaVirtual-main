@@ -1,0 +1,100 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.VideoUnidadCursoOnlineViewModel
+@{
+    ViewBag.Title = "VideoUnidadCursoOnline";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+
+    ViewBag.Seccion = "Cursos";
+    ViewBag.SubSeccion = "Curso";
+
+}
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Video Unidad</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Video Unidad</h2>
+        </div>
+    </div><!-- /.row -->
+}
+
+@MessageHelpers.ShowMessages(TempData)
+
+<div class="row table-acciones table-content list-empresa">
+    <div class="col-sm-6">
+        <h2>Lista de Videos</h2>
+    </div>
+    <div class="col-sm-6 btns-table">
+
+        <a class="btn btn-primary" href="@Url.Action("EditVideoUnidadCursoOnline", "Course", new { id = 0,unidadCursoOnlineId=Model.UnidadCursoOnlineId })">Agregar Video</a>
+    </div>
+</div>
+<div class="row mis-solicitudes table-content">
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list tipo-empresa" align="center">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Video</th>
+                    <th>Estado</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var video in Model.LstVideoUnidadCursoOnline)
+                {
+                    if (video.Estado != ConstantHelpers.ESTADO.ELIMINADO)
+                    {
+                        <tr>
+                            <td>
+                                @video.Titulo
+                            </td>
+                            <td>
+                                <a href="https://www.youtube.com/watch?v=@video.CodigoYoutube" target="_blank">@video.CodigoYoutube</a>
+                            </td>
+                            <td>
+                                <span class="label-estado @(video.Estado == ConstantHelpers.ESTADO.ACTIVO ? "completado" : "inactivo")">@(video.Estado == ConstantHelpers.ESTADO.ACTIVO ? "Activo" : "Inactivo")</span>
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Acciones
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <li>
+                                            <a class="dropdown-item" href="@Url.Action("EditVideoUnidadCursoOnline", "Course", new { unidadCursoOnlineId = Model.UnidadCursoOnlineId, videoUnidadCursoOnlineId = video.VideoUnidadCursoOnlineId })">Editar</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="@Url.Action("ChangeStateVideoUnidadCursoOnline", "Course", new { videoUnidadCursoOnlineId = video.VideoUnidadCursoOnlineId })">
+                                                @if (video.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                                                {
+                                                    <text><i class="fa fa-user fa-fw"></i>&nbsp;Activar Video</text> }
+                                                else
+                                                {
+                                                    <text><i class="fa fa-user-times fa-fw"></i>&nbsp;Desactivar Video</text>}
+                                            </a>
+                                        </li>
+                                        @if (video.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" href="@Url.Action("DeleteStateVideoUnidadCursoOnline", "Course", new { videoUnidadCursoOnlineId = video.VideoUnidadCursoOnlineId })">
+                                                    <i class="fa fa-times fa-fw"></i>&nbsp;Eliminar
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>Group 17</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="versión-3" transform="translate(-1390.000000, -937.000000)">
+            <g id="Group-17" transform="translate(1390.000000, 937.000000)">
+                <path d="M0,0 L50,0 L50,50 L5.00003191,50 C2.23859054,50 0,47.754469 0,44.9999681 L0,0 Z" id="Base" fill="#3B5998"></path>
+                <path d="M22.964074,34.8857143 L22.964074,25.7886171 L20,25.7886171 L20,22.3136287 L22.9647882,22.3136287 L22.9647882,19.6844003 C22.9647882,16.6608705 24.7289479,15 27.3394758,15 C28.5893865,15 29.686451,15.0878066 30,15.1308816 L30,18.3374799 L28.146561,18.3366516 C26.7266624,18.3366516 26.4609671,19.0341343 26.4609671,20.0571643 L26.4609671,22.3136287 L29.8585815,22.3136287 L29.4171845,25.7886171 L26.4609671,25.7886171 L26.4609671,34.8857143 L22.964074,34.8857143 L22.964074,34.8857143 Z" id="Facebook-Icon" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>

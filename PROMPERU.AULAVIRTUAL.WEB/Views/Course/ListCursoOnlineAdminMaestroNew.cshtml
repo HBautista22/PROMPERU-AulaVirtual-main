@@ -1,0 +1,192 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ListCursoMaestroOnlineAdminViewModel
+@{
+    ViewBag.Title = "ListCursoOnlineAdminMaestroNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+            <li class="breadcrumb-item active">Cursos Maestro</li>
+        </ol>
+    </div>
+    <div class="col-sm-6">
+        <h2 class="m-0"> Cursos Maestro</h2>
+    </div>
+}
+
+
+<div class="row">
+    @MessageHelpers.ShowMessages(TempData)
+    <div class="col-lg-12 box-grey-content">
+        <div class="content-form-grey">
+            <form action="@Url.Action("ListCursoMaestroOnlineAdmin", "Course")" id="searchUser" method="post">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Nombre del Curso</label>
+                            @Html.TextBoxFor(x => x.NombreCurso, new { @class = "form-control", @placeholder = "Buscar Curso", @autocomplete = "off" })
+                        </div>
+                    </div>
+                    <div class="row col-sm-12">
+                        <div class="col-sm-6 form-btn">
+                            <input type="submit" class="btn btn-primary" value="Filtrar">
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row col-sm-12 table-acciones table-content">
+    <div class="col-sm-12 btns-table">
+        <a class="btn btn-primary" href="@Url.Action("EditCursoMaestroOnline", "Course")">Agregar Curso</a>
+    </div>
+</div>
+<div class="row col-sm-12 mis-solicitudes table-content">
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list asesorias">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var curso in Model.LstCursoOnline)
+                {
+                    <tr id="@curso.CursoOnlineMaestroId">
+                        <td> @curso.Nombre </td>
+                        <td>
+                            <span class="label-estado @(curso.Estado == ConstantHelpers.ESTADO.ACTIVO ? "completado" : curso.Estado  == ConstantHelpers.ESTADO.PENDIENTE ? "pendiente" : "inactivo"  )">@(curso.Estado == ConstantHelpers.ESTADO.ACTIVO ? "Activo" : "Inactivo")</span>
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Acciones
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
+                                    <li>
+                                        @*<a class="btn-xs" href="@Url.Action("EditUnidadCursoOnline", "Course", new { CursoOnlineId = Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })"><i class="fa fa-pencil-square-o"></i>&nbsp;Editar</a>*@
+                                        <a class="dropdown-item cursosAsignados" style="overflow: hidden;" id="lnk-@curso.CursoOnlineMaestroId"><i class="fa fa-list-alt"></i>&nbsp;Ver Cursos Asignados</a>
+                                    </li>
+                                    @*<li>
+                                            <a class="dropdown-item" href="@Url.Action("EditCursoMaestroOnline", "Course", new { CursoOnlineId = Model.p })"><i class="fa fa-pencil-square-o"></i>&nbsp;Editar Curso</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="@Url.Action("EditCursoMaestroOnline", "Course", new { CursoOnlineId = Model.p })"><i class="fa fa-times fa-fw"></i>&nbsp;Eliminar Curso</a>
+                                        </li>*@
+
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("EditCursoMaestroOnline", "Course", new { CursoOnlineId = curso.CursoOnlineMaestroId })"><i class="fa fa-pencil-square-o"></i>&nbsp;Editar Curso</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="@Url.Action("DeleteCursoMaestroOnline", "Course", new { CursoOnlineId = curso.CursoOnlineMaestroId })"><i class="fa fa-times fa-fw"></i>&nbsp;Eliminar Curso</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal modal-2 fade" id="addEditCourses" tabindex="-1" aria-labelledby="addEditCoursesLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar y/o Retirar Cursos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <img src="@Url.GetCmsResourceUrl("assets/images/iconos/menu_close_blue.png")">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="content-drag-drop">
+                    <div class="box">
+                        <div class="container agregados">
+
+                            <h3><img src="@Url.GetCmsResourceUrl("assets/images/iconos/cursos-agregados.png")"> Cursos Agregados</h3>
+                            <ul class="list one" id="agregadosList" data-type="agregados"></ul>
+                        </div>
+                        <div class="container bucket disponibles">
+                            <h3><img src="@Url.GetCmsResourceUrl("assets/images/iconos/cursos_disponibles.png")"> Cursos Disponibles</h3>
+                            <ul class="list one" id="DisponibleList">
+                                <li draggable="true" data-type="agregados">Identidad corporativa en empresas turisticas - Cusco</li>
+                                <li draggable="true" data-type="agregados">Identidad Corporativa para empresas turísticas - Arequipa</li>
+                                <li draggable="true" data-type="agregados">Habilidades Interpersonales y Creatividad</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#activo").on("click", function () {
+                if ($(this).is(":checked") == true) {
+                    $('#Estado').val("True");
+                }
+                else {
+                    $('#Estado').val("False");
+                }
+            });
+
+            $('.cursosAsignados').click(function () {
+                $("#addEditCourses").modal("show");
+                $("#agregadosList li").remove()
+                $("#DisponibleList li").remove()
+
+                var id = $(this).attr('id').replace('lnk-', '');
+                var API = "/Grupo/CursoAgregadoMaestro";
+                $.getJSON
+                    (API,
+                    {
+                        CursoOnlineId: id,
+                    }
+                    )
+                    .done(function (data) {
+                        console.log(data);
+                        $.each(data, function (key, val) {
+                            $("#agregadosList").append('<li draggable="true" data-type="agregados">' + val.Nombre + '</li>');
+                        });
+
+                    });
+
+
+                $("#DisponibleList li").remove()
+                //var id = $(this).attr('id').replace('lnk-', '');
+                var API = "/Grupo/CursoDisponibleMaestro";
+                $.getJSON
+                    (API,
+                    {
+                        CursoOnlineId: id,
+                    }
+                    )
+                    .done(function (data) {
+                        console.log(data);
+                        $.each(data, function (key, val) {
+                            $("#DisponibleList").append('<li draggable="true" data-type="agregados">' + val.Nombre + '</li>');
+                        });
+
+                    });
+            });
+
+
+        });
+    </script>
+}
+

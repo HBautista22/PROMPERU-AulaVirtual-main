@@ -1,0 +1,43 @@
+﻿@using System.Configuration
+
+@{var url_aula = ConfigurationManager.AppSettings["PORTAL.AbsoluteUrl"].ToString(); }
+
+<div id="aviso">
+    <img src="@Url.Content("~/Content/landing/img/share-twitter.svg")" alt="">
+    <img src="@Url.Content("~/Content/landing/img/share-facebook.svg")" alt="">
+</div>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#"><img src="@Url.Content("~/Content/landing/img/main-logo.svg")" alt=""></a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav text-uppercase ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#nosotros">Nosotros</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#modulos">Módulos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="@url_aula/agenda">Agenda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#certificate">Certifícate</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="@url_aula/preguntas-frecuentes">Preguntas Frecuentes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="@Url.Action("Register","Front")">Regístrate</a>
+                </li>
+                <li class="nav-item" style="margin-top: 0.5em;">
+                    <a class="btn btn-primary" role="button" href="@Url.Action("Index","Login", new { returnUrl = "Course/ListCursoOnline"})">Ingresar</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

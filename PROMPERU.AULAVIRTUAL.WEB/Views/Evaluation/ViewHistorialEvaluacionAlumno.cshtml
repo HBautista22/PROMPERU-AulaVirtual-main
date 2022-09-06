@@ -1,0 +1,122 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Evaluation.ViewHistorialEvaluacionAlumnoViewModel
+
+@{
+    ViewBag.Title = Model.CursoOnline.Nombre;
+
+    ViewBag.Seccion = "Cursos";
+    ViewBag.SubSeccion = "Cursos";
+    var matricula = Model.MatriculaCursoOnline;
+    var curso = Model.CursoOnline;
+    var usuario = Model.Usuario;
+}
+
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListUsuario", "User")">Usuarios de la Empresa</a></li>
+    <li><a href="@Url.Action("ListAlumnoCursoOnline", "Course", new { UsuarioId = usuario.UsuarioId})">Historial de Cursos</a></li>
+}
+
+@section Jumbotron{
+    <div class="container-fluid container-fixed-lg @*bg-white*@">
+        <div class="inner">
+
+            <div class="container-md-height m-b-20">
+                <div class="row row-md-height">
+                    <div class="col-lg-7 col-md-height col-md-7 col-top">
+
+                        <div class="panel panel-transparent">
+
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <i class="fa fa-book"></i>&nbsp;@curso.Nombre
+                                </div>
+                            </div>
+
+                            <div class="panel-body">
+                                <h3><i class="fa fa-user"></i>&nbsp;@usuario.Nombre @usuario.Apellido</h3>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-5 col-md-5 col-md-height col-middle text-right">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container-fluid container-fixed-lg">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="invoice padding-50 sm-padding-10">
+                <div>
+                    <div class="pull-left">
+                    </div>
+                    <div class="pull-right">
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <br>
+                <br>
+                <div class="container-sm-height">
+                    <div class="row-sm-height">
+                        <div class="col-md-3 col-sm-height col-bottom sm-no-padding sm-p-b-20">
+                            <div>
+                                <div class="pull-left font-montserrat bold all-caps">Numero Preguntas Evalucion:</div>
+                                <div class="pull-right">@curso.NumPreguntasEvaluacion</div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div>
+                                <div class="pull-left font-montserrat bold all-caps">Tiempo de Evaluacion :</div>
+                                <div class="pull-right">@curso.TiempoEvaluacion</div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="table-responsive">
+                    <table class="table m-t-50">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Número</th>
+                                <th>Inicio</th>
+                                <th>Fin</th>
+                                <th class="text-center">Puntaje Obtenido/Total</th>
+                                <th class="text-center" style="min-width: 9.3em">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{var i = 0;}
+                            @foreach (var evaluacion in Model.LstEvaluacionCursoOnline)
+                            {
+                                i++;
+                                var porcentajeObtenido = ((evaluacion.PuntajeObtenido) / (evaluacion.PuntajeTotal)).ToDecimal();
+                                var Aprobado = porcentajeObtenido >= evaluacion.PorcentajeAprobacion;
+                                
+                                <tr class="@(Aprobado ? "success":"")">
+                                    <td class="text-center">@i</td>
+                                    <td class="text-center">@evaluacion.FechaInicio </td>
+                                    <td class="text-center">@(evaluacion.FechaFin != null ? evaluacion.FechaFin +"" : "--")</td>
+                                    <td class="text-center">@(evaluacion.PuntajeObtenido != null ? evaluacion.PuntajeObtenido.ToString() : "0") / @evaluacion.PuntajeTotal </td>
+                                    <td class="text-center">
+                                        <div class="label label-@(((evaluacion.PuntajeObtenido.HasValue ? evaluacion.PuntajeObtenido : 0) * 100/evaluacion.PuntajeTotal) < evaluacion.PorcentajeAprobacion? "danger":"success")">
+                                            <i class="fa fa-@( ((evaluacion.PuntajeObtenido.HasValue ? evaluacion.PuntajeObtenido : 0) * 100/evaluacion.PuntajeTotal) < evaluacion.PorcentajeAprobacion ? "close" : "check")"></i>&nbsp;
+                                            @( ((evaluacion.PuntajeObtenido.HasValue ? evaluacion.PuntajeObtenido : 0) * 100 / evaluacion.PuntajeTotal) < evaluacion.PorcentajeAprobacion ? "Desaprobado" : "Aprobado")
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

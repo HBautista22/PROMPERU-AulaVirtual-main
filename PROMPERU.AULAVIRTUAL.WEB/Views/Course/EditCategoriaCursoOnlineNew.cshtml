@@ -1,0 +1,60 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.EditCategoriaCursoOnlineViewModel
+@{
+    ViewBag.Title = "EditCategoriaCursoOnlineNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Categoria</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Categoria</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row">
+    <div class="col-lg-12 box-grey-content">
+        <h2>Agregar Categoria</h2>
+        <div class="content-form-grey">
+            <form method="post" id="searchUser">
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(x => x.CategoriaCursoOnlineId)
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="">Nombre</label>
+
+                            @Html.TextBoxFor(x => x.Nombre, new { @class = "form-control bg" })
+
+                            @Html.ValidationMessageFor(x => x.Nombre)
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="display:none">
+                        <div class="form-group">
+                            <label for="">Asunto</label>
+                            @Html.TextBoxFor(x => x.Color, new { @class = "form-control bg"})
+                            @Html.ValidationMessageFor(x => x.Color)
+                        </div>
+                    </div>
+
+                
+              
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-btn">
+                        <input type="submit" class="btn btn-primary" value="Guardar">
+                        @*<input type="submit" class="btn btn-secondary" value="Cancelar">*@
+                        <a class="btn btn-secondary" href="@Url.Action("ListCategoriaCursoOnline", "Course")">Cancelar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

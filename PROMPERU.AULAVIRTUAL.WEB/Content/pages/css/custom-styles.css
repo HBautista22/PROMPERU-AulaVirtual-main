@@ -1,0 +1,453 @@
+.act-more {
+  color: #F94D56;
+}
+.act-more:hover, .act-more:active, .act-more:focus {
+  color: #F94D56;
+}
+
+.frameWrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  border: 1px solid #777777;
+  background: #f0f0f0;
+  box-shadow: 0px 0px 10px #777777;
+}
+
+.loaderFrame {
+  display: inline-block;
+  vertical-align: middle;
+  position: absolute;
+  margin: 19%;
+  border-radius: 20px;
+  padding: 25px;
+  border: 1px solid #777777;
+  background: #ffffff;
+  box-shadow: 0px 0px 10px #777777;
+}
+
+.Centerer {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.iframeSource {
+  height: 360px;
+  width: 640px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.banner {
+  margin-bottom: 35px;
+}
+
+.mb-3 {
+  margin-bottom: 30px;
+}
+
+.mb-2 {
+  margin-bottom: 20px;
+}
+
+.cf-user-profile-panel {
+  overflow-x: hidden !important;
+  padding: 0 !important;
+}
+
+.cf-pane-fix {
+  padding: 15px;
+}
+
+.cf-user-profile-header {
+  background-color: #E30614;
+  padding: 26px;
+  color: #FFFFFF;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+@media (max-width: 600px) {
+  .cf-user-profile-header {
+    padding: 15px;
+    flex-direction: column;
+  }
+}
+.cf-user-profile-header--general {
+  border-radius: 10px;
+}
+.cf-user-profile-header__section-container {
+  overflow: hidden;
+}
+@media (min-width: 1050px) {
+  .cf-user-profile-header__section-container {
+    display: block !important;
+  }
+}
+.cf-user-profile-header__top {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-bottom: 15px;
+}
+@media (min-width: 1050px) {
+  .cf-user-profile-header__top {
+    pointer-events: none;
+  }
+}
+.cf-user-profile-header__top .cf-avatar {
+    margin-right: 10px;
+    width: 36px;
+    height: 36px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+}
+
+.cf-avatar-lg {
+    margin-right: 10px;
+    width: 90px;
+    height: 90px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+}
+.cf-avatar-sm {
+    margin-right: 10px;
+    width: 36px;
+    height: 36px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+}
+.cf-avatar--0 {
+    background-image: url("/Content/pages/img/avatares/avatar-1.png");
+}
+
+.cf-avatar--1 {
+    background-image: url("/Content/pages/img/avatares/avatar-2.png");
+}
+
+.cf-avatar--2 {
+    background-image: url("/Content/pages/img/avatares/avatar-4.png");
+}
+
+.cf-avatar--3 {
+    background-image: url("/Content/pages/img/avatares/avatar-5.png");
+}
+
+.cf-avatar--4 {
+    background-image: url("/Content/pages/img/avatares/avatar-6.png");
+}
+
+.cf-avatar--5 {
+    background-image: url("/Content/pages/img/avatares/avatar-7.png");
+}
+
+.cf-avatar--6 {
+    background-image: url("/Content/pages/img/avatares/avatar-8.png");
+}
+
+.cf-avatar--7 {
+    background-image: url("/Content/pages/img/avatares/avatar-9.png");
+}
+
+.cf-avatar--8 {
+    background-image: url("/Content/pages/img/avatares/avatar-10.png");
+}
+
+.cf-avatar--9 {
+    background-image: url("/Content/pages/img/avatares/avatar-11.png");
+}
+
+.cf-user-profile-header__top .cf-avatar--0 {
+  background-image: url("/Content/pages/img/avatares/avatar-1.png");
+}
+.cf-user-profile-header__top .cf-avatar--1 {
+  background-image: url("/Content/pages/img/avatares/avatar-2.png");
+}
+.cf-user-profile-header__top .cf-avatar--2 {
+  background-image: url("/Content/pages/img/avatares/avatar-4.png");
+}
+.cf-user-profile-header__top .cf-avatar--3 {
+  background-image: url("/Content/pages/img/avatares/avatar-5.png");
+}
+.cf-user-profile-header__top .cf-avatar--4 {
+  background-image: url("/Content/pages/img/avatares/avatar-6.png");
+}
+.cf-user-profile-header__top .cf-avatar--5 {
+  background-image: url("/Content/pages/img/avatares/avatar-7.png");
+}
+.cf-user-profile-header__top .cf-avatar--6 {
+  background-image: url("/Content/pages/img/avatares/avatar-8.png");
+}
+.cf-user-profile-header__top .cf-avatar--7 {
+  background-image: url("/Content/pages/img/avatares/avatar-9.png");
+}
+.cf-user-profile-header__top .cf-avatar--8 {
+  background-image: url("/Content/pages/img/avatares/avatar-10.png");
+}
+.cf-user-profile-header__top .cf-avatar--9 {
+  background-image: url("/Content/pages/img/avatares/avatar-11.png");
+}
+.cf-user-profile-header__top .text {
+  font-size: 20px;
+  color: #FFFFFF;
+}
+.cf-user-profile-header__top .text:link, .cf-user-profile-header__top .text:hover {
+  color: #FFFFFF;
+}
+.cf-user-profile-header__top .text:link {
+  text-decoration: underline;
+  pointer-events: all;
+}
+.cf-user-profile-header__top .cf-arrow {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  display: block;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: url("data:image/svg+xml;utf8,<svg viewBox='0 0 140 140' width='24' height='24' xmlns='http://www.w3.org/2000/svg'><g><path d='m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z' fill='white'/></g></svg>") no-repeat;
+  transition: all ease-in 0.2s;
+}
+@media (min-width: 1050px) {
+  .cf-user-profile-header__top .cf-arrow {
+    display: none;
+  }
+}
+.cf-user-profile-header__top.collapsed .cf-arrow {
+  transform: translateY(-50%) rotate(-180deg);
+}
+.cf-user-profile-header__section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+@media (max-width: 1571px) {
+  .cf-user-profile-header__section {
+    flex-direction: column;
+  }
+}
+.cf-user-profile-header__blocks {
+  display: flex;
+}
+@media (max-width: 1050px) {
+  .cf-user-profile-header__blocks {
+    flex-direction: column;
+  }
+}
+.cf-user-profile-header__block {
+  position: relative;
+  display: flex;
+  margin-right: 50px;
+  min-height: 70px;
+}
+@media (max-width: 1050px) {
+  .cf-user-profile-header__block {
+    margin-right: 0;
+    min-height: auto;
+    margin-bottom: 30px;
+  }
+}
+.cf-user-profile-header__block::before {
+  content: "";
+  width: 1px;
+  height: 90%;
+  position: absolute;
+  right: -25px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #FFFFFF;
+}
+@media (max-width: 1050px) {
+  .cf-user-profile-header__block::before {
+    right: auto;
+    top: auto;
+    transform: auto;
+    bottom: -15px;
+    width: 100%;
+    height: 1px;
+  }
+}
+.cf-user-profile-header__block:last-child::before {
+  display: none;
+}
+.cf-user-profile-header__block-left {
+  margin-right: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cf-user-profile-header__block-left .icon-library {
+  margin-bottom: 10px;
+  min-height: 32px;
+}
+.cf-user-profile-header__block-left .number {
+  font-size: 18px;
+  font-weight: bold;
+}
+.cf-user-profile-header__block-right {
+  display: flex;
+  flex-direction: column;
+}
+.cf-user-profile-header__block-right .title {
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  white-space: nowrap;
+}
+.cf-user-profile-header__block-right .cf-progress-box {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.cf-user-profile-header__block-right .cf-progress-box .cf-indicator {
+  display: block;
+  margin-left: 5px;
+  color: #000000;
+}
+.cf-user-profile-header__block-right .business {
+  color: #FFFFFF;
+  font-size: 13px;
+}
+.cf-user-profile-header__block-right .cf-progress-bar {
+  display: block;
+  position: relative;
+  width: 100%;
+  min-width: 100px;
+  height: 5px;
+  background-color: #b60511;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.cf-user-profile-header__block-right .cf-progress-bar::before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: var(--value);
+  height: 5px;
+  left: 0;
+  background-color: #b3d42b;
+}
+.cf-user-profile-header__block-right .info {
+  cursor: pointer;
+  margin-left: 10px;
+}
+.cf-user-profile-header__alert {
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  padding: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  color: #565656;
+  box-shadow: 5px 5px 15px -3px rgba(0, 0, 0, 0.55);
+  max-width: 340px;
+}
+@media (max-width: 1571px) {
+  .cf-user-profile-header__alert {
+    margin-top: 20px;
+  }
+}
+.cf-user-profile-header__alert .cf-left {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+.cf-user-profile-header__alert .cf-right {
+  display: flex;
+  flex-direction: column;
+}
+.cf-user-profile-header__alert .cf-right a {
+  font-size: 13px;
+  font-weight: bold;
+  text-decoration: underline;
+  margin-top: 5px;
+  color: #E30614;
+}
+.cf-user-profile-header__alert .cf-right a:link, .cf-user-profile-header__alert .cf-right a:hover {
+  color: #E30614;
+}
+
+.cf-medals {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.cf-medals__more {
+  width: 18px;
+  height: 22px;
+  color: #FFFFFF;
+  font-size: 28px;
+  line-height: 24px;
+  padding-left: 1px;
+  font-weight: bold;
+}
+.cf-medals__medal {
+  width: 20px;
+  height: 25px;
+  background-repeat: no-repeat;
+  margin-right: 2px;
+}
+.cf-medals--gold .cf-medals__medal {
+  background-image: url("/Content/pages/img/medal-gold.png");
+}
+.cf-medals--bronze .cf-medals__medal {
+  background-image: url("/Content/pages/img/medal-bronze.png");
+}
+.cf-medals--silver .cf-medals__medal {
+  background-image: url("/Content/pages/img/medal-silver.png");
+}
+
+.cf-advisory-table__hint {
+  border-radius: 3px;
+  display: inline-block;
+  padding: 5px;
+  color: #505050;
+  min-width: 75px;
+  text-align: center;
+}
+.cf-advisory-table__hint.rejected {
+  background-color: #ff5e5e;
+  color: #FFFFFF;
+}
+.cf-advisory-table__hint.approved {
+  background-color: #57da5c;
+}
+.cf-advisory-table__hint.pending {
+  background-color: #f7de5c;
+}
+.cf-advisory-table__button-request {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+       appearance: none;
+  border: 0;
+  padding: 5px;
+  color: #FFFFFF;
+  min-width: 75px;
+  background-color: #3a8fc8;
+  border-radius: 3px;
+}
+.cf-advisory-table__button-action {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+       appearance: none;
+  border: 0;
+  padding: 5px;
+  color: #FFFFFF;
+  min-width: 75px;
+  background-color: #3a8fc8;
+  border-radius: 3px;
+}
+.cf-advisory-table__button-action.rejected {
+  background-color: #ff5e5e;
+  color: #FFFFFF;
+}
+.cf-advisory-table__button-action.approved {
+  background-color: #57da5c;
+}

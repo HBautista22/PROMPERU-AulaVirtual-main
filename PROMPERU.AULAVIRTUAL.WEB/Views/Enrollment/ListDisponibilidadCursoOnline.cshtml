@@ -1,0 +1,61 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Enrollment.ListDisponibilidadCursoOnlineViewModel
+
+@{
+    ViewBag.Title = "Disponibilidad de Cursos";
+    ViewBag.Icon = "star";
+    ViewBag.Seccion = "Matriculas";
+    ViewBag.SubSeccion = "Disponilbilidad";
+}
+
+@section Breadcrumbs{
+
+}
+
+<div class="container-fluid container-fixed-lg">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4 class="m-t-0 m-b-0"><i class="fa fa-@ViewBag.Icon"></i>&nbsp;@ViewBag.Title</h4>
+            </div>
+            <div class="btn-group pull-right m-b-10">
+                    <a class="btn btn-primary" href="@Url.Action("EditDisponibilidadCursoOnline", "Enrollment")"><i class="fa fa-plus"></i>&nbsp;Agregar Disponibilidad</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline no-footer" id="basicTable_wrapper">
+                    <table role="grid" class="table table-hover dataTable no-footer" id="basicTable">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-11">Nombres</th>
+                                <th class="text-center">Fecha Inicio</th>
+                                <th class="text-center">Fecha Fin</th>
+                                <th class="text-center">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var disponibilidad in Model.LstDisponibilidadCursoOnline)
+                            {
+                                <tr>
+                                    <td>@disponibilidad.CursoOnline.Nombre</td>
+                                    <td>@disponibilidad.FechaInicio</td>
+                                    <td>@(disponibilidad.FechaFin.ToString() ?? "No establecido")</td>
+
+                                    <td>
+                                        <div class='btn-group dropdown'>
+                                            <a class="btn btn-xs" href="@Url.Action("EditDisponibilidadCursoOnline", "Enrollment", new { DisponibilidadCursoOnlineId = disponibilidad.DisponibilidadCursoOnlineId })"><i class="fa fa-pencil-square-o"></i>&nbsp;Editar</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model.LstDisponibilidadCursoOnline, page => Url.Action("ListCursoOnline", new { p = page }), ConstantHelpers.Bootstrap3Pager)
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

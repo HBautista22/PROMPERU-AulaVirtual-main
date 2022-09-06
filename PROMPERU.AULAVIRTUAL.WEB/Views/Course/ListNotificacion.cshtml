@@ -1,0 +1,170 @@
+﻿
+@{
+    ViewBag.Title = "ListNotificacion";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+    ViewBag.SubSeccion = "ListNotificacion";
+
+}
+@section Breadcrumbs{
+
+
+    <div class="row mb-2">
+        <ol class="breadcrumb float-sm-left">
+            <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+            <li class="breadcrumb-item active">Notificaciones</li>
+        </ol>
+    </div>
+    <div class="col-sm-6">
+        <h2 class="m-0">Notificaciones</h2>
+    </div>
+}
+
+<div class="row mb-2">
+    <section class="col-lg-12">
+        <div class="row">
+            <div class="col-sm-6 content-notificaciones">
+
+                @*@foreach (var cursos in Session.GetNotificaionesCursosUsuario())
+        {
+            <a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = cursos.Item2.Split('@')[2], disponible = true })">
+                <div class="notification new">
+                    <div class="date">
+                        <span>@cursos.Item2.Split('@')[0]</span>
+                    </div>
+                    <div class="content">
+                        <p>@cursos.Item2.Split('@')[1] (Nuevo Curso Disponible)</p>
+                    </div>
+                    <div class="btn-read">
+                        <span class="mark-read">
+                            <i class="fas fa-bell"></i>
+                        </span>
+                    </div>
+                </div>
+            </a>
+
+        }*@
+
+                @foreach (var cursos in Session.GetNotificaionesCursosUsuarioLeidos())
+                {
+                    if (cursos.Item2.Split('@')[2] == "CU")
+                    {
+                        <a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = cursos.Item1, disponible = true })">
+                            <div class="notification new">
+                                <div class="date">
+                                    <span>@cursos.Item2.Split('@')[0]</span>
+                                </div>
+                                <div class="content">
+                                    <p>@cursos.Item2.Split('@')[1] (Nuevo Curso Disponible)</p>
+                                </div>
+                                <div class="btn-read">
+                                    <span class="mark-read">
+                                        <i class="fas fa-bell"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("NotificacionView", "Notificaciones", new {NotificacionId = cursos.Item1 })">
+                            <div class="notification new">
+                                <div class="date">
+                                    <span>@cursos.Item2.Split('@')[0]</span>
+                                </div>
+                                <div class="content">
+                                    <p>@cursos.Item2.Split('@')[1] (Nuevo Curso Disponible)</p>
+                                </div>
+                                <div class="btn-read">
+                                    <span class="mark-read">
+                                        <i class="fas fa-bell"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    }
+
+
+                }
+
+                @*<div class="notification new">
+            <div class="date">
+                <span>2/Oct.</span>
+            </div>
+            <div class="content">
+                <p>A ac enim tristique amet posuere ridiculus.</p>
+            </div>
+            <div class="btn-read">
+                <span class="mark-read">
+                    <i class="fas fa-bell"></i>
+                </span>
+            </div>
+        </div>
+        <div class="notification new">
+            <div class="date">
+                <span>1/Oct.</span>
+            </div>
+            <div class="content">
+                <p>Integer pulvinar dapibus egestas lectus elit magna consectetur sodales integer. </p>
+            </div>
+            <div class="btn-read">
+                <span class="mark-read">
+                    <i class="fas fa-bell"></i>
+                </span>
+            </div>
+        </div>
+        <div class="notification">
+            <div class="date">
+                <span>1/Oct.</span>
+            </div>
+            <div class="content">
+                <p>Integer pulvinar dapibus egestas lectus elit magna consectetur sodales integer. </p>
+            </div>
+            <div class="btn-read">
+                <span class="mark-read">
+                    <i class="fas fa-bell"></i>
+                </span>
+            </div>
+        </div>
+        <div class="notification">
+            <div class="date">
+                <span>31/Set.</span>
+            </div>
+            <div class="content">
+                <p>Habitasse habitasse bibendum ligula laoreet. Id luctus enim leo auctor fringilla ullamcorper.</p>
+            </div>
+            <div class="btn-read">
+                <span class="mark-read">
+                    <i class="fas fa-bell"></i>
+                </span>
+            </div>
+        </div>
+        <div class="notification">
+            <div class="date">
+                <span>28/Set.</span>
+            </div>
+            <div class="content">
+                <p>Quam posuere massa congue lectus elementum, neque.</p>
+            </div>
+            <div class="btn-read">
+                <span class="mark-read">
+                    <i class="fas fa-bell"></i>
+                </span>
+            </div>
+        </div>
+        <div class="notification">
+            <div class="date">
+                <span>21/Set.</span>
+            </div>
+            <div class="content">
+                <p>Augue odio massa, faucibus egestas metus convallis. Pellentesque amet sollicitudin.</p>
+            </div>
+            <div class="btn-read">
+                <span class="mark-read">
+                    <i class="fas fa-bell"></i>
+                </span>
+            </div>
+        </div>*@
+            </div>
+        </div><!-- /.row -->
+    </section>
+</div>

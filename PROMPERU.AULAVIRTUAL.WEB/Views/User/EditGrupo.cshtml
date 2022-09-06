@@ -1,0 +1,94 @@
+@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.EditGrupoViewModel
+
+@{
+    ViewBag.Title = "Editar Grupo";
+    ViewBag.Icon = "user_new";
+    ViewBag.Seccion = "UsuariosGrupos";
+}
+
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListUsuariosGrupos", "User")">Grupos</a></li>
+}
+
+<div class="container-fluid container-fixed-lg">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <h3 class="usuarios">@ViewBag.Title</h3>
+                </div>
+
+                <form class="form form-horizontal fondo-generico" method="post">
+                    <div class="panel-body">
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(x => x.GrupoId)
+
+                        <div class='form-group'>
+
+                            <div class="row">
+
+                                <div class="col-sm-4 m-t-10">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.LabelFor(x => x.Descripcion, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            @Html.TextBoxFor(x => x.Descripcion, new { @class = "form-control bg" })
+                                            @Html.ValidationMessageFor(x => x.Descripcion)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 m-t-10">
+                                    <div class="row">
+                                        <div class="col-sm-12 m-l-20">
+                                            @Html.LabelFor(x => x.TipoGrupo, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                        </div>
+                                        <div class='col-sm-12'>
+
+                                            @Html.DropDownListFor(x => x.TipoGrupo, new SelectList(Model.LstTipoGrupo, "Codigo", "Nombre", Model.TipoGrupo), "[- Seleccionar -]", new { @class = "form-control bg" })
+                                            @Html.ValidationMessageFor(x => x.TipoGrupo)
+                                        </div>
+                                    </div>
+                                </div>
+
+                              
+
+                                <div class="col-sm-4 m-t-10">
+                                    @Html.EditorFor(x => x.Estado)
+                                </div>
+
+                            </div>
+
+                            @*<div class="row">
+                                @if (Model.GrupoId != null)
+                                {
+                                    <div class="col-sm-12 m-l-20">
+                                        @Html.LabelFor(x => x.LstCurso, new { @class = "col-sm-6 control-label text-add-categoria" })
+                                    </div>
+                                    <div class='col-sm-12'>
+                                        @Html.DropDownListFor(x => x.CursoOnlineMaestroArr, new MultiSelectList(Model.LstCurso, "CursoOnlineMaestroId", "Nombre", Model.CursoOnlineMaestroArr), "", new { @class = "form-control bg multipleselect", @id = "cboCurso", multiple = "multiple" })
+                                        @Html.ValidationMessageFor(x => x.CursoOnlineMaestroArr)
+                                    </div>
+                                }
+                            </div>*@
+
+
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-4">
+                                <button class="btn btn-guardar-matricula pull-center text-btn-generico" type="submit">Guardar</button>
+                                <a class="btn btn-cancelar pull-center text-btn-generico" href="@Url.Action("ListUsuariosGrupos", "User")">Cancelar</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

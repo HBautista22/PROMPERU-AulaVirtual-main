@@ -1,0 +1,599 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ViewUnidadCursoOnlineViewModel
+
+
+@{
+    ViewBag.BodyStyle = "windows desktop pace-done";
+    ViewBag.Title = Model.UnidadCursoOnline.Nombre;
+    ViewBag.Seccion = "Cursos";
+    ViewBag.SubSeccion = "CursosAlumno";
+    var puedeReiniciar = Model.CursoOnline.PermiteReinicioScorm.HasValue ? Model.CursoOnline.PermiteReinicioScorm.Value : false;
+    var tieneAvance = Model.AvanceMatriculaCursoOnline != null ? Model.AvanceMatriculaCursoOnline.FechaFin.HasValue : false;
+    var puedeReiniciarUnidad = Model.UnidadCursoOnline.TipoUnidad == ConstantHelpers.TIPO_UNIDAD.SCORM && puedeReiniciar && !tieneAvance;
+    var esAdministrador = Session.GetRol() == AppRol.Administrador;
+    var i = 1;
+    //var tiempoEspera = (AppRol.Administrador == Session.GetRol()) ? 0.0 : ((DateTime.Now - Model.AvanceMatriculaCursoOnline.FechaInicio.AddMinutes(ConstantHelpers.TIEMPO_ESTADIA_UNIDAD).AddSeconds(10)).TotalSeconds * -1);
+}
+
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListCursoOnline", "Course")">Cursos</a></li>
+    @if (esAdministrador)
+    {
+        <li><a href="@Url.Action("ViewCursoOnlineAdmin", "Course", new { CursoOnlineId = Model.CursoOnlineId })">@Model.CursoOnline.Nombre</a></li>
+    }
+    else
+    {
+        <li><a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = Model.CursoOnlineId })">@Model.CursoOnline.Nombre</a></li>
+    }
+}
+
+@section Styles
+{
+    <style type="text/css">
+        /* make the video stretch to fill the screen in WebKit */
+        :-webkit-full-screen #curso {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+}
+
+@section Jumbotron{
+    <div class="container-fluid container-fixed-lg @*bg-white*@">
+        <div class="inner">
+
+            <div class="container-md-height m-b-20">
+                <div class="row">
+                    <div class="col-lg-7 col-md-height col-md-7 col-top">
+
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="invoice padding-50 sm-padding-10 row-sm-height">
+                                    <div class="banner col-md-12 col-lg-12 col-xlg-12 animation-element">
+                                        @if (string.IsNullOrEmpty(Model.CursoOnline.RutaBanner))
+                                        {
+                                            <img class="animatescroll"  style="max-height:220px; border-radius: 8px;" width="100%" height="156px" src="https://via.placeholder.com/728x180.png?text=Banner" />
+                                        }
+                                        else
+                                        {
+                                            <img class="animatescroll"  style="max-height:220px; border-radius: 8px;" width="100%" height="156px" src="@Url.Content("~/Content/bannercursos/" + Model.CursoOnline.RutaBanner)" />
+                                        }
+                                    </div>
+                                    <div class="col-md-9 col-lg-9 col-xlg-9 animation-element">
+                                        <div class="pull-left">
+                                            <h2 class="usuarios animatescroll2">@Model.CursoOnline.Nombre</h2>
+                                            <p class="small no-margin text-course-enable  animatescroll3">Categoria - @Model.CursoOnline.CategoriaCursoOnline.Nombre</p>
+                                            @*<h5 class="semi-bold m-t-0 text-course-enable">Descripción:</h5>*@
+                                            <p class="text-course-enable m-t-10 animatescroll3">Descripción: @Html.Raw(Model.CursoOnline.Descripcion)</p>
+                                            @*<h3 class="usuarios">@Model.UnidadCursoOnline.Nombre</h3>*@
+                                            <div class="clearfix"></div>
+                                            <br>
+                                            <br>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                  
+                                    <div class="col-lg-3 col-md-3 text-right">
+                                        @if (puedeReiniciarUnidad)
+                                        {
+                                            <a class="btn btn-filtrar-usuario  filtrar p-t-10 m-r-15" data-toggle="modal" data-target="#modal-reinicio"><i class="fa fa-refresh"></i>&nbsp;Reiniciar Avances</a>
+                                        }
+                                        <button class="btn btn-info m-r-10" onclick="$('#curso').fullScreen(true)"><span><i class="fa fa-arrows-alt"></i></span></button>
+                                        @if (esAdministrador)
+                                        {
+                                            <a class="btn btn-filtrar-usuario  filtrar p-t-10 m-r-10" href="@Url.Action("EditUnidadCursoOnline", "Course", new { CursoOnlineId = Model.CursoOnlineId, UnidadCursoOnlineId = Model.UnidadCursoOnlineId })"><i class="fa fa-pencil"></i>&nbsp;Editar Unidad</a>
+                                        }
+
+                                        <a class="btn btn-next btn-filtrar-usuario  filtrar p-t-10 @(Model.AvanceMatriculaCursoOnline != null && Model.AvanceMatriculaCursoOnline.FechaFin == null ? "disabled" : String.Empty)" href="@Url.Action("ViewSiguienteUnidadCursoOnline", new { UnidadCursoOnlineId = Model.UnidadCursoOnlineId })">Siguiente <i class="fa @(Model.AvanceMatriculaCursoOnline != null && Model.AvanceMatriculaCursoOnline.FechaFin == null ? "fa-lock" : "fa-chevron-right")"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@helper VerHijo(PROMPERU.AULAVIRTUAL.BE.CURSOS.UnidadCursoOnline unidad, int index, int level = 0, string sufijo = "")
+{
+var contenidoId = unidad.UnidadCursoOnlineId;
+var parentId = unidad.UnidadCursoOnlinePadreId ?? 0;
+var indexHijo = 1;
+var sufijoActual = sufijo + index;
+var contenidosHijos = unidad.UnidadCursoOnline1.Where(x => !x.Estado.Equals(ConstantHelpers.ESTADO.ELIMINADO)).OrderBy(x => x.Orden).ToList();
+var inactive = unidad.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO) ? "danger c-white" : string.Empty;
+var hasOptions = false;
+var hasFile = false;
+
+    <tr class="@inactive" data-id="@contenidoId" data-parent="@parentId" data-level="@level" data-status-id="@unidad.Estado.Equals(ConstantHelpers.ESTADO.ACTIVO)">
+        <td class="">@sufijoActual</td>
+        @*<td class="text-center">@(unidad.Estado.Equals(ConstantHelpers.ESTADO.ACTIVO) ? unidad.Orden.ToString() : "-")</td>*@
+        <td class="">@unidad.Nombre<br><br>
+        <div class="container visible-xs">
+                        @if (!string.IsNullOrEmpty(unidad.RutaArchivoAdicional))
+            {
+                hasFile = true;
+                <!--<a class="btn btn-xs" @Data.ModalLink("_ViewContentAdditionalFile", new { UnidadCursoOnlineId = unidad.UnidadCursoOnlineId, hasFile })><i class="fa fa-eye"></i> Ver archivo</a>-->
+                hasOptions = true;
+            }
+            @if (!string.IsNullOrEmpty(unidad.RutaWeb))
+            {
+                <a class="btn btn-xs" @Data.ModalLink("_ViewContentAdditionalFile", new { UnidadCursoOnlineId = unidad.UnidadCursoOnlineId, ExternalLink = unidad.RutaWeb, hasFile })>
+                    <i class="fa fa-link"></i>Ver enlace externo
+                </a>
+                hasOptions = true;
+            }
+            @if (!hasOptions)
+            {
+                <p>Sin opciones a mostrar</p>
+            }
+        </div>
+        </td>
+        @*<td> @(unidad.TipoUnidad1?.Nombre)</td>*@
+        @*<td class="text-center"><span class="label @(unidad.Estado == ConstantHelpers.ESTADO.ACTIVO ? "label-success" : "label-important")">@(unidad.Estado == ConstantHelpers.ESTADO.ACTIVO ? "Activo" : "Inactivo")</span></td>*@
+
+        <td class="text-center hidden-xs">
+            @if (!string.IsNullOrEmpty(unidad.RutaArchivoAdicional))
+            {
+                hasFile = true;
+                <!--<a class="btn btn-xs" @Data.ModalLink("_ViewContentAdditionalFile", new { UnidadCursoOnlineId = unidad.UnidadCursoOnlineId, hasFile })><i class="fa fa-eye"></i> Ver archivo</a>-->
+                hasOptions = true;
+            }
+            @if (!string.IsNullOrEmpty(unidad.RutaWeb))
+            {
+                if (unidad.RutaWeb.IndexOf("https://repositorio.promperu.gob.pe") == -1)
+                {
+
+                    <a class="btn btn-xs" href="@unidad.RutaWeb" target="_blank">
+                        <i class="fa fa-link"></i>Ver enlace externo
+                    </a>
+
+                }
+                else
+                {
+
+                    <a class="btn btn-xs" @Data.ModalLink("_ViewContentAdditionalFile", new { UnidadCursoOnlineId = unidad.UnidadCursoOnlineId, ExternalLink = unidad.RutaWeb, hasFile })>
+                        <i class="fa fa-link"></i>Ver enlace externo
+                    </a>
+
+                }
+
+
+                hasOptions = true;
+            }
+            @if (!hasOptions)
+            {
+                <p>Sin opciones a mostrar</p>
+            }
+        </td>
+    </tr>
+
+if (unidad.TipoUnidadId == ConstantHelpers.TIPO_UNIDAD.DB_CONTENIDO)
+{
+    return;
+}
+else if (contenidosHijos.Count() > 0)
+{
+    level++;
+    foreach (var item in contenidosHijos)
+    {
+            <text>@VerHijo(item, indexHijo++, level, $"{sufijoActual}.")</text>
+    }
+}
+}
+
+<div class="container-fluid container-fixed-lg">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-transparent ">
+
+                                @{
+                                    var lstEnlaceExterno = Model.LstRecurso.Where(x => x.Tipo == "ENL").ToList();
+                                    var lstRecursoDigial = Model.LstRecurso.Where(x => x.Tipo == "REC").ToList();
+                                }
+                                <ul class="nav nav-tabs nav-tabs-fillup">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#slide1" style="overflow:hidden"><span>Contenido</span></a>
+                                    </li>
+
+                                    @if (!String.IsNullOrEmpty(Model.UnidadCursoOnline.Descripcion))
+                                    {
+                                        <li>
+                                            <a data-toggle="tab" href="#slide2" style="overflow:hidden"><span>Descripción</span></a>
+                                        </li>
+                                    }
+                                    @if (lstEnlaceExterno.Count > 0 || lstRecursoDigial.Count > 0)
+                                    {
+                                        <li>
+                                            <a data-toggle="tab" href="#slide3" style="overflow:hidden"><span>Recursos</span></a>
+                                        </li>
+                                    }
+
+                                    @if (Model.LstTemas.Count > 0)
+                                    {
+                                        <li>
+                                            <a data-toggle="tab" href="#slide4" style="overflow:hidden"><span>Temas/Unidades</span></a>
+                                        </li>
+                                    }
+
+                                    @if (Model.TipoUnidad == ConstantHelpers.TIPO_UNIDAD.TIEMPO)
+                                    {
+                                        <li class="pull-right">
+                                            <h4 id="timer"></h4>
+                                        </li>
+                                    }
+                                </ul>
+
+                                <div class="tab-content">
+
+                                    <div class="tab-pane slide-left active" id="slide1">
+                                        <div class="row column-seperation">
+                                            <div class="text-center">
+
+                                                @* Verificar si los archivos adicionales son solo tipo scorm o tiempo*@
+
+                                                @if (!string.IsNullOrEmpty(Model.RutaArchivoAdicional))
+                                                {
+                                                    <div class="col-sm-12" style="margin-bottom:20px;">
+                                                        <a class="btn btn-primary" @Data.ModalLink("_ViewContentAdditionalFile", new { UnidadCursoOnlineId = Model.UnidadCursoOnlineId })>Visualizar contenido <i class="fa fa-eye"></i></a>
+                                                    </div>
+                                                }
+
+                                                @{
+                                                    var urlCurso = Model.UnidadCursoOnline.RutaArchivoInicio ?? (Model.UnidadCursoOnline.RutaWeb ?? string.Empty);
+                                                    
+                                                    var urlBaseCurso = Server.MapPath("~/Archivos adicionales");
+
+                                                    if (!(urlCurso.StartsWith("http://") || urlCurso.StartsWith("https://")))
+                                                    {
+                                                        urlCurso = Url.Content(urlBaseCurso + ConstantHelpers.GET_RELATIVE_COURSE_RESOUCE_PATH(Model.CursoOnline.Codigo, Model.UnidadCursoOnline.GUID) + Model.UnidadCursoOnline.RutaArchivoInicio);
+                                                    }
+
+                                                    if (!urlCurso.StartsWith("https://www.youtube.com/embed/"))
+                                                    {
+
+                                                        if (urlCurso.StartsWith("https://youtu.be") || urlCurso.StartsWith("https://www.youtube.com"))
+                                                        {
+                                                            var NombreVideo = "";
+
+                                                            if (urlCurso.StartsWith("https://www.youtube.com"))
+                                                            {
+                                                                NombreVideo = urlCurso.Substring(urlCurso.IndexOf('=') + 1, urlCurso.Length - (urlCurso.IndexOf('=')+1) );
+                                                            }
+                                                            else
+                                                            {
+                                                                NombreVideo = urlCurso.Replace("https://youtu.be/", "");
+                                                            }
+
+                                                            urlCurso = "https://www.youtube.com/embed/" + NombreVideo;
+                                                        }
+
+                                                    }
+
+                                                }
+                                                <iframe src="@urlCurso" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" frameborder="0" height="@Model.UnidadCursoOnline.AltoContenedor" width="@Model.UnidadCursoOnline.AnchoContenedor" id="curso"></iframe>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @if (!String.IsNullOrEmpty(Model.UnidadCursoOnline.Descripcion))
+                                    {
+                                        <div class="tab-pane slide-left" id="slide2">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>@Html.Raw(Model.UnidadCursoOnline.Descripcion)</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    @if (lstEnlaceExterno.Count > 0 || lstRecursoDigial.Count > 0)
+                                    {
+                                        <div class="tab-pane slide-left" id="slide3">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="col-sm-6">
+                                                        <div class="panel panel-default">
+                                                            <div class="panel-body">
+                                                                <h3><i class="fa fa-download"></i>&nbsp;Recursos digitales</h3>
+
+                                                                @if (lstRecursoDigial.Count() == 0)
+                                                                {
+                                                                    <i>La unidad no tiene recursos digitales</i>
+                                                                }
+
+                                                                <ul>
+                                                                    @foreach (var recurso in lstRecursoDigial)
+                                                                    {
+                                                                        <li><a href="@recurso.Ruta">@recurso.Nombre</a></li>
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="panel panel-default">
+                                                            <div class="panel-body">
+                                                                <h3><i class="fa fa-link"></i>Enlaces externos</h3>
+
+                                                                @if (lstEnlaceExterno.Count() == 0)
+                                                                {
+                                                                    <i>La unidad no tiene enlaces externos</i>
+                                                                }
+
+                                                                <ul>
+                                                                    @foreach (var recurso in lstEnlaceExterno)
+                                                                    {
+                                                                        <li><a href="@recurso.Ruta">@recurso.Nombre</a></li>
+                                                                    }
+
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    }
+
+                                    @if (Model.LstTemas.Count > 0)
+                                    {
+                                        <div class="tab-pane slide-left" id="slide4">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="table-responsive">
+                                                        <table id="collaptable" class="table m-t-50">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th class="col-sm-6 ">Nombre</th>
+                                                                    @*<th>Estructura</th>
+                                                                        <th class="text-center">Estado</th>*@
+                                                                    <th class="text-center hidden-xs" style="min-width: 9.3em">Opciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody @*id="sortable"*@>
+
+                                                                @if (Model.LstTemas.Count() > 0)
+                                                                {
+                                                                    foreach (var item in Model.LstTemas)
+                                                                    {
+                                                                        <text>@VerHijo(item, i++)</text>
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    @RazorHelpers.Content("assets/plugins/sortable/js/jquery-sortable.js", Url)
+    @RazorHelpers.Content("assets/plugins/aCollapTable/jquery.aCollapTable.min.js", Url)
+
+    <script>
+        var dataList = [];
+        var CursoOnlineId = @Model.CursoOnlineId;
+
+        $(document).ready(function () {
+            dataList = $(".table.m-t-50 tbody tr[data-id]").each(function(i,e){ dataList.push($(e).data('id'))});
+            /*$(function () {
+                $('#sortable').sortable({
+                    change: function () {
+                        dataList = [];
+                        $(".table.m-t-50 tbody tr[data-id]").each(function(i,e){ dataList.push($(e).data('id'))});
+                    }
+                });
+            });
+            $('#sortable').find('tr').each(function(e,i){console.log($(i).data('id'))})*/
+            //$('#sort').on('click', OrderValues);
+
+            //$('#collaptable').aCollapTable({
+            //           startCollapsed: true,
+            //           addColumn: false,
+            //           plusButton: '<i class="fa fa-plus-circle "></i> ',
+            //           minusButton: '<i class="fa fa-minus-circle "></i> '
+            //       });
+        });
+    </script>
+
+    @if (Model.TipoUnidad == ConstantHelpers.TIPO_UNIDAD.SCORM)
+    {
+        <script>
+
+            @*
+        $('.scormApi').hide();
+
+        var tiempo = parseInt( @tiempoEspera) * 1000;
+        window.onload = function () {
+            var timer = setInterval(function () {
+                $('.btn-next').removeClass('disabled');
+                $('.btn-next i').removeClass().addClass('fa.fa-chevron-right');
+
+                $.get('@Url.Action("ViewSiguienteUnidadCursoOnline", new { UnidadCursoOnlineId = Model.UnidadCursoOnlineId })');
+
+                //$('.pgn-wrapper.notification-unidad').show();
+
+                $('data-button=siguiente').click();
+                clearInterval(timer);
+            }, tiempo);
+
+            if (tiempo <= 0) {
+                clearTimeout(timer)
+            }
+        };
+
+        var videoElement = document.getElementById("curso");
+
+        $(function () {
+            $(document).bind("fullscreenchange");
+        });*@
+        </script>
+    }
+
+    @*@if (Model.TipoUnidad == ConstantHelpers.TIPO_UNIDAD.TIEMPO)
+        {
+            <script>
+                Date.prototype.addSeconds = function (h) {
+                    this.setSeconds(this.getSeconds() + h);
+                    return this;
+                }
+
+                var date = (new Date().addSeconds(60 * '@Model.TiempoPermanencia')) / 1000;
+
+                $('#timer').countid({
+                    clock: true,
+                    dateTime: date,
+                    dateTplRemaining: "%H:%M:%S",
+                    complete: function () {
+                        $('#timer').remove();
+                        $.ajax({
+                            url: '@(Html.Raw(Url.Action("_UpdateAvanceMatriculaCursoOnline", "Course", new { MatriculaCursoOnlineId = Model.MatriculaCursoOnlineId, UnidadCursoOnlineId = Model.UnidadCursoOnlineId })))',
+                            success: function (data) {
+                                $('.btn-next').removeClass('disabled');
+                                $('.btn-next').find('i').remove();
+                                console.log(data);
+                            }
+                        })
+                    }
+                })
+
+            </script>
+        }*@
+
+
+    @if (Model.TipoUnidad == ConstantHelpers.TIPO_UNIDAD.TIEMPO)
+    {
+        <script>
+
+            var finalized = false;
+
+            function pad(n, width, z) {
+                z = z || '0';
+                n = n + '';
+                return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+            }
+
+            Date.prototype.addSeconds = function (h) {
+                this.setSeconds(this.getSeconds() + h);
+                return this;
+            }
+
+            var countDownDate = new Date().addSeconds(60 * '@Model.TiempoPermanencia').getTime();
+
+            var timer = setInterval(function () {
+                var now = new Date().getTime();
+
+                var difference = countDownDate - now;
+
+                //var days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                //var hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById("timer").innerHTML = pad(minutes, 2) + " : " + pad(seconds, 2);
+
+                if (difference < 0) {
+                    clearInterval(timer);
+                    document.getElementById("timer").innerHTML = "00 : 00";
+                    if (!finalized) {
+                        finalized = true;
+                        document.getElementById("timer").innerHTML = '';
+                        $.ajax({
+                            url: '@(Html.Raw(Url.Action("_UpdateAvanceMatriculaCursoOnline", "Course", new { MatriculaCursoOnlineId = Model.MatriculaCursoOnlineId, UnidadCursoOnlineId = Model.UnidadCursoOnlineId })))',
+                            success: function (data) {
+                                $('.btn-next').removeClass('disabled');
+                                $('.btn-next').find('i').remove();
+                                console.log(data);
+                            }
+                        })
+                    }
+                }
+            }, 1000);
+
+        </script>
+    }
+
+    <script>
+        var videoElement = document.getElementById("curso");
+
+        function PushUnidad() {
+
+            var data = {
+                UnidadCursoOnlineIdEnc: '@Model.UnidadCursoOnlineIdEnc',
+                MatriculaCursoOnlineIdEnc: '@Model.MatriculaCursoOnlineIdEnc',
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PushUnidadCursoOnline", "Json")',
+                data: data,
+                success: function () {
+                },
+                error: function () {
+                    console.error('sin conexion');
+                },
+                dataType: "json"
+            });
+        }
+
+
+        $(function () {
+            $(document).bind("fullscreenchange");
+
+            //setInterval(PushUnidad, 300000);
+        });
+    </script>
+
+    @if (puedeReiniciarUnidad)
+    {
+        <div class="modal fade fill-in" id="modal-reinicio" tabindex="-1" role="dialog" aria-hidden="true">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close"></i></button>
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 no-padding sm-m-t-10 text-center">
+                                <h5 data-container="titulo"><i class="fa fa-warning"></i> Esta seguro de reiniciar los avances de la unidad?</h5>
+                                <p><strong>Se perderán los avances realizados en la unidad de manera permanente.</strong></p>
+                                <br>
+                                <button class="btn btn-default btn-lg" data-dismiss="modal"><i class="fa fa-times" data-element="icono"></i>&nbsp; Cancelar</button>
+                                <a class="btn btn-warning btn-lg text-black" href="@Url.Action("RestartParametroScorm", "Course", new { MatriculaCursoOnlineId = Model.MatriculaCursoOnlineId, UnidadCursoOnlineId = Model.UnidadCursoOnlineId })"><i class="fa fa-refresh"></i>&nbsp; Reiniciar</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+}

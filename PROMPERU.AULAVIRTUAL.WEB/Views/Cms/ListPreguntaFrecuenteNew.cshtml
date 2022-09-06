@@ -1,0 +1,81 @@
+﻿@model IEnumerable<PROMPERU.AULAVIRTUAL.BE.CMS.CMS_PreguntaFrecuente>
+@{
+    ViewBag.Title = "ListPreguntaFrecuenteNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Preguntas frecuentes</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Preguntas frecuentes</h2>
+        </div>
+    </div><!-- /.row -->
+}
+<div class="row table-acciones table-content list-empresa">
+    <div class="col-sm-6">
+        <h2>Lista de Certificados</h2>
+    </div>
+    <div class="col-sm-6 btns-table">
+        <a class="btn btn-primary" href="@Url.Action("AddEditPreguntaFrecuente", "CMS")">Agregar Pregunta frecuente</a>
+
+    </div>
+    
+</div>
+<div class="row mis-solicitudes table-content">
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list tipo-empresa" align="center">
+            <thead>
+                <tr>
+                    <th>
+                        Pregunta
+                    </th>
+                    <th>
+                        Respuesta
+                    </th>
+                    <th>
+                        Publicado
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pregunta)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Respuesta)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EsPublicado)
+                    </td>
+                    <td>
+                        
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                Acciones
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item" href="@Url.Action("AddEditPreguntaFrecuente", "CMS", new { id = item.Id })">Editar</a></li>
+
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+

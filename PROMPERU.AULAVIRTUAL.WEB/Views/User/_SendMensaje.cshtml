@@ -1,0 +1,81 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User._SendMensajeViewModel
+@{
+    Layout = ConstantHelpers.Layout.MODAL_LAYOUT_PATH;
+    ViewBag.ModalClass = "";
+    //ViewBag.ModalClass = "stick-up";
+    ViewBag.ModalDialogClass = "modal-md";
+    ViewBag.Form = new ModalFormHelpers("_SendMensaje", "User", FormMethod.Post);
+    //ViewBag.Icon = "fa fa-circle";
+    //ViewBag.Title = Model.CursoOnlineId;
+    ViewBag.DeshabilitarCerrarFooter = true;
+
+}
+
+
+<div class="form-group-attached text-center">
+    <br />
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.GrupoId)
+    @Html.HiddenFor(x => x.ListItems, new { @id = "hitems" })
+
+    <h2>Enviar Notificaciones</h2>
+
+</div>
+
+@section Footer{
+    <!--<button class="btn btn-info pull-left" type="submit"><i class="fa fa-floppy-o"></i>&nbsp;Guardar Disponibilidad</button>-->
+
+    <div class="row">
+        <input type="hidden" id="hmensaje" name="Mensaje">
+        <div class="col-lg-12 text-left">
+
+            <div class="form-group">
+                @Html.LabelFor(x => Model.LstNotificaciones, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                @Html.DropDownListFor(x => x.LstNotificaciones, new SelectList(Model.LstNotificaciones, "NotificacionId", "Titulo", Model.NotificacionId), "[- Seleccionar -]", new { @class = "form-control bg" })
+                @Html.ValidationMessageFor(x => Model.LstNotificaciones)
+            </div>
+            
+            @*<div class="form-group">
+                @Html.LabelFor(x => Model.Asunto, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                @Html.TextBoxFor(x => Model.Asunto, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa un asunto" })
+                @Html.ValidationMessageFor(x => Model.Asunto)
+            </div>*@
+
+        </div>
+
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-sm-5 col-sm-offset-1 align-self-center">
+            <div class="form-group form-group-default input-group">
+                <button class="btn btn-guardar-matricula pull-center text-btn-generico" type="submit">Enviar <i class="fa fa-send"></i></</button>
+            </div>
+        </div>
+        <div class="col-sm-5 col-sm-offset-1 align-self-center">
+            <div class="form-group form-group-default input-group">
+                <a class="btn btn-cancelar pull-center text-btn-generico" data-dismiss="modal" href="#">Cancelar</a>
+            </div>
+        </div>
+    </div>
+
+}
+
+<script language="text/javascript">
+
+    $(function () {
+
+        $("#LstNotificaciones").on("change", function () {
+
+            var mensaje = $("#LstNotificaciones option:selected").val();
+
+            $("#hmensaje").val(mensaje);
+
+
+
+        });
+
+
+    });
+
+</script>

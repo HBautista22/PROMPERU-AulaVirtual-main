@@ -1,0 +1,473 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ViewCursoOnlineViewModel
+
+@{
+    ViewBag.Title = Model.CursoOnline.Nombre;
+    ViewBag.Seccion = ViewBag.Seccion;
+    ViewBag.SubSeccion = "Cursos";
+
+
+    //var puedeDescargarCertificado = Model.MatriculaCursoOnline.PorcentajeObtenido.HasValue && Model.MatriculaCursoOnline.PorcentajeObtenido > Model.CursoOnline.PorcentajeAprobacion;
+
+    var esAdministrador = Session.GetRol() == AppRol.Administrador;
+    var esSupervisor = Session.GetRol() == AppRol.Supervisor;
+
+    var estaDisponible = Model.EstaDisponible;
+    var estaMatriculado = Model.MatriculaCursoOnline != null;
+    var puedeDescargarCertificado = false;
+    if (Model.CursoOnline.TieneExamen == ConstantHelpers.ESTADO.ACTIVO)
+    {
+        puedeDescargarCertificado = estaMatriculado && Model.SeCompletoEvaluacionesSatisfactoriamente && Model.MatriculaCursoOnline.Estado.Equals(ConstantHelpers.ESTADO_MATRICULA.APROBADO);
+    }
+    else
+    {
+        puedeDescargarCertificado = estaMatriculado && Model.MatriculaCursoOnline.Estado.Equals(ConstantHelpers.ESTADO_MATRICULA.APROBADO);
+    }
+
+    var puedeHacerEvaluacion = estaMatriculado && Model.MatriculaCursoOnline.PorcentajeAvance >= 100 && !Model.MatriculaCursoOnline.Estado.Equals(ConstantHelpers.ESTADO_MATRICULA.APROBADO);
+
+    DateTime? fechaLimiteMatricula = null;
+    if (estaMatriculado)
+    {
+        fechaLimiteMatricula = Model.MatriculaCursoOnline.FechaMatricula.AddDays(60);
+    }
+
+}
+
+@section Styles{
+    @if (AppRol.Supervisor == Session.GetRol())
+    {
+        @RazorHelpers.Content("assets/plugins/jquery-datatable/media/css/jquery.dataTables.css", Url)
+        @RazorHelpers.Content("assets/plugins/jquery-datatable/extensions/FixedColumns/css/dataTables.fixedColumns.min.css", Url)
+        @RazorHelpers.Content("assets/plugins/datatables-responsive/css/datatables.responsive.css", Url)
+    }
+}
+
+@section Breadcrumbs{
+    <li><a href="@Url.Action(ViewBag.Vista, "Course")">@ViewBag.Name</a></li>
+}
+
+<div class="container-fluid container-fixed-lg">
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="invoice padding-50 sm-padding-10 row-sm-height">
+
+                <div class="banner col-md-12 animation-element">
+                    @if (string.IsNullOrEmpty(Model.CursoOnline.RutaBanner))
+                    {
+                        <img class="animatescroll" style="border-radius: 8px;" width="100%" src="https://via.placeholder.com/728x180.png?text=Banner" />
+                    }
+                    else
+                    {
+                        <img class="animatescroll" style="border-radius: 8px;" width="100%" src="@Url.Content("~/Content/bannercursos/" + Model.CursoOnline.RutaBanner)" />
+                    }
+                </div>
+                <div class="col-md-12 animation-element">
+                    <div class="pull-left">
+                        <h2 class="usuarios animatescroll2">@Model.CursoOnline.Nombre</h2>
+                        <p class="small no-margin text-course-enable animatescroll3">Categoria - @Model.CursoOnline.CategoriaCursoOnline.Nombre</p>
+                        @*<h5 class="semi-bold m-t-0 text-course-enable">Descripción:</h5>*@
+                        <p class="text-course-enable m-t-10 animatescroll3">Descripción: @Html.Raw(Model.CursoOnline.Descripcion)</p>
+                        <div class="clearfix"></div>
+
+                        <br>
+                        <br>
+                    </div>
+
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="col-md-12">
+                    <div class="pull-left">
+                        @if (Session.GetRol() != AppRol.Alumno && Session.GetRol() != AppRol.Empresa)
+                        {
+
+                            if (Model.CountUsuariosEmpresa < 600)
+                            {
+                                <a class="btn btn-course-enable" @Data.ModalLink("_ResgisterUsuariosMatriculaCursoOnline", "Enrollment", new { CursoOnlineId = Model.CursoOnlineId })>Matricular usuarios</a>
+                            }
+                            <a class="btn btn-course-enable" style="width: auto;" @Data.ModalLink("_RegisterUsuarioCargaMasiva", "Enrollment", new { CursoOnlineId = Model.CursoOnlineId })>Matricular usuarios (masivo)</a>
+                            <div class="btn-group-vertical">
+                                <div>
+                                    <div class="btn-group dropdown-default">
+                                        <button type="button" class="btn dropdown-toggle text-center base" data-toggle="dropdown" style="overflow: hidden; width: 170px !important;height: auto !important;"> Opciones <i class='fa fa-chevron-down dropdown-toggle m-l-20' data-toggle='dropdown' style="cursor:pointer"></i></button>
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="btnGroupOpciones">
+                                            @if (esAdministrador || (esSupervisor && estaDisponible))
+                                            {
+                                                @*<a class="btn btn-inverse" href="@Url.Action("ListUsuarioMatriculado", "Enrollment",new { CursoOnlineId=Model.CursoOnlineId})"><i class="fa fa-users"></i>&nbsp;Usuarios matriculados</a>
+            <a class="btn btn-info" @Data.ModalLink("_ResgisterUsuariosMatriculaCursoOnline", "Enrollment", new { CursoOnlineId = Model.CursoOnlineId })><i class="fa fa-user-plus"></i>&nbsp;Matricular usuarios</a>
+            <a class="btn btn-primary" href="@Url.Action("SendRecordatorio", "Report", new { CursoOnlineId = Model.CursoOnlineId })"><i class="fa fa-send"></i>&nbsp;Enviar Recordatorio</a>
+                                                *@
+                                                <li>
+                                                    <a href="@Url.Action("ListUsuarioMatriculado", "Enrollment", new { CursoOnlineId = Model.CursoOnlineId })"><i class="fa fa-users"></i>&nbsp;Usuarios matriculados</a>
+                                                </li>
+
+                                                <li>
+                                                    @*<a href="@Url.Action("SendRecordatorio", "Report", new { CursoOnlineId = Model.CursoOnlineId })"><i class="fa fa-send"></i>&nbsp;Enviar Recordatorio</a>*@
+                                                    <a @Data.ModalLink("_SendRecordatorio", "Report", new { CursoOnlineId = Model.CursoOnlineId })><i class="fa fa-send"></i>&nbsp;Enviar Recordatorio</a>
+                                                </li>
+                                            }
+                                            @*@if (puedeDescargarCertificado)
+                                            {*@
+                                            <li class="divider"></li>
+                                            <li>
+                                                @*<a class="btn btn-success" href="@Url.Action("DownloadCertificado", "Document", new { MatriculaCursoOnlineId = matricula.MatriculaCursoOnlineId, CursoOnlineId = Model.CursoOnlineId })"><i class="fa fa-file-o"></i>&nbsp;Descargar Constancia</a>*@
+                                            </li>
+                                            @*}*@
+                                            @if (puedeHacerEvaluacion && Model.CursoOnline.TieneExamen == ConstantHelpers.ESTADO.ACTIVO)
+                                            {
+                                                <li class="divider"></li>
+                                                <li>
+                                                    @*<a class="btn btn-primary" href="@Url.Action("DoEvaluacionCursoOnline", "Evaluation", new { CursoOnlineId = Model.CursoOnlineId })"><i class="fa fa-check"></i>&nbsp;Iniciar Examen</a>*@
+                                                    <a href="@Url.Action("DoEvaluacionCursoOnline", "Evaluation", new { CursoOnlineId = Model.CursoOnlineId })"><i class="fa fa-check"></i>&nbsp;Iniciar Examen</a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="container-sm-height">
+                    <div class="row-sm-height">
+
+
+                    </div>
+
+                    <div class="row-sm-height">
+                        @*@if (!estaMatriculado&& estaDisponible && (esSupervisor || esAdministrador || Model.PuedeMatricularse))
+                            {
+                                                <button class="btn btn-course-enable pull-right" data-target="#modalFillIn" data-toggle="modal" id="btnFillSizeToggler">Matricularme</button>
+                                            }*@
+                        <button class="btn btn-course-enable pull-right" data-target="#modalFillIn" data-toggle="modal" id="btnFillSizeToggler">Inscribirse</button>
+                    </div>
+                </div>
+
+
+                <div class="table-responsive">
+                    <table class="table m-t-10">
+                        <thead>
+                            <tr>
+                                <th class="title-table"></th>
+                                <th class="col-sm-12 title-table">Nombre</th>
+                                <th class="text-center title-table hidden-xs" style="min-width: 20.3em">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var dictUnidad in Model.DictUnidadCursoOnline)
+                            {
+                                var unidad = dictUnidad.Key;
+                                var estadoUnidad = String.Empty;
+                                var CulminoUnidad = false;
+
+                                var cantidadPreguntas = unidad.PreguntaCursoOnline.Where(x => x.Estado == ConstantHelpers.ESTADO.ACTIVO).ToArray().Count();
+
+                                switch (dictUnidad.Value)
+                                {
+                                    case ConstantHelpers.ESTADO_UNIDAD.COMPLETADO:
+                                        estadoUnidad = "check text-success";
+                                        CulminoUnidad = true;
+                                        break;
+                                    case ConstantHelpers.ESTADO_UNIDAD.PENDIENTE:
+                                        estadoUnidad = "arrow-right";
+                                        break;
+                                    default:
+                                        estadoUnidad = "lock text-primary";
+                                        break;
+                                }
+
+                                <tr>
+                                    <td class="text-center text-table">
+                                        <i class="fa fa-@estadoUnidad" style="@(dictUnidad.Value == ConstantHelpers.ESTADO_UNIDAD.PENDIENTE ? "color: #0085FF": String.Empty)"></i>
+                                    </td>
+
+                                    <td class="text-table">@unidad.Nombre<br><br>
+                                    
+                                    <div class='btn-group dropdown visible-xs'>
+                                            @if (estaMatriculado)
+                                            {
+                                                <a class="btn btn-xs text-btn-table" data-modal-show data-href="@Url.Action("ViewUnidadCursoOnline", "Course", new { CursoOnlineId = @Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })"><i class="fa fa-search"></i>&nbsp;Ver</a>
+                                                //if (unidad.PreguntaCursoOnline.Count > 0)
+                                                if (cantidadPreguntas > 0)
+                                                {
+                                                    if (unidad.AvanceMatriculaCursoOnline.Where(a => a.MatriculaCursoOnlineId == Model.MatriculaCursoOnlineId).Any(x => x.FechaFin.HasValue))
+                                                    {
+                                                        if (Model.MatriculaVencida)
+                                                        {
+                                                            if (Model.MatriculaCursoOnline.EvaluacionCursoOnline.Where(a => a.UnidadCursoOnlineId == unidad.UnidadCursoOnlineId).Count() > 0 && Model.MatriculaCursoOnline.EvaluacionCursoOnline.Where(a => a.UnidadCursoOnlineId == unidad.UnidadCursoOnlineId).Any(x => x.FechaFin.HasValue))
+                                                            {
+                                                                if (Model.MatriculaCursoOnline.EvaluacionCursoOnline.Where(a => a.UnidadCursoOnlineId == unidad.UnidadCursoOnlineId).Max(a => a.Nota).Value > Model.CursoOnline.PorcentajeAprobacion)
+                                                                {
+                                                                    <a style="border-radius: 8px;" class="btn btn-success btn-xs text-btn-table-red" href="@Url.Action("ViewHistorialEvaluacion", "Evaluation", new { MatriculaCursoOnlineId = Model.MatriculaCursoOnline.MatriculaCursoOnlineId })">Ver Evaluación</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a style="border-radius: 8px;" class="btn btn-default btn-xs text-btn-table" @Data.ModalDialog("¡Su matrícula ha expirado!, solo podra visualizar el contenido de las unidades", "Regresar", "red")><i class="fa fa-lock"></i>&nbsp;Iniciar Examen</a>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <a style="border-radius: 8px;" class="btn btn-default btn-xs text-btn-table" @Data.ModalDialog("¡Su matrícula ha expirado!, solo podra visualizar el contenido de las unidades", "Regresar", "red")><i class="fa fa-lock"></i>&nbsp;Iniciar Examen</a>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            if (Model.MatriculaCursoOnline.EvaluacionCursoOnline.Where(a => a.UnidadCursoOnlineId == unidad.UnidadCursoOnlineId).Count() > 0 && Model.MatriculaCursoOnline.EvaluacionCursoOnline.Where(a => a.UnidadCursoOnlineId == unidad.UnidadCursoOnlineId).Any(x => x.FechaFin.HasValue))
+                                                            {
+                                                                if (Model.MatriculaCursoOnline.EvaluacionCursoOnline.Where(a => a.UnidadCursoOnlineId == unidad.UnidadCursoOnlineId).Max(a => a.Nota).Value > Model.CursoOnline.PorcentajeAprobacion)
+                                                                {
+                                                                    <a style="border-radius: 8px;" class="btn btn-success btn-xs text-btn-table-red" href="@Url.Action("ViewHistorialEvaluacion", "Evaluation", new { MatriculaCursoOnlineId = Model.MatriculaCursoOnline.MatriculaCursoOnlineId })">Ver Evaluación</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a style="border-radius: 8px;" class="btn btn-primary btn-xs text-btn-table-red" href="@Url.Action("DoEvaluacionCursoOnline", "Evaluation", new { CursoOnlineId = Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })"><i class="fa fa-check"></i>&nbsp;Iniciar Examen</a>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <a style="border-radius: 8px;" class="btn btn-primary btn-xs text-btn-table-red" href="@Url.Action("DoEvaluacionCursoOnline", "Evaluation", new { CursoOnlineId = Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })"><i class="fa fa-check"></i>&nbsp;Iniciar Examen</a>
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a style="border-radius: 8px;" class="btn btn-default btn-xs text-btn-table" @Data.ModalDialog("Aun no ha completado la unidad para porder rendir el examen", "Regresar", "red")><i class="fa fa-lock"></i>&nbsp;Iniciar Examen</a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <!--<a style="border-radius: 8px;" class="btn btn-default btn-xs text-btn-table" @Data.ModalDialog("La unidad no cuenta con preguntas configuradas, informar al supervisor", "Regresar", "red")><i class="fa fa-lock"></i>&nbsp;Iniciar Examen</a>--><!--modificado por OTI-->
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-xs text-btn-table" data-modal-show data-href="#"><i class="fa fa-lock"></i>&nbsp;Ver</a>
+                                            }
+                                        </div>
+                                    
+                                    </td>
+
+                                    <td class="text-center text-table hidden-xs">
+                                        <div class='btn-group dropdown'>
+                                            @if (estaMatriculado)
+                                            {
+                                                <a class="btn btn-xs text-btn-table" data-modal-show data-href="@Url.Action("ViewUnidadCursoOnline", "Course", new { CursoOnlineId = @Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })"><i class="fa fa-search"></i>&nbsp;Ver</a>
+                                                if (cantidadPreguntas > 0)
+                                                {
+                                                    if (unidad.AvanceMatriculaCursoOnline.Where(a => a.MatriculaCursoOnlineId == Model.MatriculaCursoOnlineId).Any(x => x.FechaFin.HasValue))
+                                                    {
+                                                        if (Model.MatriculaVencida)
+                                                        {
+                                                            if (Model.MatriculaCursoOnline.EvaluacionCursoOnline.Where(a => a.UnidadCursoOnlineId == unidad.UnidadCursoOnlineId).Count() > 0 && Model.MatriculaCursoOnline.EvaluacionCursoOnline.Where(a => a.UnidadCursoOnlineId == unidad.UnidadCursoOnlineId).Any(x => x.FechaFin.HasValue))
+                                                            {
+                                                                if (Model.MatriculaCursoOnline.EvaluacionCursoOnline.Where(a => a.UnidadCursoOnlineId == unidad.UnidadCursoOnlineId).Max(a => a.Nota).Value > Model.CursoOnline.PorcentajeAprobacion)
+                                                                {
+                                                                    <a style="border-radius: 8px;" class="btn btn-success btn-xs text-btn-table-red" href="@Url.Action("ViewHistorialEvaluacion", "Evaluation", new { MatriculaCursoOnlineId = Model.MatriculaCursoOnline.MatriculaCursoOnlineId })">Ver Evaluación</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a style="border-radius: 8px;" class="btn btn-default btn-xs text-btn-table" @Data.ModalDialog("¡Su matrícula ha expirado!, solo podra visualizar el contenido de las unidades", "Regresar", "red")><i class="fa fa-lock"></i>&nbsp;Iniciar Examen</a>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <a style="border-radius: 8px;" class="btn btn-default btn-xs text-btn-table" @Data.ModalDialog("¡Su matrícula ha expirado!, solo podra visualizar el contenido de las unidades", "Regresar", "red")><i class="fa fa-lock"></i>&nbsp;Iniciar Examen</a>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            if (Model.MatriculaCursoOnline.EvaluacionCursoOnline.Any(a => a.UnidadCursoOnlineId == unidad.UnidadCursoOnlineId) && Model.MatriculaCursoOnline.EvaluacionCursoOnline.Where(a => a.UnidadCursoOnlineId == unidad.UnidadCursoOnlineId).Any(x => x.FechaFin.HasValue))
+                                                            {
+                                                                if (Model.MatriculaCursoOnline.EvaluacionCursoOnline.Where(a => a.UnidadCursoOnlineId == unidad.UnidadCursoOnlineId).Max(a => a.Nota).Value > Model.CursoOnline.PorcentajeAprobacion)
+                                                                {
+                                                                    <a style="border-radius: 8px;" class="btn btn-success btn-xs text-btn-table-red" href="@Url.Action("ViewHistorialEvaluacion", "Evaluation", new { MatriculaCursoOnlineId = Model.MatriculaCursoOnline.MatriculaCursoOnlineId })">Ver Evaluación</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a style="border-radius: 8px;" class="btn btn-primary btn-xs text-btn-table-red" href="@Url.Action("DoEvaluacionCursoOnline", "Evaluation", new { CursoOnlineId = Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })"><i class="fa fa-check"></i>&nbsp;Iniciar Examen</a>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <a style="border-radius: 8px;" class="btn btn-primary btn-xs text-btn-table-red" href="@Url.Action("DoEvaluacionCursoOnline", "Evaluation", new { CursoOnlineId = Model.CursoOnlineId, UnidadCursoOnlineId = unidad.UnidadCursoOnlineId })"><i class="fa fa-check"></i>&nbsp;Iniciar Examen</a>
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <a style="border-radius: 8px;" class="btn btn-default btn-xs text-btn-table" @Data.ModalDialog("Aun no ha completado la unidad para porder rendir el examen", "Regresar", "red")><i class="fa fa-lock"></i>&nbsp;Iniciar Examen</a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <!--<a style="border-radius: 8px;" class="btn btn-default btn-xs text-btn-table" @Data.ModalDialog("La unidad no cuenta con preguntas configuradas, informar al supervisor", "Regresar", "red")><i class="fa fa-lock"></i>&nbsp;Iniciar Examen</a>--><!--modificado por OTI-->
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-xs text-btn-table" data-modal-show data-href="#"><i class="fa fa-lock"></i>&nbsp;Ver</a>
+                                            }
+                                        </div>
+                                    </td>
+
+                                    
+
+                                </tr>
+                            }
+                          
+                                
+                            
+                            @*<tr>
+                                <td class="text-center">
+                                    <i class="fa @(!puedeDescargarCertificado ? "fa-lock text-primary" : "fa-check text-success")"></i>
+                                </td>
+                                <td class="">Constancia de aprobación del curso</td>
+                                <td class="text-right">
+                                    @if (puedeDescargarCertificado)
+                                    {
+                                        <a class="btn btn-success text-btn-table" href="@Url.Action("DownloadCertificado", "Document", new { MatriculaCursoOnlineId = Model.MatriculaCursoOnline.MatriculaCursoOnlineId,CursoOnlineId = Model.CursoOnlineId })"><i class="fa fa-file-o"></i>&nbsp;Descargar Constancia</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn text-btn-table" @Data.ModalDialog(ConstantHelpers.MENSAJE_CURSO.CARTIFICADO, "Regresar", String.Empty)><i class="fa fa-lock"></i>&nbsp;Descargar Constancia</a>
+                                    }
+
+                                    <a href="@Url.Action("DownloadCertificadoAlumno", "Document", new { MatriculaCursoOnlineId = Model.MatriculaCursoOnline.MatriculaCursoOnlineId, CursoOnlineId = Model.CursoOnlineId, UsuarioId = Session.GetUsuarioId() })"><i class="fa fa-file-o"></i>&nbsp;Descargar Constancia</a>
+                                </td>
+                            </tr>*@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+
+    <script>
+        $(function () {
+            $('[data-modal-show]').on('click', function () {
+                var $modal = $('#modal-unidad');
+                var $this = $(this);
+                var href = $this.data('href');
+                var titulo = 'Antes de iniciar el curso tener en cuenta lo siguiente:';
+                $modal.find('[data-container="link"]').attr('href', href);
+                $modal.find('[data-container="titulo"] strong').html(titulo);
+
+                $modal.modal('show');
+            });
+        });
+
+  
+    </script>
+
+   
+
+    @if (AppRol.Supervisor == Session.GetRol())
+    {
+        @RazorHelpers.Content("assets/plugins/jquery-datatable/media/js/jquery.dataTables.min.js", Url)
+        @RazorHelpers.Content("assets/plugins/jquery-datatable/extensions/TableTools/js/dataTables.tableTools.min.js", Url)
+        @RazorHelpers.Content("assets/plugins/jquery-datatable/extensions/Bootstrap/jquery-datatable-bootstrap.js", Url)
+        @RazorHelpers.Content("assets/plugins/datatables-responsive/js/datatables.responsive.js", Url)
+        @RazorHelpers.Content("assets/plugins/datatables-responsive/js/lodash.min.js", Url)
+        @RazorHelpers.Content("assets/js/datatables.js", Url)
+    }
+
+
+    @*@if (!estaMatriculado && estaDisponible)
+        {*@
+    <div class="modal fade fill-in" id="modalFillIn" tabindex="-1" role="dialog" aria-hidden="true">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close"></i></button>
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 no-padding sm-m-t-10 text-center">
+                            <h5>Usted se está Matriculando al Curso <span class="semi-bold">@Model.CursoOnline.Nombre</span> </h5>
+                            <br />
+                            <button class="btn btn-default btn-lg btn-large fs-15" data-dismiss="modal"><i class="fa fa-times"></i>&nbsp; Regresar</button>
+                            <a class="btn btn-primary btn-lg btn-large fs-15" href="@Url.Action("RegisterUsuarioMatriculaCursoOlnile", "Enrollment", new { CursoOnlineId = Model.CursoOnlineId })"><i class="fa fa-check"></i>&nbsp;Matricularme</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    @*}*@
+
+    <div class="modal fade fill-in" id="generic-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close"></i></button>
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 no-padding sm-m-t-10 text-center">
+                            <h5 data-container="titulo"></h5>
+                            <a class="btn btn-primary btn-lg btn-large fs-15" href="#" data-element="boton"><i class="fa" data-element="icono"></i>&nbsp;<span data-container="texto-boton"></span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modal-unidad" tabindex="-1" role="dialog" aria-hidden="true">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close"></i></button>
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5><i class="fa fa-info-circle"></i> <span class="semi-bold">@(estaMatriculado ? Html.Raw("Antes de iniciar el curso tener en cuenta las siguientes indicaciones:") : Html.Raw("Es requerida una matrícula para poder acceder a los detalles del curso."))</span></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 sm-m-t-10 text-center">
+                            <br />
+                            <ul class="text-left">
+                                @if (estaMatriculado)
+                                {
+                                    <li>Se recomienda el uso de los navegadores: Firefox 52+, Google Chrome 59+, Internet Explorer 10+, Opera 45+.</li>
+                                    <li>El tiempo de carga dependerá de su ancho de banda, el inicio puede tardar unos segundos.</li>
+                                    <li>Se debe completar todas las actividades del curso para pasar a la siguiente unidad. El curso cuenta con un menú para identificar secciones pendientes.</li>
+                                    <li>Para finalizar la unidad se deberá dar click al botón <strong>Siguiente</strong> que se encuentra en la parte superior derecha. Este botón se activará una vez haya completado las actividades del curso.</li>
+                                }
+                                else
+                                {
+                                    <li>Si no encuentra la opcion de matrícula, comuníquese con su supervisor asignado.</li>
+                                }
+                                @*<li>
+                                    @if (estaMatriculado)
+                                    {<text>
+                                            La fecha límite para completar el curso es el <b> @fechaLimiteMatricula.Value.ToShortDateString(). </b>
+                                    </text>}
+                                    La matrícula a un curso tiene una vigencia de 60 días desde la fecha de su inscripción. Si la empresa le ha indicado una fecha menor, tomar en cuenta esta última.
+                                </li>
+                                    *@
+                                <li>Si tiene inconvenientes con los cursos o la plataforma, tomar una captura la pantalla y enviar el detalle al correo de soporte.@*: <a href="mailto:soportewebprll@rimac.com.pe">soportewebprll@promperu.com.pe</a>*@ </li>
+                            </ul>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer text-center">
+                    <button class="btn btn-default btn-lg btn-large fs-15" data-dismiss="modal"><i class="fa fa-times"></i>&nbsp; Regresar</button>
+                    @if (estaMatriculado)
+                    {
+                        <a class="btn btn-primary btn-lg btn-large fs-15" data-container="link" href="#" data-element="boton"><i class="fa fa-play" data-element="icono"></i>&nbsp; Iniciar<span data-container="texto-boton"></span></a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

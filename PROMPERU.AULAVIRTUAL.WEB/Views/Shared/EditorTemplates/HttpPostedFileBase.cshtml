@@ -1,0 +1,14 @@
+﻿
+<div class="form-group">
+    @Html.LabelForModel(new { @class="col-sm-3 control-label"})
+    <div class="col-sm-9">
+        @if (ViewData.ContainsKey("Ruta") && ViewData["Ruta"] != null)
+        { 
+            <a href="@ViewData["Ruta"].ToString()">Descargar</a>
+        }
+
+        <input type="file" title="Seleccionar archivo" class="form-control" name="@Html.NameForModel()"/>
+
+        @Html.ValidationMessageFor(x => x)
+    </div>
+</div>

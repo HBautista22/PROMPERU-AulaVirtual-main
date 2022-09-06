@@ -1,0 +1,316 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Evaluation.DoEvaluacionCursoOnlineViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+    ViewBag.Title = "Evaluación";
+    ViewBag.Seccion = "Cursos";
+    ViewBag.SubSeccion = "CursosAlumno";
+    var timeGuid = Guid.NewGuid().ToString().Substring(0, 8);
+    var mostrarRespuestas = false;
+}
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action(" listcursoonlinealumno", "Course" )">Cursos</a></li>
+                <li class="breadcrumb-item active"><a href="@Url.Action(" viewcursoonline", "Course" , new { cursoonlineid=Model.CursoOnlineId })">@Model.CursoOnline.Nombre</a></li>
+            </ol>
+        </div>
+    </div><!-- /.row -->
+}
+
+<div class="container-fluid container-fixed-lg">
+
+    <div class="panel panel-default">
+
+        <div class="panel-body">
+            <div class="invoice padding-50 sm-padding-10 border-0">
+                <div>
+                    <h2 class="pb-4"><i class="fa fa-file-alt"></i>&nbsp;@Model.CursoOnline.Nombre</h2>
+                </div>
+
+                <form name="DoEvaluation" method="post">
+
+                    @*<div class="progress">
+                        <div class="progress-bar progress-bar-success" style="float: right"></div>
+                    </div>
+
+                    <div class="float-left">
+                        <button class="btn btn-primary" type="reset"><i class="fa fa-undo"></i>&nbsp;Limpiar</button>
+                    </div>
+
+                    <div class="float-right">
+                        <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i>&nbsp;Finalizar</button>
+                    </div>*@
+
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(x => x.EvaluacionCursoOnlineId)
+
+                    @{ var numPregunta = 0; }
+
+                    @foreach (var preguntaEvaluacion in Model.LstPreguntaEvaluacionCursoOnline)
+                    {
+                        var pregunta = preguntaEvaluacion.PreguntaCursoOnline;
+
+                        var respuestas = Model.DictRespuestasEvaluacionCursoOnline[preguntaEvaluacion.PreguntaEvaluacionCursoOnlineId].OrderBy(x => x.OrdenMostrado).Select(x => x.RespuestaCursoOnline);
+                        numPregunta++;
+
+                        var codigoPregunta = "PRE-" + pregunta.PreguntaCursoOnlineId;
+
+                        <div class="m-t-15 padding-20 bg-master-lightest">
+
+                            @switch (pregunta.Tipo)
+                            {
+                                case ConstantHelpers.TIPO_PREGUNTA.VERDADERO_FALSO:
+
+                                    <p><strong>@numPregunta) @pregunta.Texto</strong></p>
+                                    <div class="radio radio-primary inline">
+                                        @foreach (var respuesta in respuestas)
+                                        {
+                                            var codigoRespuesta = codigoPregunta + "-" + respuesta.RespuestaCursoOnlineId;
+
+                                            <input type="radio" name="@codigoPregunta" value="@respuesta.RespuestaCursoOnlineId" id="@codigoRespuesta" /> <label for="@codigoRespuesta">@respuesta.Texto</label> if (mostrarRespuestas)
+                                            {<i class="fa fa-@(respuesta.EsSolucion ? "circle" : String.Empty)"></i>} <br />
+                                        }
+                                    </div>
+
+                                    break;
+                                case ConstantHelpers.TIPO_PREGUNTA.SIMPLE:
+
+                                    <p><strong>@numPregunta) @pregunta.Texto</strong></p>
+
+                                    <div class="radio radio-primary inline">
+                                        @foreach (var respuesta in respuestas)
+                                        {
+                                            var codigoRespuesta = codigoPregunta + "-" + respuesta.RespuestaCursoOnlineId;
+
+                                            <input type="radio" name="@codigoPregunta" value="@respuesta.RespuestaCursoOnlineId" id="@codigoRespuesta" /> <label for="@codigoRespuesta">@respuesta.Texto</label> if (mostrarRespuestas)
+                                            {<i class="fa fa-@(respuesta.EsSolucion ? "circle" : String.Empty)"></i>} <br />
+                                        }
+                                    </div>
+
+                                    break;
+                                case ConstantHelpers.TIPO_PREGUNTA.MULTIPLE:
+
+                                    <p><strong>@numPregunta) @pregunta.Texto</strong></p>
+                                    <div class="checkbox check-primary">
+                                        @foreach (var respuesta in respuestas)
+                                        {
+                                            var codigoRespuesta = codigoPregunta + "-" + respuesta.RespuestaCursoOnlineId;
+
+                                            <input type="checkbox" name="@codigoPregunta" value="@respuesta.RespuestaCursoOnlineId" id="@codigoRespuesta" /> <label for="@codigoRespuesta">@respuesta.Texto</label> if (mostrarRespuestas)
+                                            {<i class="fa fa-@(respuesta.EsSolucion ? "circle" : String.Empty)"></i>} <br />
+                                        }
+                                    </div>
+
+                                    break;
+                                case ConstantHelpers.TIPO_PREGUNTA.COMPLETAR:
+                                    var texto = pregunta.Texto.Split(new[] { "###" }, StringSplitOptions.None);
+                                    var opciones = texto.Count() - 1;
+                                    var orden = 0;
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <p>
+                                                        <strong>
+                                                            @numPregunta )
+                                                            @foreach (var item in texto)
+                                                            {
+                                                                if (orden == opciones)
+                                                                {
+                                                                    continue;
+                                                                }
+                                                                orden++;
+                                                                var codigoPreguntaMUL = codigoPregunta + "-" + orden;
+                                                                @(" " + item + " ");
+
+                                                                <select class="" name="@codigoPreguntaMUL">
+                                                                    <option>[ - Seleccione - ]</option>
+
+                                                                    @foreach (var respuesta in respuestas)
+                                                                    {
+                                                                        <option value="@respuesta.RespuestaCursoOnlineId">@respuesta.Texto <i>@respuesta.OrdenSolucion</i></option>
+                                                                    }
+                                                                </select>
+                                                            }
+                                                        </strong>
+                                                    </p>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    break;
+                                case ConstantHelpers.TIPO_PREGUNTA.RELACIONAR:
+                                    var enunciadosRespuesta = respuestas.Where(x => x.EsSolucion == true && x.OrdenSolucion != null).OrderBy(x => x.OrdenSolucion).ToList();
+                                    var ordenResp = 0;
+                                    <p><strong>@numPregunta) @pregunta.Texto</strong></p>
+
+                                    <div class="col-md-6">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var enunciado in enunciadosRespuesta)
+                                                {
+                                                    ordenResp++;
+                                                    <tr>
+                                                        <td class="col-md-6">@enunciado.Texto.Split(new[] { "###" }, StringSplitOptions.None)[0];</td>
+                                                        <td class="col-md-6">
+                                                            @{var codigoPreguntaMUL = codigoPregunta + "-" + ordenResp;}
+                                                            <select class="form-control" name="@codigoPreguntaMUL">
+                                                                <option>[ - Seleccione - ]</option>
+                                                                @foreach (var respuesta in respuestas)
+                                                                {
+                                                                    <option value="@respuesta.RespuestaCursoOnlineId" title="@respuesta.Texto.Split(new[] { "###" }, StringSplitOptions.None)[1]">@respuesta.Texto.Split(new[] { "###" }, StringSplitOptions.None)[1]</option>
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+                                                    @*ordenResp++;
+                                                        <div class="col-sm-6">
+                                                            <p>
+                                                                @enunciado.Texto.Split(new[] { "###" }, StringSplitOptions.None)[0];
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-sm-6 TIPO-REL">
+                                                            @{var codigoPreguntaMUL = codigoPregunta + "-" + ordenResp;}
+
+                                                            <select class="form-control"  name="@codigoPreguntaMUL">
+                                                                <option>[ - Seleccione - ]</option>
+                                                                @foreach (var respuesta in respuestas)
+                                                                {
+                                                                    <option value="@respuesta.RespuestaCursoOnlineId">@respuesta.Texto.Split(new[] { "###" }, StringSplitOptions.None)[1] <i>@respuesta.OrdenSolucion</i></option>
+                                                                }
+                                                            </select>
+                                                        </div>*@
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <br />
+                                    break;
+                            }
+
+                        </div>
+                    }
+                    <br />
+
+                    <div class="clearfix"></div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" style="float: right"></div>
+                    </div>
+
+                    <div class="mt-4 d-flex justify-content-between">
+                        <button class="btn btn-primary" type="reset"><i class="fa fa-undo"></i>&nbsp;Limpiar</button>
+                        <button id="button-post" class="btn btn-primary" type="submit" name="button"><i class="fa fa-check"></i>&nbsp;Finalizar</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="pgn-wrapper mt-4" data-position="top-right">
+    <div class="pgn pgn-flip">
+        <div class="alert alert-success" id="alerta_tiempo" style="padding: 10px 30px 5px 20px;; display:none">
+            <h2 class="m-t-0"><i class="fa fa-clock-o"></i>&nbsp; <span class="time" id="@timeGuid" style="font-size:120%"></span></h2>
+        </div>
+    </div>
+</div>
+
+@{
+    var tiempoEvaluacion = (DateTime.Now - Model.EvaluacionCursoOnline.FechaInicio.AddMinutes(Model.CursoOnline.TiempoEvaluacion).AddSeconds(1)).TotalSeconds * -1;
+    var tiempoEvaluacionMilisecconds = tiempoEvaluacion * 1000 + 400;
+}
+
+
+@section Scripts{
+    <script>
+        var duracion = parseInt(@tiempoEvaluacion);
+        var duracionMilisecconds = parseInt(@tiempoEvaluacionMilisecconds);
+
+        function startTimer(duracion, display, progress, notification) {
+            var inicio = Date.now(), diferencia, minutos, segundos, tmr, cambio;
+            cambio = 0;
+            function timer() {
+                diferencia = duracion - (((Date.now() - inicio) / 1000) | 0);
+                if (diferencia < 0) {
+                    clearInterval(trm);
+                    return;
+                }
+                minutos = (diferencia / 60) | 0;
+                segundos = (diferencia % 60) | 0;
+                minutos = (minutos < 10) ? "0" + minutos : minutos;
+                segundos = (segundos < 10) ? "0" + segundos : segundos;
+
+                //display.textContent = minutos + ":" + segundos;
+                display.text(minutos + ":" + segundos);
+
+                porcentaje = (diferencia / duracion) * 100;
+                progress.css('width', porcentaje + '%');
+
+                if (diferencia <= 300) {
+                    progress.removeClass("progress-bar-success").addClass("progress-bar-danger");
+                    notification.removeClass("alert-success").addClass("alert-danger");
+                    //display.style.color = "#E63528";
+                    display.css('color', '#fffff')
+                    $('.alert h2').css("color", "#E63528");
+                }
+
+            };
+            timer();
+            tmr = setInterval(timer, 1000);
+
+        }
+
+        $(function () {
+            @*var tiempoTotal = duracion, display = document.querySelector(".time, '#@timeGuid'");*@
+
+            var tiempoTotal = duracion, $display = $(".time, #@timeGuid");
+            var progress = $('.progress-bar');
+            var notification = $('.alert');
+
+            startTimer(tiempoTotal, $display, progress, notification);
+            setInterval(function () { document.DoEvaluation.button.click(); }, duracionMilisecconds);
+
+            $('select').on('change', function () {
+                var $this = $(this);
+                var selectedOption = $this.closest('tbody').find(':selected');
+                var selectedValues = [];
+
+                selectedOption.each(function (i, option) {
+                    selectedValues.push($(option).val());
+                });
+
+                $this.closest('tbody').find('select').each(function (val, select) {
+                    $(select).find('option').each(function (index, option) {
+                        if ((selectedValues.indexOf($(option).val()) != -1 && !isNaN($(option).val()))) {
+                            $(option).css('display', 'none');
+                        }
+                        else {
+                            $(option).css('display', '');
+                        }
+                    })
+
+                });
+            });
+
+            setTimeout(function () { $("#alerta_tiempo").css("display", "block"); }, 4000);
+
+        });
+
+
+
+
+    </script>
+}

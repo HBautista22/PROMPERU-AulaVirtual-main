@@ -1,0 +1,637 @@
+﻿@using PROMPERU.AULAVIRTUAL.BE.CMS;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow, max-image-preview:large">
+    <link rel="shortcut icon" href="" />
+
+    <title>Dashboard - Aula Virtual</title>
+    <link rel="canonical" href="">
+    <meta name="description" content="" />
+    <meta name="author" content="MinePeru">
+    <meta name="distribution" content="global" />
+    <meta name="keywords" content="" />
+
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="" />
+    <meta property="og:description" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:site_name" content="" />
+    <meta property="og:image" content="">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:description" content="" />
+    <meta name="twitter:title" content="" />
+    <meta name="twitter:site" content="" />
+    <meta name="twitter:image" content="" />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css")">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("plugins/icheck-bootstrap/icheck-bootstrap.min.css")">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("plugins/jqvmap/jqvmap.min.css")">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("dist/css/adminlte.min.css")">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("plugins/overlayScrollbars/css/OverlayScrollbars.min.css")">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("plugins/daterangepicker/daterangepicker.css")">
+    <!-- summernote -->
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("plugins/summernote/summernote-bs4.min.css")">
+    <!-- Normalize -->
+    <link rel="stylesheet" type="text/css" href="@Url.GetCmsResourceUrl("assets/css/normalize.css")">
+    <!-- Fontawesome -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <!-- Slick -->
+    <link rel="stylesheet" type="text/css" href="@Url.GetCmsResourceUrl("assets/slick/slick.css")" />
+    <link rel="stylesheet" type="text/css" href="@Url.GetCmsResourceUrl("assets/slick/slick-theme.css")" />
+    <!-- General -->
+    <link rel="stylesheet" type="text/css" href="@Url.GetCmsResourceUrl("assets/css/style.css")">
+    @RenderSection("Styles", false)
+    <style>
+        select.form-control {
+            font-size: 12px !important;
+        }
+    </style>
+
+</head>
+<body class="sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+    <div class="wrapper">
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item d-sm-inline-block">
+                    <a href="#" class="nav-link logo-brand">
+                        <img src="@Url.GetCmsResourceUrl("assets/images/logos/logo_aula-virtual.png")" alt="Aula Virtual">
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Notifications Dropdown Menu -->
+                @if (Session.GetRol() != null && Session.GetRol() != AppRol.Asesor && Session.GetRol() != AppRol.Administrador && Session.GetRol() != AppRol.Profesor)
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i class="far fa-bell"></i>
+                            <span class="badge badge-warning navbar-badge">@Session.GetNotificaionesCursosUsuario().Count()</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right dropdown-notifications">
+                            <span class="dropdown-item dropdown-header">Notificaciones</span>
+                            <ul class="list-notifications">
+
+                                @if (Session.GetNotificaionesCursosUsuario() != null && Session.GetNotificaionesCursosUsuario().Count > 0)
+                                {
+                                    foreach (var cursos in Session.GetNotificaionesCursosUsuario())
+                                    {
+                                        <li>
+                                            <a href="#" class="dropdown-item nuevo">
+                                                <span class="date-notification">@cursos.Item2.Split('@')[0]</span>
+                                                <span class="float-right text-muted text-sm">@cursos.Item2.Split('@')[1] (Nuevo Curso Disponible)</span>
+                                            </a>
+                                        </li>
+                                    }
+
+                                }
+
+
+                            </ul>
+                            <a href="@Url.Action("ListNotificacion", "Course")" class="dropdown-item dropdown-footer btn-primary">ver todas <i class="right fas fa-angle-right"></i></a>
+                        </div>
+                    </li>
+                }
+
+
+                <!-- Info Usuario -->
+                <li class="nav-item info-usuario">
+                    <div class="picture-user">
+                        <div class="photo"><img src="@Url.GetCmsResourceUrl("assets/images/user.png")"></div>
+                        <span>@Session.GetNombreCompleto()</span>
+                    </div>
+                </li>
+                <!-- Perfil Dropdown Menu -->
+                <li class="nav-item dropdown info-perfil">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="fas fa-cog"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right dropdown-perfil">
+
+                        @if (Session.GetRol() != AppRol.Asesor)
+                        {
+                            <a href="@Url.Action("ViewPerfil", "User", new { UsuarioId = Session.GetUsuarioId() })" class="dropdown-item profile">
+                                <span class="icon"></span><span class="label">Editar Perfil</span>
+                            </a>
+                        }
+
+
+                        <a href="@Url.Action("Logout", "Home")" class="dropdown-item logout">
+                            <span class="icon"></span><span class="label">Cerrar Sesión</span>
+                        </a>
+
+
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-mobile" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+
+        <aside class="main-sidebar @(Session.GetRol() == AppRol.Administrador || Session.GetRol() == AppRol.Profesor ? "main-sidebar-admin" : String.Empty) elevation-4">
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item">
+                        <a href="@Url.Action("Dashboard", "Home")" class="nav-link nav-inicio @(ViewBag.SubSeccion == "Index" ? "active" : String.Empty)">
+                            <span class="nav-icon"></span>
+                            <p>
+                                Inicio <i class="right fas fa-angle-right"></i>
+                            </p>
+                        </a>
+                    </li>
+
+
+
+
+                    @if (Session.GetRol() == AppRol.Administrador || Session.GetRol() == AppRol.Profesor)
+                    {
+
+                        foreach (var cursos in Session.Get_MenuCMs())
+                        {
+                            var cadena = cursos.Item2.Split('@');
+
+                            <li class="nav-item">
+                                <a href="@cadena[0]" class="nav-link  @cadena[3] @(ViewBag.Seccion == cadena[2] ? "active" : String.Empty)">
+                                    <span class="nav-icon"></span>
+                                    <p>
+                                        @cadena[1] <i class="right fas fa-angle-right"></i>
+                                    </p>
+                                </a>
+
+
+                                @{
+                                    var Menudetalle = Session.Get_MenuCMsDetalle().Where(x => x.Item1 == cursos.Item1).ToList();
+                                }
+
+                                @if (Menudetalle.Count > 0)
+                                {
+                                    <ul class="nav nav-treeview">
+                                        @foreach (var cursosdetalle in Menudetalle)
+                                        {
+                                            var cadenadetalle = cursosdetalle.Item2.Split('@');
+
+                                            <li class="nav-item">
+                                                <a href="@cadenadetalle[0]" class="nav-link  @cadenadetalle[3] @(ViewBag.SubSeccion ==cadenadetalle[2] ? "active" : String.Empty)">
+                                                    <span class="nav-icon"></span>
+                                                    <p> @cadenadetalle[1] <i class="right fas fa-angle-right"></i></p>
+                                                </a>
+                                            </li>
+
+
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+
+                    }
+                    else if (Session.GetRol() == AppRol.Supervisor)
+                    {
+
+
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("ListUsuario", "User")" class="nav-link nav-usuarios @(ViewBag.Seccion == "Usuarios" ? "active" : String.Empty)">
+                                <span class="nav-icon"></span>
+                                <p>
+                                    Usuarios <i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("ListCursoOnline", "Course")" class="nav-link nav-cursos-disponibles @(ViewBag.SubSeccion == "CursosDisponibles" ? "active" : String.Empty)">
+                                <span class="nav-icon"></span>
+                                <p>Cursos Disponibles <i class="right fas fa-angle-right"></i></p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("ListCursoOnlineAlumno", "Course")" class="nav-link nav-mis-cursos @(ViewBag.Seccion == "MisCursos" ? "active" : String.Empty)">
+                                <span class="nav-icon"></span>
+                                <p>
+                                    Mis cursos <i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("ListCursoOnlineMaestroAlumno", "Course")" class="nav-link nav-mis-cursos @(ViewBag.Seccion == "MisCursosMacro" ? "active" : String.Empty)">
+                                <span class="nav-icon"></span>
+                                <p>
+                                    Mis cursos macro<i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("HistoryMatriculaCursoOnline", "Course")" class="nav-link nav-mis-calificaciones @(ViewBag.Seccion == "MisCalificaciones" ? "active" : String.Empty)">
+                                <span class="nav-icon"></span>
+                                <p>
+                                    Mis Calificaciones <i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:;" class="nav-link nav-reportes @(ViewBag.Seccion == "Reportes" ? "active" : String.Empty)">
+                                <span class="nav-icon"></span>
+                                <p>
+                                    Reportes <i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ListCursoOnline", "Report")" class="nav-link nav-cursos-cat @(ViewBag.SubSeccion == "Certificados" ? "active" : String.Empty)">
+                                        <span class="nav-icon"></span>
+                                        <p>Certificados <i class="right fas fa-angle-right"></i></p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("ReportHistoricoAlumnos", "Report")" class="nav-link nav-cursos-admin @(ViewBag.SubSeccion == "Alumnos" ? "active" : String.Empty)">
+                                        <span class="nav-icon"></span>
+                                        <p>Seguimiento de Alumnos <i class="right fas fa-angle-right"></i></p>
+                                    </a>
+                                </li>
+
+
+                            </ul>
+                        </li>
+
+                    }
+                    else if (Session.GetRol() == AppRol.Asesor)
+                    {
+
+
+                        @*<li class="nav-item">
+                        <a href="@Url.Action("ListCursoOnline", "Course")" class="nav-link nav-mis-cursos @(ViewBag.SubSeccion == "CursosDisponibles" ? "active" : String.Empty)">
+                            <span class="nav-icon"></span>
+                            <p>
+                                Telexportemos <i class="right fas fa-angle-right"></i>
+                            </p>
+                        </a>
+                    </li>*@
+
+                    }
+                    else if (Session.GetCursoMaestro() == AppCursoMaestro.TieneCurso)
+                    {
+
+
+                        //Alumno
+
+                        foreach (var cursos in Session.Get_MenuCMs())
+                        {
+                            var cadena = cursos.Item2.Split('@');
+
+                            <li class="nav-item">
+                                <a href="@cadena[0]" class="nav-link  @cadena[3] @(ViewBag.Seccion == cadena[2] ? "active" : String.Empty)">
+                                    <span class="nav-icon"></span>
+                                    <p>
+                                        @cadena[1] <i class="right fas fa-angle-right"></i>
+                                    </p>
+                                </a>
+
+
+                                @{
+                                    var Menudetalle = Session.Get_MenuCMsDetalle().Where(x => x.Item1 == cursos.Item1).ToList();
+                                }
+
+                                @if (Menudetalle.Count > 0)
+                                {
+                                    <ul class="nav nav-treeview">
+                                        @foreach (var cursosdetalle in Menudetalle)
+                                        {
+                                            var cadenadetalle = cursosdetalle.Item2.Split('@');
+
+                                            <li class="nav-item">
+                                                <a href="@cadenadetalle[0]" class="nav-link  @cadenadetalle[3] @(ViewBag.SubSeccion ==cadenadetalle[2] ? "active" : String.Empty)">
+                                                    <span class="nav-icon"></span>
+                                                    <p> @cadenadetalle[1] <i class="right fas fa-angle-right"></i></p>
+                                                </a>
+                                            </li>
+
+
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+
+
+                        //CMS_Menu alumno
+
+                        @*<li class="nav-item">
+                        <a href="@Url.Action("ListCursoOnline", "Course")" class="nav-link nav-mis-cursos @(ViewBag.SubSeccion == "CursosDisponibles" ? "active" : String.Empty)">
+                            <span class="nav-icon"></span>
+                            <p>
+                                Cursos Disponibles <i class="right fas fa-angle-right"></i>
+                            </p>
+                        </a>
+                    </li>
+
+
+
+                    <li class="nav-item">
+                        <a href="@Url.Action("ListCursoOnlineAlumno", "Course")" class="nav-link nav-mis-cursos @(ViewBag.SubSeccion == "MisCursos" ? "active" : String.Empty)">
+                            <span class="nav-icon"></span>
+                            <p>
+                                Mis cursos <i class="right fas fa-angle-right"></i>
+                            </p>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a href="@Url.Action("ListNotificacion", "Course")" class="nav-link nav-notificaciones  @(ViewBag.SubSeccion == "ListNotificacion" ? "active" : String.Empty)">
+                            <span class="nav-icon"></span>
+                            <p>
+                                Notificaciones <i class="right fas fa-angle-right"></i>
+                            </p>
+                        </a>
+                    </li>
+
+
+
+                    <li class="nav-item">
+                        <a href="@Url.Action("ListCursoOnlineMaestroAlumno", "Course")" class="nav-link nav-mis-cursos @(ViewBag.SubSeccion == "MisCursosMacro" ? "active" : String.Empty)">
+                            <span class="nav-icon"></span>
+                            <p>
+                                Cursos Maestro<i class="right fas fa-angle-right"></i>
+                            </p>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a href="@Url.Action("HistoryMatriculaCursoOnline", "Course")" class="nav-link nav-mis-calificaciones @(ViewBag.SubSeccion == "HistoryMatriculaCursoOnline" ? "active" : String.Empty)">
+                            <span class="nav-icon"></span>
+                            <p>
+                                Mis Calificaciones <i class="right fas fa-angle-right"></i>
+                            </p>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a href="@Url.Action("ViewCertificadoOnline", "Course")" class="nav-link nav-mis-constancias @(ViewBag.SubSeccion == "ViewCertificadoOnline" ? "active" : String.Empty)">
+                            <span class="nav-icon"></span>
+                            <p>
+                                Mis Certificados <i class="right fas fa-angle-right"></i>
+                            </p>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "AsesoriaAsesorado")" class="nav-link nav-asesorias @(ViewBag.Seccion == "MisAsesoriasAsesorado" ? "active" : String.Empty)">
+                            <span class="nav-icon"></span>
+                            <p>
+                                Asesorías <i class="right fas fa-angle-right"></i>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@Url.Action("ListLink", "Link")" class="nav-link nav-enlaces-de-interes @(ViewBag.Seccion == "Links" ? "active" : String.Empty)">
+                            <span class="nav-icon"></span>
+                            <p>
+                                Enlaces de interés <i class="right fas fa-angle-right"></i>
+                            </p>
+                        </a>
+                    </li>*@
+
+                    }
+                    else if (Session.GetRol() == AppRol.Alumno || Session.GetRol() == AppRol.Empresa)
+                    {
+                        <li class="nav-item">
+                            <a href="@Url.Action("ListCursoOnline", "Course")" class="nav-link nav-cursos-disp @(ViewBag.SubSeccion == "CursosDisponibles" ? "active" : String.Empty)">
+                                <span class="nav-icon"></span>
+                                <p>
+                                    Cursos Disponibles <i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("ListCursoOnlineAlumno", "Course")" class="nav-link nav-mis-cursos @(ViewBag.SubSeccion == "ListCursoOnlineAlumno" ? "active" : String.Empty)">
+                                <span class="nav-icon"></span>
+                                <p>
+                                    Mis cursos  <i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("ListNotificacion", "Course")" class="nav-link nav-notificaciones  @(ViewBag.SubSeccion == "ListNotificacion" ? "active" : String.Empty)">
+                                <span class="nav-icon"></span>
+                                <p>
+                                    Notificaciones <i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("HistoryMatriculaCursoOnline", "Course")" class="nav-link nav-mis-calificaciones @(ViewBag.SubSeccion == "HistoryMatriculaCursoOnline" ? "active" : String.Empty)">
+                                <span class="nav-icon"></span>
+                                <p>
+                                    Mis Calificaciones  <i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("ViewCertificadoOnline", "Course")" class="nav-link nav-mis-constancias @(ViewBag.SubSeccion == "ViewCertificadoOnline" ? "active" : String.Empty)">
+                                <span class="nav-icon"></span>
+                                <p>
+                                    Mis constancias <i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("ViewEnlaceInteresOnline", "Course")" class="nav-link nav-enlaces-de-interes @(ViewBag.SubSeccion == "ViewEnlaceInteresOnline" ? "active" : String.Empty)">
+                                <span class="nav-icon"></span>
+                                <p>
+                                    Enlaces de Interés <i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index", "AsesoriaAsesorado")" class="nav-link nav-asesorias @(ViewBag.Seccion == "MisAsesoriasAsesorado" ? "active" : String.Empty)">
+                                <span class="nav-icon"></span>
+                                <p>
+                                    Asesorías <i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+
+
+
+
+            </nav>
+            <!-- /.sidebar-menu -->
+        </aside>
+        <!-- /.sidebar -->
+    </div>
+        <!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            @RenderSection("Breadcrumbs", false)
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Main row -->
+
+            @RenderBody()
+
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <p>
+                    Copyright &copy; 2021 PROMPERU. Todos los Derechos Reservados.
+                </p>
+            </footer>
+
+            <!-- Control Sidebar -->
+            <aside class="control-sidebar control-sidebar-dark">
+                <!-- Control sidebar content goes here -->
+            </aside>
+            <!-- /.control-sidebar -->
+        </div>
+
+        <script type="text/javascript" src="@Url.GetCmsResourceUrl("assets/js/jquery-2.1.3.min.js")"></script>
+        <script>
+            $(document).ready(function () {
+
+
+
+                $("#cbodepartamento").on("change", function () {
+
+                    if ($("#cboprovincia > option").length > 1) {
+                        $("#cboprovincia option[value != '']").remove();
+                    }
+
+                    if ($("#Region > option").length > 1) {
+                        $("#Region option[value != '']").remove();
+                    }
+
+                    var $dropdown = $("#cboprovincia");
+                    $.post("/Front/LlenarProvincia", { dep: $(this).val() })
+                        .done(function (data) {
+                            var arr = JSON.parse(data);
+                            $.each(arr, function () {
+                                $dropdown.append($("<option />").val(this.ProvinciaId).text(this.Nombre));
+                            });
+                        });
+                });
+
+                $("#cboprovincia").on("change", function () {
+
+                    if ($("#Region > option").length > 1) {
+                        $("#Region option[value != '']").remove();
+                    }
+
+                    var $dropdown = $("#Region");
+                    $.post("/Front/LlenarDistrito", { dep: $("#cbodepartamento").val(), prov: $(this).val() })
+                        .done(function (data) {
+                            var arr = JSON.parse(data);
+                            $.each(arr, function () {
+                                $dropdown.append($("<option />").val(this.DistritoId).text(this.Nombre));
+                            });
+                        });
+                });
+            });
+
+
+
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="@Url.GetCmsResourceUrl("plugins/bootstrap/js/bootstrap.bundle.min.js")"></script>
+        @RenderSection("Scripts", false)
+
+        <!-- ./wrapper -->
+        <!-- JQuery -->
+        <!-- Bootstrap -->
+        <!-- jQuery -->
+        <!-- <script src="@Url.GetCmsResourceUrl("plugins/jquery/jquery.min.js")"></script> -->
+        <!-- jQuery UI 1.11.4 -->
+        <script src="@Url.GetCmsResourceUrl("plugins/jquery-ui/jquery-ui.min.js")"></script>
+        <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+        <script>
+            $.widget.bridge('uibutton', $.ui.button)
+        </script>
+        <!-- Bootstrap 4 -->
+        <!-- ChartJS -->
+        <script src="@Url.GetCmsResourceUrl("plugins/chart.js/Chart.min.js")"></script>
+        <!-- Sparkline -->
+        <script src="@Url.GetCmsResourceUrl("plugins/sparklines/sparkline.js")"></script>
+        <!-- JQVMap -->
+        <script src="@Url.GetCmsResourceUrl("plugins/jqvmap/jquery.vmap.min.js")"></script>
+        <script src="@Url.GetCmsResourceUrl("plugins/jqvmap/maps/jquery.vmap.usa.js")"></script>
+        <!-- jQuery Knob Chart -->
+        <script src="@Url.GetCmsResourceUrl("plugins/jquery-knob/jquery.knob.min.js")"></script>
+        <!-- daterangepicker -->
+        <script src="@Url.GetCmsResourceUrl("plugins/moment/moment.min.js")"></script>
+        <script src="@Url.GetCmsResourceUrl("plugins/daterangepicker/daterangepicker.js")"></script>
+        <!-- Tempusdominus Bootstrap 4 -->
+        <script src="@Url.GetCmsResourceUrl("plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js")"></script>
+        <!-- Summernote -->
+        <script src="@Url.GetCmsResourceUrl("plugins/summernote/summernote-bs4.min.js")"></script>
+        <!-- overlayScrollbars -->
+        <script src="@Url.GetCmsResourceUrl("plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")"></script>
+        <!-- AdminLTE App -->
+        <script src="@Url.GetCmsResourceUrl("dist/js/adminlte.js")"></script>
+        <!-- AdminLTE for demo purposes -->
+        <!-- <script src="../dist/js/demo.js"></script> -->
+        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+        <!-- <script src="../dist/js/pages/dashboard.js"></script> -->
+        <!-- Slick -->
+        <script type="text/javascript" src="@Url.GetCmsResourceUrl("assets/slick/slick.min.js")"></script>
+        <!-- jquery-validation -->
+        <script src="@Url.GetCmsResourceUrl("plugins/jquery-validation/jquery.validate.min.js")"></script>
+        <script src="@Url.GetCmsResourceUrl("plugins/jquery-validation/additional-methods.min.js")"></script>
+        <!-- General -->
+        <script type="text/javascript" src="~/Scripts/uploads.js"></script>
+        <script type="text/javascript" src="@Url.GetCmsResourceUrl("assets/js/main.js")"></script>
+
+        <script src="~/Content/CMS_NEW/Recursos/plugins/select2/js/select2.js"></script>
+
+        <link href="~/Content/CMS_NEW/Recursos/plugins/select2/css/select2.css" rel="stylesheet" />
+
+        <script src="~/Content/assets/js/Sortable.min.js"></script>
+
+        @RazorHelpers.Content("assets/js/backend/Usuario.js", Url)
+
+        @RenderSection("Jumbotron", false)
+    </section>
+</div>
+    </body>
+</html>

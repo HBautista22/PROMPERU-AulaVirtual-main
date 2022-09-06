@@ -1,0 +1,54 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.ViewAccesosViewModel
+
+@{
+    ViewBag.Title = "Accesos";
+    ViewBag.Icon = "user-secret";
+    ViewBag.Seccion = "Usuarios";
+    ViewBag.SubSeccion = "viewAcceso";
+
+}
+
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListUsuario", "User")">Usuarios</a></li>
+}
+
+<div class="container-fluid container-fixed-lg">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4 class="m-t-0 m-b-0 usuarios"><i class="fa fa-@ViewBag.Icon"></i>&nbsp;@ViewBag.Title</h4>
+            </div>
+            <div class="btn-group pull-right m-b-10">
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline no-footer" id="basicTable_wrapper">
+                    <table role="grid" class="table table-hover dataTable no-footer table-condensed" id="basicTable">
+                        <thead>
+                            <tr>
+                                <th class="title-table">Fecha Acceso</th>
+                                <th class="text-center col-sm-9 title-table" style="min-width: 9.3em">Detalles</th>
+                                <th class="text-center title-table" style="width: 135px;">Tipo Acceso</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.LstAccesos)
+                            {
+                                <tr>
+                                    <td class="text-table"><label class="label label-info"> @item.FechaAcceso.ToShortDateString() </label> &nbsp; <label class="label label-default"> @item.FechaAcceso.ToShortTimeString() </label> <label class="label" style="background:none"> @item.IPAcceso </label></td>
+                                    <td class="text-left text-table" style="white-space: nowrap;">@(!String.IsNullOrEmpty(item.UserAgent) ? item.UserAgent.Replace(Environment.NewLine, String.Empty) : " - Restingido - ")</td>                                    
+                                    <td class="text-center text-table"><span class="label label-inverse">@item.TipoAcceso</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model.LstAccesos, page => Url.Action("ViewAccesos", new { p = page, UsuarioId = Model.UsuarioId }), ConstantHelpers.Bootstrap3Pager)
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

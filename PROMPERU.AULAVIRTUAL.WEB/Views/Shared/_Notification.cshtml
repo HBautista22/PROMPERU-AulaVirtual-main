@@ -1,0 +1,42 @@
+﻿@{
+    var nroNotificaciones = NotificationLogic.NroNotificaciones(Session.GetUsuarioId());    
+    var notificaciones = NotificationLogic.GetNotificaciones(Session.GetUsuarioId());    
+}
+
+<li class='dropdown medium only-icon widget'>
+
+    @if (nroNotificaciones == 0)
+    {
+    <a class='dropdown-toggle' href="@Url.Action("ListNotificacion", "Notification")">
+        <i class='icon-rss'></i>
+        <div class='label'>0</div>
+    </a>
+    } else {
+    <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+        <i class='icon-rss'></i>
+        <div class='label'>@(nroNotificaciones < 11 ? nroNotificaciones.ToString() : "10+")</div>
+    </a>
+    <ul class='dropdown-menu'>
+        @foreach (var notificacion in notificaciones)
+        {
+        <li>
+            <a href='@Url.Action("Ver", "VerNotificacion", new { NotificacionId = notificacion.NotificacionId })' class="has-tooltip" data-placement="left" title="@notificacion.Mensaje">
+                <div class='widget-body'>
+                    <div class='pull-left icon'>
+                        <i class='icon-envelope text-error'></i>
+                    </div>
+                    <div class='pull-left text'>
+                        @(notificacion.Mensaje.Length > 40? notificacion.Mensaje.Substring(0,37)+"..." : notificacion.Mensaje)
+                        <small class='text-muted timeago' title="@notificacion.Fecha.ToString("o")">@notificacion.Fecha</small>
+                    </div>
+                </div>
+            </a>
+        </li>
+        <li class='divider'></li>
+        }
+        <li class='widget-footer'>
+        <a href='@Url.Action("ListNotificacion", "Notification")'>Ver todas</a>
+        </li>
+    </ul>
+    }
+</li>

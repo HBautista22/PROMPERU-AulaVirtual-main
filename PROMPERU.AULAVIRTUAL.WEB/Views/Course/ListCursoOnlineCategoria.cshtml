@@ -1,0 +1,88 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ListCursoOnlineCategoriaViewModel
+
+@{
+    ViewBag.Title = "Cursos";
+    ViewBag.Icon = "book";
+    ViewBag.Seccion = "Categorias"; 
+    var categoria = Model.CategoriaCursoOnline;
+}
+
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListCategoriaCursoOnline", "Course")">Categorias</a></li>
+}
+
+<div class="container-fluid container-fixed-lg">
+
+    <div class="panel panel-transparent">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4 class="m-t-0 m-b-10"><i class="fa fa-@ViewBag.Icon"></i>&nbsp;@ViewBag.Title</h4>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+            @{ var numCurso = 0;}
+
+            @foreach (var curso in Model.LstCursoOnline)
+            {
+                var matricula = Model.LstMatriculaCursoOnline.Where(x => x.CursoOnlineId == curso.CursoOnlineId).FirstOrDefault();
+                if (numCurso % 4 == 0)
+                {
+                    if (numCurso != 0)
+                    {                    
+                        @Html.Raw("</div></div>")
+                    }
+                <text><div class="col-md-12 col-xlg-12">
+                        <div class="row m-b-10"> </text>
+                }
+       
+                <div class="col-sm-6 col-md-3 m-b-20">
+                    <div class="ar-1-1">
+
+                        <div class="panel no-border widget widget-loader-circle-lg no-margin" style="  background-image: linear-gradient(rgba(0, 0, 0, 0.1),rgba(0, 0, 0, 0.5)),url('@(Url.Content(ConstantHelpers.DEFAULT_SERVER_PATH + curso.RutaImagen))');  background-size: contain,cover; background-position: center">
+                            <div class="panel-heading">
+                                @if (matricula !=null)
+                                {
+                                    <div class="pull-left">
+                                        <span class="label @(matricula.Estado == ConstantHelpers.ESTADO_MATRICULA.APROBADO || matricula.Estado == ConstantHelpers.ESTADO_MATRICULA.COMPLETADO ? "label-success" : "label-danger")" style="margin-top: -3px;"><i class="fa fa-circle"></i> <strong>@matricula.PorcentajeAvance %</strong> </span>
+                                    </div>
+                                }
+                                else if (Model.LstCursoOnlineDisponibe.Contains(curso.CursoOnlineId))
+                                {
+                                    <div class="pull-left">
+                                        <span class="label label-inverse"><i class="fa fa-circle-o"></i> Disponible</span> 
+                                    </div>   
+                                }
+                                <div class="panel-controls">
+                                    <ul>
+                                        <li>
+                                            @*<a href="#" class="portlet-refresh" data-toggle="refresh"><i class="portlet-icon portlet-icon-refresh-lg-white"></i></a>*@
+                                            <a class="btn btn-xs btn-primary" href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = curso.CursoOnlineId })" >Ingresar <i class="fa fa-search"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="pull-bottom bottom-left bottom-right padding-25">
+                                    <span class="label label-success font-montserrat fs-11" style="background-color: @categoria.Color">@categoria.Nombre </span>
+                                    <br>
+                                    <h3 class="text-white">@curso.Nombre</h3>
+                                    @*<p class="text-white hint-text hidden-md">@curso.Descripcion.Substring(0, 80) . . .</p>
+                                    <a class="btn btn-xs btn-primary" href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = curso.CursoOnlineId })" ><i class="fa fa-search"></i> Ingresar</a>*@
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                numCurso++;
+
+            }
+            </div>
+
+        </div>
+        </div>
+            @Html.PagedListPager(Model.LstCursoOnline, page => Url.Action("ListCursoOnlineCategoria", new { CategoriaCursoOnlineId = Model.CategoriaCursoOnlineId, p = page }), ConstantHelpers.Bootstrap3Pager)    
+    </div>
+</div>

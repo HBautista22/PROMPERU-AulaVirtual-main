@@ -1,0 +1,102 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Course.ApiViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+    <script language="javascript">
+
+        var cursoOnlineId = '@Model.UnidadCursoOnlineId';
+        var unidadCursoOnlineId = '@Model.UnidadCursoOnlineId';
+        var matriculaCursoOnlineId = '@Model.MatriculaCursoOnlineId';
+
+        // ------------------------------------------
+        //	 SCORM RTE Functions - Initialization
+        // ------------------------------------------
+        function LMSInitialize(dummyString) {
+            console.log("Inicio El curso", dummyString);
+            return "true";
+        }
+
+        // ------------------------------------------
+        //	 SCORM RTE Functions - Getting and Setting Values
+        // ------------------------------------------
+        function LMSGetValue(variable) {
+            var req = $.ajax({
+                url: '@Url.Action("GetValue", "Scorm")',
+                data: {
+                    Variable: variable,
+                    UnidadCursoOnlineId: unidadCursoOnlineId,
+                    MatriculaCursoOnlineId: matriculaCursoOnlineId,
+                },
+                type: "POST",
+                async: false
+            });
+            var resp = "";
+            req.then(function (data) { resp = data }, function (data) { resp = "" });
+            return resp;
+        }
+
+        function LMSSetValue(variable, value) {
+            var req = $.ajax({
+                url: '@Url.Action("SetValue", "Scorm")',
+                data: {
+                    Variable: variable,
+                    Value: value,
+                    UnidadCursoOnlineId: unidadCursoOnlineId,
+                    MatriculaCursoOnlineId: matriculaCursoOnlineId,
+                },
+                type: "POST",
+                async: false
+            });
+            var resp = "";
+            req.then(function (data) {
+                if (data.finalizado) {
+                    //alert('Ha finalizado esta unidad. Para continuar con el resto del curso.');
+                    $('.btn-next', window.parent.document).removeClass('disabled');
+                    $('.btn-next', window.parent.document).find('i').remove();
+                }
+                resp = "true"
+            }, function (data) {
+                resp = "false"
+            });
+            return resp;
+        }
+
+        function LMSCommit(dummyString) {
+            return "true";
+        }
+
+        // ------------------------------------------
+        //	 SCORM RTE Functions - Closing The Session
+        // ------------------------------------------
+        function LMSFinish(dummyString) {
+            console.log("Terminó el curso");
+            return "true";
+        }
+
+        // ------------------------------------------
+        //	 SCORM RTE Functions - Error Handling
+        // ------------------------------------------
+        function LMSGetLastError() {
+            return 0;
+        }
+
+        function LMSGetDiagnostic(errorCode) {
+            return "diagnostic string";
+        }
+
+        function LMSGetErrorString(errorCode) {
+            return "error string";
+        }
+
+    </script>
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+</body>
+</html>

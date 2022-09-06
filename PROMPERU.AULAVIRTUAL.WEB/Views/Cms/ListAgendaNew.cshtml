@@ -1,0 +1,84 @@
+﻿@model IEnumerable<PROMPERU.AULAVIRTUAL.BE.CMS.CMS_Agenda>
+@{
+    ViewBag.Title = "ListAgendaNew";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+    ViewBag.SubSeccion = "Agenda";
+}
+
+@section Breadcrumbs{
+    <div class="row mb-2">
+        <div class="col-sm-12">
+            <ol class="breadcrumb float-sm-left">
+                <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                <li class="breadcrumb-item active">Agendas</li>
+            </ol>
+        </div>
+        <div class="col-sm-6">
+            <h2 class="m-0">Agendas</h2>
+        </div>
+    </div><!-- /.row -->
+}
+
+
+<div class="row table-acciones table-content list-empresa">
+    <div class="col-sm-6">
+        <h2>Lista de Agendas</h2>
+    </div>
+    <div class="col-sm-6 btns-table">
+        <a class="btn btn-primary" href="@Url.Action("AddEditAgenda", "CMS")">Agregar Agendas</a>
+
+    </div>
+</div>
+<div class="row mis-solicitudes table-content">
+    <div class="col-sm-12 table-responsive altomin">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" class="table-list tipo-empresa" align="center">
+            <thead>
+                <tr>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        Fechas
+                    </th>
+                    <th>
+                        Imagen
+                    </th>
+                    <th>
+                        Sumilla
+                    </th>
+                    <th>
+                        Publicado
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaInicio) - @Html.DisplayFor(modelItem => item.FechaFin)
+                        </td>
+                        <td>
+                            <img style="background-image:url('@(item.Imagen != null ? Url.Content(item.Imagen) : "")'); background-size: contain; width:200px; height:100px; background-repeat: no-repeat; background-position: center;" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Sumilla)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EsPublicado)
+                        </td>
+                        <td>
+                            
+                            <li><a class="dropdown-item" href="@Url.Action("AddEditAgenda", "CMS", new { id = item.Id })">Editar</a></li>
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+    </div>

@@ -1,0 +1,124 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Enrollment.ResultCargaDatosUsuarioViewModel
+@{
+    ViewBag.Title = "Resultado de Carga Masiva";
+}
+@section Breadcrumbs{
+    <li><a href="@Url.Action("ListCursoOnline", "Course")">Cursos</a></li>
+    <li><a href="@Url.Action("ViewCursoOnline", "Course", new { CursoOnlineId = Model.CursoOnlineId })">@Model.CursoOnline.Nombre</a></li>
+}
+@section Styles{
+    <style>
+        .alumnoNoMatriculado {
+            background: #fddddd !important;
+            background-color: #fddddd !important;
+        }
+    </style>
+}
+
+<div class="container-fluid container-fixed-lg">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4 class="m-t-0 m-b-0"><i class="fa fa-@ViewBag.Icon"></i>&nbsp;@ViewBag.Title</h4>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+            <ul class="nav nav-tabs nav-tabs-linetriangle" data-init-reponsive-tabs="dropdownfx">
+                <li class="active" style="background-color:#B6E8B6">
+                    <a data-toggle="tab" href="#usuariosRegistrados"><span>Usuarios registrados</span></a>
+                </li>
+                @if (Model.LstUsuarioNoRegistrados.Count() > 0)
+                {
+                    <li style="background-color:#FFC8C8">
+                        <a data-toggle="tab" href="#usuariosNoRegistrados"><span>Usuarios No registrados</span></a>
+                    </li>
+                }
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="usuariosRegistrados">
+                    <div class="table-responsive">
+                        <div class="dataTables_wrapper form-inline no-footer" id="basicTable_wrapper">
+                            <table role="grid" class="table table-hover table-responsive dataTable no-footer">
+                                <thead>
+                                    <tr>
+                                        <th class="col-sm-3">Nombre y Apellido</th>
+                                        <th class="col-sm-2">Correo Electrónico</th>
+                                        <th class="col-sm-2">Contraseña</th>
+                                        <th class="col-sm-2">Matrícula</th>
+                                        <th class="text-center col-sm-2">Usuario Nuevo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var matriculaCursoOnline in Model.LstMatriculaCursoOnline)
+                                    {
+                                        var alumnoNoMatriculado = String.IsNullOrEmpty(matriculaCursoOnline.Usuario.Nombre) || String.IsNullOrEmpty(matriculaCursoOnline.Usuario.Apellido) || String.IsNullOrEmpty(matriculaCursoOnline.Usuario.Email);
+                                        <tr>
+                                            <td>@matriculaCursoOnline.Usuario.Apellido, @matriculaCursoOnline.Usuario.Nombre</td>
+                                            <td>@matriculaCursoOnline.Usuario.Email</td>
+                                            <td>@matriculaCursoOnline.Usuario.Password</td>
+                                            <td>
+                                                @if (Model.LstUsuarioNoMatriculados.Contains(matriculaCursoOnline.UsuarioId))
+                                                {
+                                                    <div class="label label-danger">Matrícula existente</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="label label-info">Matriculado</div>
+                                                }
+                                            </td>
+                                            <td class="text-center @(alumnoNoMatriculado ? "alumnoNoMatriculado" : String.Empty)">
+                                                @if (Model.LstUsuarioIdExistente != null)
+                                                {
+                                                    if (Model.LstUsuarioIdExistente.Contains(matriculaCursoOnline.UsuarioId))
+                                                    {
+                                                        <div class="label label-info">Usuario existente</div>                                            
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="label label-success">Usuario nuevo</div>                                            
+                                                    }
+                                                }
+
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                @if (Model.LstUsuarioNoRegistrados.Count() > 0)
+                {
+                    <div class="tab-pane" id="usuariosNoRegistrados">
+                        <table role="grid" class="table table-hover table-responsive dataTable no-footer">
+                            <thead>
+                                <tr>
+                                    <th class="text-center col-sm-2">Nombre </th>
+                                    <th class="text-center col-sm-2">Apellido</th>
+                                    <th class="text-center col-sm-2">Email</th>
+                                    <th class="text-center col-sm-6">Motivo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var usuario in Model.LstUsuarioNoRegistrados)
+                                {
+                                    <tr>
+                                        <td class="text-center @(String.IsNullOrEmpty(usuario.Nombre) ? "alumnoNoMatriculado" : String.Empty)">@(String.IsNullOrEmpty(usuario.Nombre) ? "-" : usuario.Nombre)</td>
+                                        <td class="text-center @(String.IsNullOrEmpty(usuario.Apellido) ? "alumnoNoMatriculado" : String.Empty)">@(String.IsNullOrEmpty(usuario.Apellido) ? "-" : usuario.Apellido)</td>
+                                        <td class="text-center @(String.IsNullOrEmpty(usuario.Email) ? "alumnoNoMatriculado" : String.Empty)">@(String.IsNullOrEmpty(usuario.Email) ? "-" : usuario.Email)</td>
+                                        <td class="text-center">@(String.IsNullOrEmpty(usuario.Email) || String.IsNullOrEmpty(usuario.Nombre) || String.IsNullOrEmpty(usuario.Apellido) ? "Datos inválidos" : "Usuario no registrado a través del Portal")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+            <div>
+                <a class="btn btn-info" href="@Url.Action("ViewCursoOnline","Course",new {CursoOnlineId= Model.CursoOnlineId })"><i class="fa fa-arrow-left"></i>&nbsp;Regresar</a>
+            </div>
+        </div>
+    </div>
+</div>

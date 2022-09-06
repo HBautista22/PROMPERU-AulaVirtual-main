@@ -1,0 +1,19 @@
+﻿@model String
+
+<div class='form-group'>
+    
+
+    @if (ViewData.ContainsKey("Label") && ViewData["Label"] != null)
+    {
+        <text>@Html.Label(ViewData["Label"].ToString(),new { @class="col-sm-3 control-label"})</text>
+    }
+    else
+    { 
+        <text>@Html.LabelForModel(new { @class="col-sm-3 control-label"})</text>
+    }
+
+    <div class="col-sm-9">
+        @Html.TextBoxFor(x => x, new { @class="form-control", @autocomplete="off" })
+        @Html.ValidationMessageFor(x => x)
+    </div>
+</div>

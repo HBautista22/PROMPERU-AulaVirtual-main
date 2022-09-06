@@ -1,0 +1,438 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Asesor.ListAddAsesorViewModel
+@{
+    ViewBag.Title = "Asesores";
+    ViewBag.Icon = "user_new";
+    ViewBag.Seccion = "Asesores";
+}
+@section Styles{
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <style>
+
+        .loader-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            margin: -4rem;
+            display: none;
+            z-index: 20;
+        }
+
+        .loader-background {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+            opacity: 0.3;
+        }
+
+        .loader-button {
+            position: absolute;
+            top: 60%;
+            width: 100%;
+        }
+
+        .loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 1;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid red;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+            opacity: 1;
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .field-validation-error {
+            color: red;
+        }
+
+
+        /*codigo modificado*/
+
+        .modal-content {
+            height: 100vh;
+            overflow: auto;
+        }
+
+        .ocultar_text {
+            visibility: hidden;
+        }
+
+
+        .vsb-main {
+            width: 100%;
+        }
+        /* modify Javier Castro */
+        .form-registro {
+            padding: 0 1.5rem;
+        }
+
+            .form-registro .btn-login-new {
+                background-color: rgb(239, 240, 244) !important;
+                border-radius: 100px !important;
+                box-shadow: none !important;
+                font-size: 13px !important;
+                text-align: left !important;
+                height: 42px !important;
+                border-color: transparent !important;
+            }
+
+                .form-registro .btn-login-new:focus {
+                    background-color: rgb(255, 255, 255) !important;
+                    font-size: 13px !important;
+                    border-radius: 100px !important;
+                    box-shadow: rgba(168, 172, 185, 0.62) 0px 9px 18px 0px !important;
+                    border-color: transparent;
+                }
+
+            .form-registro .input-group {
+                position: relative;
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                -ms-flex-align: stretch;
+                align-items: stretch;
+                width: 100%;
+            }
+
+            .form-registro .dropdown-toggle::after {
+                display: inline-block;
+                margin-left: .255em;
+                vertical-align: .255em;
+                content: "";
+                border-top: .3em solid;
+                border-right: .3em solid transparent;
+                border-bottom: 0;
+                border-left: .3em solid transparent;
+            }
+
+            .form-registro .input-group > .custom-file, .input-group > .custom-select, .input-group > .form-control, .input-group > .form-control-plaintext {
+                position: relative;
+                -ms-flex: 1 1 auto;
+                flex: 1 1 auto;
+                width: 1%;
+                margin-bottom: 0;
+            }
+
+            .form-registro .dropdown-menu {
+                background-color: white !important;
+            }
+
+            .form-registro .dropdown-item {
+                display: block;
+                width: 100%;
+                padding: .25rem 1.5rem;
+                clear: both;
+                font-weight: 400;
+                color: #212529;
+                text-align: inherit;
+                white-space: nowrap;
+                background-color: transparent;
+                border: 0;
+            }
+
+                .form-registro .dropdown-item:focus, .form-registro .dropdown-item:hover {
+                    color: #16181b;
+                    text-decoration: none;
+                    background-color: #f8f9fa;
+                }
+
+            .form-registro select.form-control {
+                -webkit-appearance: none !important;
+                -moz-appearance: none !important;
+                background-color: #FAFAFA;
+                border-radius: 0;
+                background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeD0iMTJweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIzcHgiIHZpZXdCb3g9IjAgMCA2IDMiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDYgMyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBvbHlnb24gcG9pbnRzPSI1Ljk5MiwwIDIuOTkyLDMgLTAuMDA4LDAgIi8+PC9zdmc+);
+                background-position: 100% center;
+                background-repeat: no-repeat;
+                border-style: solid;
+                border-width: 1px;
+                border-color: #ccc;
+                color: rgba(0, 0, 0, 0.75);
+                font-size: .875rem;
+                line-height: normal;
+                padding: .5rem;
+                border-radius: 0;
+                height: 2.3125rem;
+            }
+
+            .form-registro .btn.button-Registro_New {
+                background-color: #E30614 !important;
+                border: 0 !important;
+                border-radius: 99px;
+                width: 250px;
+                height: 50px;
+                color: #FFFFFF;
+                font-size: 14px;
+                text-transform: uppercase;
+                font-weight: 300;
+                letter-spacing: 1.4px;
+                line-height: 28px;
+                text-align: center;
+            }
+    </style>
+
+    @RazorHelpers.Content("assets/multiselect/vanillaSelectBox.css", Url)
+}
+@section Scripts{
+    
+    @RazorHelpers.Script("jquery.unobtrusive-ajax.js", Url)
+    <script src="~/Client Scripts/mvcfoolproof.unobtrusive.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    @RazorHelpers.Content("assets/js/backend/RegistroAsesor.js", Url)
+    @RazorHelpers.Content("assets/multiselect/vanillaSelectBox.js", Url)
+
+}
+<div class="container-fluid container-fixed-lg">
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4 class="m-t-0 m-b-0"><i class="fa fa-user_new"></i>&nbsp;@ViewBag.Title</h4>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            <h3 class="usuarios">Crear Asesor</h3>
+                        </div>
+
+                        <form class="form-registro" action="@Url.Action("SaveAsesor")" method="post">
+                            <div class="form-container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group text-left">
+                                            <label for="" class="datos-personales">Datos Personales</label>
+                                        </div>
+                                    </div>
+                                    <input name="UsuarioAsesor.TipoRegistro" type="hidden" value="1"><span class="checkmark"></span>
+                                    @Html.HiddenFor(x => x.UsuarioAsesor.Nacionalidad)
+                                    @Html.HiddenFor(x => x.UsuarioAsesor.Conversion)
+                                    <input type="hidden" id="cbodocumento_val">
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                        <div class="form-group">
+                                            <label class="nombre-de-usuario mb-2 ml-3" id="lbldocumento">Documento</label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <button class="btn btn-outline-secondary dropdown-toggle btn-login-new" style="color:#6C757D;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tipo</button>
+                                                    <div class="dropdown-menu" id="cbodocumento">
+                                                        <a class="dropdown-item" style="font-size:12px" href="#">DNI</a>
+                                                        <a class="dropdown-item" style="font-size:12px" href="#">OTROS</a>
+                                                    </div>
+                                                </div>
+                                                <input type="text" id="DNI" name="UsuarioAsesor.DNI" readonly="readonly" class="form-control frm-login frm-event btn-login-new pl-3 input-validation-error" data-val="true" data-val-required="El documento es obligatorio" data-val-length-min="8" data-val-length="Completar el documento" aria-label="Ingresa tu documento" placeholder="Ingresar tu documento">
+                                            </div>
+                                            @Html.ValidationMessageFor(x => Model.UsuarioAsesor.DNI)
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(x => Model.UsuarioAsesor.Nombres, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                            @Html.TextBoxFor(x => Model.UsuarioAsesor.Nombres, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa ambos nombres" })
+                                            @Html.ValidationMessageFor(x => Model.UsuarioAsesor.Nombres)
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(x => Model.UsuarioAsesor.Apellidos, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                            @Html.TextBoxFor(x => Model.UsuarioAsesor.Apellidos, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa ambos apellidos" })
+                                            @Html.ValidationMessageFor(x => Model.UsuarioAsesor.Apellidos)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(x => Model.UsuarioAsesor.Email, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                            @Html.TextBoxFor(x => Model.UsuarioAsesor.Email, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa el correo electrónico" })
+                                            @Html.ValidationMessageFor(x => Model.UsuarioAsesor.Email)
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(x => Model.UsuarioAsesor.ConfirmarEmail, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                            @Html.TextBoxFor(x => Model.UsuarioAsesor.ConfirmarEmail, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Confirma el correo electrónico" })
+                                            @Html.ValidationMessageFor(x => Model.UsuarioAsesor.ConfirmarEmail)
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                        <div class="form-group">
+                                            @Html.LabelFor(x => Model.UsuarioAsesor.Password, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                            @Html.PasswordFor(x => Model.UsuarioAsesor.Password, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa el Password" })
+                                            @Html.ValidationMessageFor(x => Model.UsuarioAsesor.Password)
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    @*<div class="col-md-4 col-sm-12 col-xs-12 col-xl-4 col-lg-4">
+                                            <div class="form-group">
+                                                @Html.LabelFor(x => Model.UsuarioAsesor.Direccion, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                                @Html.TextBoxFor(x => Model.UsuarioAsesor.Direccion, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa el domicilio" })
+                                                @Html.ValidationMessageFor(x => Model.UsuarioAsesor.Direccion)
+                                            </div>
+                                        </div>*@
+
+                                    <div class="col-md-4 col-sm-4 col-xl-4 col-lg-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(x => Model.UsuarioAsesor.Telefono, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                            @Html.TextBoxFor(x => Model.UsuarioAsesor.Telefono, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa el número telefónico" })
+                                            @Html.ValidationMessageFor(x => Model.UsuarioAsesor.Telefono)
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 col-sm-12 col-xs-12 col-xl-4 col-lg-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(x => Model.UsuarioAsesor.NacionalidadId2, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                            @Html.DropDownListFor(x => Model.UsuarioAsesor.NacionalidadId2, new SelectList(Model.UsuarioAsesor.Nacionalidades, "ParametroId", "Descripcion"), "[- Seleccionar -]", new { @id = "cbonacionalidad", @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => Model.UsuarioAsesor.NacionalidadId2)
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 col-sm-4 col-xl-4 col-lg-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(x => Model.UsuarioAsesor.Cargo, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                            @Html.TextBoxFor(x => Model.UsuarioAsesor.Cargo, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa el cargo" })
+                                            @Html.ValidationMessageFor(x => Model.UsuarioAsesor.Cargo)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-12 col-xs-12 col-xl-4 col-lg-4">
+                                        <div class="form-group">
+
+                                            <label for="cbosector" class="texto-sector nombre-de-usuario mb-2 ml-3">A qué sector pertenece</label>
+                                            @Html.DropDownListFor(x => Model.UsuarioAsesor.Sector, new SelectList(Model.UsuarioAsesor.LstSector, "SectorId", "Descripcion"), "[- Seleccionar -]", new { @id = "cbosector", @class = "form-control" })
+                                            @Html.ValidationMessageFor(x => Model.UsuarioAsesor.Sector)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                @*<div class="col-md-12 col-sm-6 col-xl-8 col-lg-12" style="text-align: -moz-left; text-align: -webkit-left;">
+                                        <div class="form-group chck-register chck3">
+                                            <label class="container">
+
+                                                <label class="he-leido-y-acepto-la">He leído y acepto las políticas de privacidad, el tratamiento de datos y los <a style="color:black; text-decoration:underline" data-toggle="modal" data-target="#myModal" href="@Url.Action("_ViewTermsConditions", "Login")">Terminos y Condiciones</a></label>
+                                                @Html.CheckBoxFor(x => Model.UsuarioAsesor.AceptaTerminosCondiciones)
+                                                <span class="checkmark"></span>
+                                                @Html.TextBoxFor(x => Model.UsuarioAsesor.AceptaTerminosCondiciones2, new { @class = "ocultar_text" })
+                                                @Html.ValidationMessageFor(x => Model.UsuarioAsesor.AceptaTerminosCondiciones2)
+                                            </label>
+                                        </div>
+                                    </div>*@
+                                <div class="col-md-12 col-sm-6 col-xl-4 col-lg-12">
+                                    <div class="form-group">
+                                        <button type="submit" id="btnregistro" class="btn button-Registro_New">Registrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <h3 class="usuarios">Listar Asesores</h3>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <div class="dataTables_wrapper form-inline no-footer" id="basicTable_wrapper">
+                                <table role="grid" class="table table-hover dataTable no-footer" id="basicTable">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-sm-4 title-table">Nombres</th>
+                                            <th class="col-sm-4 title-table">Código</th>
+                                            <th class="col-sm-4 title-table">Cargo</th>
+                                            <th class="text-center title-table">Estado</th>
+                                            <th class="text-center title-table" style="min-width: 9.3em">Opciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var usuario in Model.UsuariosAsesores)
+                                        {
+
+                                            <tr>
+                                                <td class="text-table">@usuario.Apellido, @usuario.Nombre</td>
+                                                <td class="text-table">@usuario.Codigo</td>
+                                                <td class="text-table">@usuario.Cargo</td>
+                                                <td class="text-table"><span class="label @(usuario.Estado == ConstantHelpers.ESTADO.ACTIVO ? "label-success" : usuario.Estado  == ConstantHelpers.ESTADO.PENDIENTE ? "label-warning" : "label-important"  )">@(usuario.Estado == ConstantHelpers.ESTADO.ACTIVO ? "Activo" : usuario.Estado == ConstantHelpers.ESTADO.PENDIENTE ? "Pendiente" : "Inactivo")</span></td>
+                                                <td class="text-right text-table">
+                                                    <div class='base dropdown p-t-5 p-b-5'>
+                                                        <a class="base m-r-80" href="@Url.Action("EditAsesor", "Asesor", new { id = usuario.UsuarioId })">Editar</a>
+                                                        <i class='fa fa-chevron-down dropdown-toggle m-r-10' data-toggle='dropdown' style="cursor:pointer"></i>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a class="btn-xs" href="@Url.Action("ChangeStateAsesor", "Asesor", new { id = usuario.UsuarioId })">
+                                                                    @if (usuario.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                                                                    {
+                                                                        <text><i class="fa fa-user fa-fw"></i>&nbsp;Activar a Usuario</text>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <text><i class="fa fa-user-times fa-fw"></i>&nbsp;Desactivar Usuario</text>
+                                                                    }
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                                @Html.PagedListPager(Model.LstUsuario, page => Url.Action("Index", "Asesor", new { p = page, CadenaBuscar = String.Empty, EmpresaId = Model.EmpresaId }), ConstantHelpers.Bootstrap3Pager)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

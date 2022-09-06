@@ -1,0 +1,311 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Cms.ViewPaginaViewModel
+@{
+    var model = Model;
+    var menu = model.Menu; //model.Datos.CMS_Menu.FirstOrDefault(x => x.Codigo == "PRINCIPAL").CMS_MenuItem.Where(x => x.EsPublicado).OrderBy(x => x.Orden);
+    var url_aula = model.Url_aula;
+    var analytics = model.Analytics;
+    
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Bootstrap core CSS -->
+    <link href="@Url.GetCmsResourceUrl("vendor/bootstrap/css/bootstrap.min.css")" rel="stylesheet">
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("vendor/owlcarousel/assets/owl.carousel.min.css")">
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("vendor/owlcarousel/assets/owl.theme.default.min.css")">
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("css/docs.theme.min.css")">
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("css/animate_Course.css")">
+    <!-- Custom fonts for this template -->
+    <link href="@Url.GetCmsResourceUrl("vendor/fontawesome-free/css/all.min.css")" rel="stylesheet" type="text/css">
+    <!--<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Karla" rel="stylesheet">-->
+    <!-- Custom styles for this template -->
+    <link href="@Url.GetCmsResourceUrl("css/agency.min.css")" rel="stylesheet">
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("css/responsive.css")">
+    <link rel="stylesheet" href="@Url.GetCmsResourceUrl("css/style.css")">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <style>
+
+        .bg-primary {
+            transition: all 1s ease;
+        }
+    </style>
+
+
+    <!-- Google Tag Manager -->
+    <script>
+    (function (w, d, s, l, i) {
+        w[l] = w[l] || []; w[l].push({
+            'gtm.start':
+                new Date().getTime(), event: 'gtm.js'
+        }); var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', '@analytics');</script>
+    <!-- End Google Tag Manager -->
+
+
+</head>
+<body id="page-top">
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=@analytics"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <!--
+    <div id="aviso">
+      <img src="/bitportal/Cms_Data/Sites/promperu/Files/img/share-twitter.svg" alt="">
+      <img src="/bitportal/Cms_Data/Sites/promperu/Files/img/share-facebook.svg" alt="">
+    </div>
+    -->
+    <!--View:Partial.Header-->
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <div class="container-fluid">
+            <a class="navbar-brand js-scroll-trigger" href="/">
+                <img src="@Url.GetCmsResourceUrl("img/logo-aulavirtual.svg")" style="width: 200px;" alt="" />
+            </a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    @foreach (var item in menu)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link js-scroll-trigger" href="@url_aula@Url.GetCmsMenuItemUrl(item)">@item.Titulo</a>
+                        </li>
+                    }
+                    <li class="nav-item" style="margin-top: 0.5em;">
+                        <a class="btn btn-promperu-White" href="@Url.Action("Index","Login")" role="button">Ingresar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--/View:Partial.Header-->
+    <!--View:Pagina.Inicio-->
+    <style>
+
+        .line-clamp {
+            display: block;
+            display: -webkit-box;
+            max-width: 100%;
+            height: 74px;
+            margin: 0 auto;
+            font-size: 14px;
+            line-height: 1.7;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        .nosotros {
+            animation-duration: 6s;
+            animation-delay: 2s;
+        }
+
+        .confian {
+            animation-duration: 6s;
+            animation-delay: 2s;
+        }
+
+        .item-tabProducto {
+            color: #E63528;
+            font-size: 22px;
+        }
+
+            .item-tabProducto:hover {
+                color: #E63528;
+                font-size: 22px;
+                border-bottom: 5px solid #13A538;
+            }
+
+        .nav .nav-item > .active {
+            color: #E63528;
+            border-bottom: 5px solid #13A538;
+        }
+    </style>
+    @RenderBody()
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row mw-none">
+                <div class="col-md-4 p-5 ml-5">
+                    <div class="form-group">
+                        <div><img src="@Url.GetCmsResourceUrl("img/mincentur-logo.png")" alt=""></div>
+                        <div class="form-group fg">
+                            <label class="la-comision-de-promo" for="">
+                                @("footer_texto".Label())
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 p-5 ml-5 mt-4">
+                    <label for="" class="lb-link">@("nombre_footer_dos".Label())</label>
+                    <div class="form-group fg">
+                        <li><a target="_blank" href="https://peru.info/es-pe/">@("link_uno".Label())</a></li>
+                        <li><a target="_blank" href="https://www.promperu.gob.pe/">@("link_dos".Label())</a></li>
+                        <li><a target="_blank" href="https://exportemos.pe">@("link_tres".Label())</a></li>
+                        <li><a target="_blank" href="https://www.gob.pe/mincetur">@("link_cuatro".Label()) </a></li>
+                    </div>
+                </div>
+                <div class="col-md-3 p-5 mt-4">
+                    <label for="" class="lb-link">@("info_contacto".Label())</label>
+                    <div class="form-group fg">
+                        <p>@("ic_direccion".Label())</p>
+                        <!--<p>(+51) 616-7400 Ext.3109</p>-->
+                        <p>@("ic_telefono".Label())</p>
+                        <a href="#aulavirtual@promperu.gob.pe">@("ic_correo".Label())</a>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row mw-none ft2">
+                <div class="col-md-2 ml-5 pl-5"><a href="#">&copy;2019 PROMPERÚ</a></div>
+                <div class="col-md-4 ft-col ft3">
+                    <a href="@Url.GetCmsPageUrl("pregunta-frecuente")">@("pregunta_frecuente".Label())</a>
+                    <a href="#" style="margin-left: 3em;">@("privacidad")</a>
+                    <a style="margin-left: 3em;" href="@Url.GetCmsPageUrl("mapa-sitio")">@("mapa_sitio".Label())</a>
+                </div>
+                <div class="col-md-4 ft3">
+                    <a target="_blank" style="margin-right: 20px;" href="https://www.facebook.com/promperu"><img src="@Url.GetCmsResourceUrl("img/facebook.svg")" alt=""></a>
+                    <a target="_blank" style="margin-right: 20px;" href="https://twitter.com/PromPeru"><img src="@Url.GetCmsResourceUrl("img/twitter.svg")" alt=""></a>
+                    <a target="_blank" style="margin-right: 20px;" href="https://www.linkedin.com/company/392025?trk=vsrp_companies_res_name&amp;trkInfo=VSRPsearchId%3A1485013621477865369025%2CVSRPtargetId%3A392025%2CVSRPcmpt%3Aprimary"><img src="@Url.GetCmsResourceUrl("img/linkedin.svg")" alt=""></a>
+                    <a target="_blank" style="margin-right: 20px;" href="https://www.youtube.com/promperu"><img src="@Url.GetCmsResourceUrl("img/youtube.svg")" alt=""></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!--/View:Partial.Footer-->
+    <!-- Bootstrap core JavaScript -->
+    <script src="@Url.GetCmsResourceUrl("vendor/jquery/jquery.min.js")"></script>
+    <script src="@Url.GetCmsResourceUrl("vendor/bootstrap/js/bootstrap.bundle.min.js")"></script>
+    <!-- Plugin JavaScript -->
+    <script src="@Url.GetCmsResourceUrl("vendor/jquery-easing/jquery.easing.min.js")"></script>
+    <!-- Carousel -->
+    <script src="@Url.GetCmsResourceUrl("vendor/owlcarousel/owl.carousel.js")"></script>
+    <!-- Contact form JavaScript -->
+    <script src="@Url.GetCmsResourceUrl("js/jqBootstrapValidation.js")"></script>
+    <script src="@Url.GetCmsResourceUrl("js/contact_me.js")"></script>
+    <!-- Custom scripts for this template -->
+    <script src="@Url.GetCmsResourceUrl("js/agency.min.js")"></script>
+    @RenderSection("Scripts", false)
+    <script>
+
+        $(document).ready(function () {
+            var owl = $('.owl-carousel');
+            owl.owlCarousel({
+                items: 3,
+                loop: true,
+                margin: 10,
+                autoplay: false,
+                autoplayTimeout: 1000,
+                autoplayHoverPause: true,
+                responsive: {
+                    0: {
+                        items: 1,
+                        height: 500
+                    },
+
+                    576: {
+                        items: 1,
+                        margin: 20,
+                        height: 500
+                    },
+
+                    992: {
+                        items: 2,
+                        margin: 20,
+                    },
+
+                    1200: {
+                        margin: 5,
+                    }
+
+                }
+            });
+            $('.play').on('click', function () {
+                owl.trigger('play.owl.autoplay', [1000])
+            });
+            $('.stop').on('click', function () {
+                owl.trigger('stop.owl.autoplay')
+            });
+
+            /*----------------------------*/
+            $('#aviso').hide(0);
+            /*
+            $(window).scroll(function(){
+              var windowHeight = $(window).scrollTop();
+              var section2 = $("#services").offset();
+              section2 = section2.top;
+              if(windowHeight >= section2  ){
+                $('#aviso').fadeIn(500);
+              }
+            });*/
+
+
+            /*
+         document.getElementById("page-top").addEventListener("scroll", myFunction);
+
+             document.getElementById("certificate").addEventListener("scroll", Animate);*/
+
+            $("#nosotros_header").click(function () {
+
+                $("#nosotros").focus();
+
+            });
+
+            $("#modulos_header").click(function () {
+
+                $("#modulos").focus();
+
+            });
+
+            $("#certificate_header").click(function () {
+
+                $("#certificate").focus();
+
+            });
+
+        });
+
+
+
+    </script>
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/5cbdd108c1fe2560f3fff612/default';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
+    <script>
+        $(window).scroll(function () {
+            if ($("#mainNav").offset().top > 56) {
+                $("#mainNav").addClass("bg-danger");
+            } else {
+                $("#mainNav").removeClass("bg-danger");
+            }
+        });
+    </script>
+</body>
+</html>

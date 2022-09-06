@@ -1,0 +1,481 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.User.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_FrontLayout.cshtml";
+}
+@section Styles{
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <style>
+
+        .loader-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            margin: -4rem;
+            display: none;
+            z-index: 20;
+        }
+
+        .loader-background {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+            opacity: 0.3;
+        }
+
+        .loader-button {
+            position: absolute;
+            top: 60%;
+            width: 100%;
+        }
+
+        .loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 1;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid red;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+            opacity: 1;
+        }
+
+        @@keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .field-validation-error {
+            color: red;
+        }
+
+
+        /*codigo modificado*/
+
+        .modal-content {
+            height: 100vh;
+            overflow: auto;
+        }
+
+        .ocultar_text {
+            visibility: hidden;
+        }
+
+
+        .vsb-main {
+        width:100%;
+        }
+
+    </style>
+
+    @RazorHelpers.Content("assets/multiselect/vanillaSelectBox.css", Url)
+
+}
+<!-- Navigation -->
+@*<nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-trans" id="mainNav">
+        <div class="container-fluid">
+            <div class="row mw-none">
+                <div class="col-md-9"><a class="navbar-brand js-scroll-trigger mt-4" href="@ViewBag.URLPortal"><img src="@Url.Content("~/Content/landing/img/mincentur-logo.png")" alt=""></a></div>
+                <div class="col-md-0"><a class="navbar-brand js-scroll-trigger mt-4" href="https://www.facebook.com/promperu"><img src="@Url.Content("~/Content/landing/img/redes/facebook.svg")" alt=""></a></div>
+                <div class="col-md-0"> <a class="navbar-brand js-scroll-trigger mt-4" href="https://twitter.com/PromPeru"><img src="@Url.Content("~/Content/landing/img/redes/twitter.svg")" alt=""></a></div>
+                <div class="col-md-0">
+                    <a class="navbar-brand js-scroll-trigger mt-4" href="https://www.linkedin.com/company/392025?trk=vsrp_companies_res_name&amp;trkInfo=VSRPsearchId%3A1485013621477865369025%2CVSRPtargetId%3A392025%2CVSRPcmpt%3Aprimary"><img src="@Url.Content("~/Content/landing/img/redes/linkedin.svg")" alt=""></a>
+                </div>
+                <div class="col-md-0"><a class="navbar-brand js-scroll-trigger mt-4" href="https://www.youtube.com/promperu"><img src="@Url.Content("~/Content/landing/img/redes/youtube.svg")" alt=""></a></div>
+                <div class="col-md-1 mt-2"><a href="@Url.Action("index","login")" class="btn button-register mt-4">Iniciar Sesión</a></div>
+
+            </div>
+        </div>
+    </nav>*@
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+    <div class="container-fluid">
+        <a class="navbar-brand js-scroll-trigger" href="@ViewBag.URLPortal"><img style="width: 60%;" src="@Url.Content("~/Content/landing/img/mincentur-logo.svg")" alt="" /></a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a id="nosotros_header" class="nav-link js-scroll-trigger" href="@ViewBag.URLPortal/#nosotros">Nosotros</a>
+                </li>
+                <li class="nav-item">
+                    <a id="modulos_header" class="nav-link js-scroll-trigger" href="@ViewBag.URLPortal/#modulos">Módulos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="@ViewBag.URLPortal/Agenda">Agenda</a>
+                </li>
+                <li class="nav-item">
+                    <a id="certificate_header" class="nav-link js-scroll-trigger" href="@ViewBag.URLPortal/#certificate">Certifícate</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="@ViewBag.URLPortal/preguntas-frecuentes">Preguntas Frecuentes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("index","login")" style="padding-top: 9px !important;" class="nav-link js-scroll-trigger btn btn-promperu-White">Ingresar</a>
+                </li>
+                <li class="nav-item">
+                    <a target="_blank" class="nav-link js-scroll-trigger" href="https://www.facebook.com/promperu"><img src="@Url.Content("~/Content/landing/img/redes/facebook.svg")" alt=""></a>
+                </li>
+                <li class="nav-item">
+                    <a target="_blank" class="nav-link js-scroll-trigger" href="https://twitter.com/PromPeru"><img src="@Url.Content("~/Content/landing/img/redes/twitter.svg")" alt=""></a>
+                </li>
+                <li class="nav-item">
+                    <a target="_blank" class="nav-link js-scroll-trigger" href="https://www.linkedin.com/company/392025?trk=vsrp_companies_res_name&amp;trkInfo=VSRPsearchId%3A1485013621477865369025%2CVSRPtargetId%3A392025%2CVSRPcmpt%3Aprimary"><img src="@Url.Content("~/Content/landing/img/redes/linkedin.svg")" alt=""></a>
+                </li>
+                <li class="nav-item">
+                    <a target="_blank" class="nav-link js-scroll-trigger text-left" href="https://www.youtube.com/promperu"><img src="@Url.Content("~/Content/landing/img/redes/youtube.svg")" alt=""></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Header -->
+<header class="masthead masthead-login">
+    <div class="container-fluid">
+        <div class="intro-text intro-text-registro" style="text-align: -webkit-center;">
+            <div class="form-group text-center pb-1"><div class="lb-login-iniciar">Regístrate</div></div>
+            <div class="col-md-11 pb-5 pt-3" style="text-align: -moz-center;">
+                <form class="form-registro" action="@Url.Action("Register")" method="post">
+                    <div class="loader-container">
+                        <div class="loader-background"></div>
+                        <div class="loader"></div>
+                        <div class="loader-button">
+                            <button type="button" class="btn btn-primary" onclick="cancelRequest()">Cancelar</button>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align: -moz-center;">
+                        <div class="col-md-6 col-lg-4 col-sm-6 offset-lg-3">
+                            <div class="form-group chck-change chck2">
+                                <label class="container emprendedor">
+                                    <label class="emprendedor">Emprendedor</label>
+                                    <input name="tipoEmprendedor" type="radio" value="1"><span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4 col-sm-6">
+                            <div class="form-group chck-change chck2">
+                                <label class="container emprendedor">
+                                    <label class="emprendedor"> Empresa</label>
+                                    <input name="tipoEmpresa" type="radio" value="0" checked><span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group text-left">
+                                    <label for="" class="datos-personales">Datos Personales</label>
+                                </div>
+                            </div>
+                            @Html.HiddenFor(x => x.Nacionalidad)
+                            @Html.HiddenFor(x => x.Conversion)
+
+
+                            <input type="hidden" id="cbodocumento_val">
+
+                            <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+
+                                <div class="form-group">
+                                    <label class="nombre-de-usuario mb-2 ml-3" id="lbldocumento">Documento</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <button class="btn btn-outline-secondary dropdown-toggle btn-login-new" style="color:#6C757D;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tipo</button>
+                                            <div class="dropdown-menu" id="cbodocumento">
+                                                <a class="dropdown-item" style="font-size:12px" href="#">DNI</a>
+                                                <a class="dropdown-item" style="font-size:12px" href="#">OTROS</a>
+                                            </div>
+                                        </div>
+                                        <input type="text" id="DNI" name="DNI" readonly="readonly" class="form-control frm-login frm-event btn-login-new pl-3 input-validation-error" data-val="true" data-val-required="El documento es obligatorio" data-val-length-min="8" data-val-length="Completar el documento" aria-label="Ingresa tu documento" placeholder="Ingresar tu documento">
+                                    </div>
+                                    @Html.ValidationMessageFor(x => Model.DNI)
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => Model.Nombres, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                    @Html.TextBoxFor(x => Model.Nombres, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa tus ambos nombres" })
+                                    @Html.ValidationMessageFor(x => Model.Nombres)
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => Model.Apellidos, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                    @Html.TextBoxFor(x => Model.Apellidos, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa tus ambos apellidos" })
+                                    @Html.ValidationMessageFor(x => Model.Apellidos)
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => Model.Email, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                    @Html.TextBoxFor(x => Model.Email, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa tus correo electrónico" })
+                                    @Html.ValidationMessageFor(x => Model.Email)
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => Model.ConfirmarEmail, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                    @Html.TextBoxFor(x => Model.ConfirmarEmail, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Confirma tu correo electrónico" })
+                                    @Html.ValidationMessageFor(x => Model.ConfirmarEmail)
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => Model.Password, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                    @Html.PasswordFor(x => Model.Password, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa tu Password" })
+                                    @Html.ValidationMessageFor(x => Model.Password)
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 col-sm-12 col-xs-12 col-xl-4 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => Model.Direccion, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                    @Html.TextBoxFor(x => Model.Direccion, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa tu domicilio" })
+                                    @Html.ValidationMessageFor(x => Model.Direccion)
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-4 col-xl-4 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => Model.Telefono, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                    @Html.TextBoxFor(x => Model.Telefono, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa tu número telefónico" })
+                                    @Html.ValidationMessageFor(x => Model.Telefono)
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-12 col-xs-12 col-xl-4 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => Model.NacionalidadId2, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                    @Html.DropDownListFor(x => Model.NacionalidadId2, new SelectList(Model.Nacionalidades, "ParametroId", "Descripcion"), "[- Seleccionar -]", new { @id = "cbonacionalidad", @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => Model.NacionalidadId2)
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-12 col-xs-12 col-xl-4 col-lg-4">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => Model.Sexo, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                    @Html.DropDownListFor(x => Model.Sexo, new SelectList(Model.LstSexo, "ParametroId", "Descripcion"), "[- Seleccionar -]", new { @id = "cbosexo", @class = "form-control" })
+                                    @Html.ValidationMessageFor(x => Model.Sexo)
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4 col-sm-12 col-xs-12 col-xl-4 col-lg-4">
+                                <div class="form-group">
+
+                                    <label for="cbosector" class="texto-sector nombre-de-usuario mb-2 ml-3">A qué sector pertenece</label>
+                                    @Html.DropDownListFor(x => Model.Sector, new SelectList(Model.LstSector, "SectorId", "Descripcion"), new { @id = "cbosector", @class = "form-control", multiple = "multiple", size = "1" })
+                                    @Html.ValidationMessageFor(x => Model.Sector)
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                    <div id="empresaSection" class="form-container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group text-left">
+                                    <label for="" class="datos-personales">Datos de la Empresa</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => Model.RUC, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                    @Html.TextBoxFor(x => Model.RUC, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa el RUC de la empresa" })
+                                    @Html.ValidationMessageFor(x => Model.RUC)
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => Model.RazonSocial, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                    @Html.TextBoxFor(x => Model.RazonSocial, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa la razón social de la empresa" })
+                                    @Html.ValidationMessageFor(x => Model.RazonSocial)
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => Model.CIIU, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                    @Html.TextBoxFor(x => Model.CIIU, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa el código (CIIU) de la empresa" })
+                                    @Html.ValidationMessageFor(x => Model.CIIU)
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => Model.Productos, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                    @Html.TextBoxFor(x => Model.Productos, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa el producto de la empresa" })
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-6 col-xl-4 col-lg-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => Model.EmailEmpresa, new { @class = "nombre-de-usuario mb-2 ml-3" })
+                                    @Html.TextBoxFor(x => Model.EmailEmpresa, new { @class = "form-control frm-login frm-event btn-login-new pl-3", @placeholder = "Ingresa el correo de la empresa" })
+                                    @Html.ValidationMessageFor(x => Model.EmailEmpresa)
+                                </div>
+                            </div>
+
+                            
+
+                        </div>
+                    </div>
+                    @*<div class="row">
+                            <div class="col-md-8" style="text-align: -moz-left;text-align: -webkit-left;">
+                                <div class="form-group chck-register chck3">
+                                    <label class="container">
+                                        @Html.DisplayNameFor(x => Model.TieneTest)
+                                        @Html.CheckBoxFor(x => Model.TieneTest)
+                                        <span class="checkmark"></span>
+                                        @Html.ValidationMessageFor(x => Model.TieneTest)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>*@
+                    <div class="row">
+                        <div class="col-md-12 col-sm-6 col-xl-8 col-lg-12" style="text-align: -moz-left; text-align: -webkit-left;">
+                            <div class="form-group chck-register chck3">
+                                <label class="container">
+                                    <!--<label class="he-leido-y-acepto-la">He leído y acepto las políticas de privacidad, el tratamiento de datos y los <a style="color:black; text-decoration:underline" href="#">términos & condiciones.</a></label>-->
+                                    <label class="he-leido-y-acepto-la">He leído y acepto las políticas de privacidad, el tratamiento de datos y los <a style="color:black; text-decoration:underline" data-toggle="modal" data-target="#myModal" href="@Url.Action("_ViewTermsConditions", "Login")">Terminos y Condiciones</a></label>
+                                    @Html.CheckBoxFor(x => Model.AceptaTerminosCondiciones)
+                                    <span class="checkmark"></span>
+                                    @Html.TextBoxFor(x => Model.AceptaTerminosCondiciones2, new { @class = "ocultar_text" })
+                                    @Html.ValidationMessageFor(x => Model.AceptaTerminosCondiciones2)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-6 col-xl-4 col-lg-12">
+                            <div class="form-group">
+                                <button type="submit" id="btnregistro" class="btn button-Registro_New">Registrarme</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+@section Scripts{
+    @RazorHelpers.Script("jquery.unobtrusive-ajax.js", Url)
+    <script src="~/Client Scripts/mvcfoolproof.unobtrusive.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    @RazorHelpers.Content("assets/js/backend/Registro.js", Url)
+    @RazorHelpers.Content("assets/multiselect/vanillaSelectBox.js", Url)
+
+}
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg full-screen" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center" style="margin: 0 auto">
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Terminos y Condiciones</h4>-->
+                <h2>Terminos y Condiciones</h2>
+            </div>
+            <div class="modal-body">
+
+
+
+                <div>
+
+                    <p>En Promperú, tenemos muy en cuenta la privacidad de los visitantes de todos nuestros sitios web, incluyendo nuestras páginas y aplicaciones en Redes Sociales como Facebook y Twitter, y dispositivos móviles.</p>
+                    <p>Sabemos que mantener su confianza requiere que protejamos su privacidad, por ello, mediante esta “Política de Privacidad”, se detallan nuestras prácticas relacionadas con la información y las elecciones que usted, como visitante de este sitio, puede hacer en relación con la recopilación y uso de su información.</p>
+
+                    <h5>¿Qué  información personal podemos preguntarle y qué uso le damos?</h5>
+                    <p>Cuando usted visita nuestro sitio, recolectamos su información personal (por ejemplo, su nombre, dirección, número de teléfono, dirección de e-mail, etc.) solamente cuando usted nos la proporciona de forma voluntaria. Dependiendo del objetivo para el cual haya proporcionado dicha información, podemos utilizarla para comunicarnos con usted con respecto a nuestros productos, servicios y promociones, para ofrecerle cualquier otra información que usted solicite, para personalizar su experiencia en nuestro sitio y/o para mejorar nuestras ofertas de productos y servicios.</p>
+                    <p>Se le podrá pedir información personal si usted: (i) Se registra para participar en un sorteo, un concurso u otra promoción; (ii) Se registra como usuario o publica contenido en nuestro sitio; (iii) Solicita que le enviemos un boletín u otro tipo de información o material, o: bien (iv) Participa en secciones de nuestro sitio web que soliciten información personal.</p>
+                    <p>Su participación en cualquiera de estas actividades (y por tanto, el suministro de datos personales) son totalmente voluntarios. Podemos utilizar la información que usted suministre para responder a sus preguntas o comentarios, para administrar nuestros sitios y promociones, para satisfacer su solicitud, suscripción o pedido, para proveerle una experiencia personalizada en nuestras webs o bien para suministrar o mejorar nuestros productos y servicios. No le enviaremos ningún boletín ni comunicación similar alguna por e-mail, a menos que usted expresamente haya otorgado su consentimiento.</p>
+                    <p>Si usted opta por recibir dichas comunicaciones por e-mail, siempre tendrá la oportunidad de “darse de baja” de la suscripción en cualquier momento.</p>
+
+                    <h5>¿Cómo utilizamos las “cookies”, “web beacons” o tecnologías similares? </h5>
+                    <p>Podemos emplear en nuestro sitio la tecnología de “cookies”, “web beacons” y dispositivos similares para facilitar la navegación y administración del mismo, así como para comprender y potenciar la efectividad de nuestro sitio y ofrecer una experiencia superior a los visitantes. La información rastreada a través de estos mecanismos incluye, a título enunciativo, pero no limitativo: (1) la dirección IP de un usuario (por ejemplo, yahoo.com – 192.168.1.1), (2) el tipo de navegador web (por ejemplo, Microsoft Internet Explorer) y de sistema operativo (por ejemplo, Windows o Linux) utilizado, (3) las páginas del sitio que un usuario visita; y, (4) otros sitios web que un usuario ha visitado antes de visitar el nuestro.</p>
+                    <p>La mayoría de los navegadores aceptan las “cookies” automáticamente, pero pueden configurarse para que no las aceptan, o bien avisarle al usuario cuando se envía alguna. Si usted quiere desactivar las “cookies”, remítase al menú de ayuda de su navegador para aprender a hacerlo. Tenga en cuenta que, si desactiva las “cookies”, quizás no pueda utilizar algunas funciones personalizadas de nuestro sitio. Las “cookies” no recopilan, ni contienen su nombre o dirección de e-mail. Los “web beacons” son gráficos de 1×1, de un solo pixel, que nos permiten contar el número de usuarios que han visitado una página web en particular, o bien obtener acceso a determinadas “cookies”. Podemos usar los “web beacons” en nuestro sitio web para contar los usuarios, así como para reconocer a los mismos al obtener acceso a nuestras “cookies”. Mediante el acceso a nuestras “cookies”, podemos personalizar nuestro sitio web, así como mejorar su experiencia en el mismo. También podemos incluir “web beacons” en mensajes de e-mail formateados en HTML que enviamos para determinar cuáles han sido abiertos. Al igual que las “cookies”, los “web beacons” no recopilan, ni contienen su nombre o dirección de e-mail. “Cookies” y tecnologías similares que usamos para “online behavioral advertising” – y su derecho a darse de baja. Se debe tener en cuenta que, terceros que prestan servicio a agencias de publicidad o determinando qué publicidad usted podría ver en otros sitios, pueden usar “cookies” para recopilar información (como, por ejemplo, las publicidades que ha visto, sitios web o páginas que ha visitado). Mediante el acceso a nuestras “cookies” podemos hacer una deducción sobre el tipo de contenido de publicidades en internet que podría ser relevante para usted. </p>
+                    <p>Asimismo, mientras usted visita nuestro sitio web, dichas “cookies” pueden ser usados por terceros  para recopilar información y así mostrarle publicidades que creen ser relevante para usted cuando visita otros sitios web, que no son nuestros. Este método se llama “online behavioral advertising”. Puede darse de baja para que estos terceros no usen las “cookies” con fin de recopilar información de su computadora para “online behavioral advertising” haciendo clic aquí: <a href="http://preferences.truste.com/truste/" target="_blank">http://preferences.truste.com/truste/</a>. Se dará de baja solamente de las empresas que cumplan con los estándares de truste.  Para darse de baja de todos los publicistas externos, debe desactivar las cookies en su navegador. Si se da de baja, estas agencias se comprometen a no usar las “cookies” (ni tecnologías similares) en esta forma con fin de recopilar información en cualquier sitio (no solo el nuestro) para realizar “online behavioral advertising”. Por favor, tenga en cuenta que el proceso de darse de baja en sí, requiere el uso de las “cookies”. En otras palabras, cuando se da de baja, se genera una “cookie” en el navegador que informa a los terceros que no deban usar “cookies” para realizar “online behavioral advertising”.</p>
+                    <p>Como consecuencia, si posteriormente usted borra las “cookies” de su navegador (como hace mucha gente de vez en cuando), su dada de baja estará perdida hasta que la restablezca. Además, por favor, tener en cuenta que el darse de baja no significa que ya no recibirá publicidades – solo significa que no recibirá publicidades que en otras circunstancias hubieran sido dirigidas a usted en base a las “cookies” de su computadora por empresas que cumplen con los estándares de confianza.</p>
+
+                    <h5>¿Cuándo podríamos proporcionar a terceros su información personal? </h5>
+                    <p>Podemos compartir su información personal con terceros, si usted nos autoriza previa y expresamente a hacerlo. También podemos proporcionar dicha información a terceros que prestan servicios en nuestro nombre. Dichos terceros sólo podrán utilizar tal información en conjunción con los servicios específicos que prestan en nuestro nombre (por ejemplo, para satisfacer un pedido, responder a sus preguntas o comentarios, ofrecer un premio en un sorteo, llevar a cabo una encuesta entre consumidores, investigar un reclamo, etc.).</p>
+                    <p>Nos reservamos el derecho a divulgar cualquier información personal, según sea necesario, si dicha información es solicitada por mandato de Ley o resolución judicial. También podremos divulgar información personal a terceros, si tenemos razón para creer que la divulgación de dicha información es necesaria para identificar, contactar o entablar acción legal contra alguna persona que pudiera estar violando los términos de uso de nuestro sitio.</p>
+
+                    <h5>Información personal que podemos recibir de Servicios de Redes Sociales</h5>
+                    <p>Si elige usar o acceder a los servicios de terceros de Redes Sociales (como Facebook o Twitter), podemos recibir los datos que usted haya dispuesto mediante estos servicios, incluyendo información sobre sus contactos. Por ejemplo, algunas Redes Sociales permiten compartir contenido de nuestro sitio web con sus contactos, o extraer información sobre sus contactos para que usted pueda conectarse con ellos en nuestro sitio web. Pueden también, en algunos casos, facilitar su registro en nuestro sitio de web y mejorar o personalizar su experiencia en nuestro sitio de web. Su decisión de usar los servicios de las Redes Sociales es siempre voluntaria; sin embargo, debe asegurarse que está de acuerdo con la información que éstos pueden poner a nuestra disposición, visitando las “Políticas de privacidad” de estos servicios.</p>
+                    <p>La información personal recibida a través de los Servicios de Redes Sociales podrá ser usada en la manera descrita anteriormente.</p>
+
+                    <h5>Contenido generado por el usuario y características del perfil público</h5>
+                    <p>Los usuarios de “chat rooms” y tableros de mensajes / anuncios electrónicos que puedan estar en nuestro sitio deben ser conscientes de que voluntariamente revelan información de identificación personal (por ejemplo, nombre, dirección de correo electrónico, etc.) para un tablero de mensajes, anuncios, un área de “chat”, u otras secciones interactivas en las que se puede publicar información personal.</p>
+                    <p>Esta información puede ser recogida y usada por otros usuarios de internet, lo que puede originar mensajes no solicitados enviados por otros anunciantes o terceras partes. Nosotros no hacemos representaciones ni tomamos responsabilidades en cuanto a la seguridad de la información que usted voluntariamente publica en “chat rooms” y tableros de mensajes / anuncios.</p>
+
+                    <h5>Herramientas “Enviar a un amigo”</h5>
+                    <p>Este sitio puede, ocasionalmente, incluir una aplicación de “Enviar a un amigo” que le facilitará a usted referir información o materiales desde nuestro sitio hacia el correo electrónico de amigos o familiares. Para enviar su mensaje electrónico, la aplicación le solicitará que ingrese la dirección electrónica del destinatario y/o información similar (incluyendo la dirección electrónica de usted). Esta información solamente es usada por la aplicación para dirigir su mensaje correctamente.</p>
+
+                    <h5>Cambios en nuestra política de privacidad en línea</h5>
+                    <p>Nos reservamos el derecho de actualizar y/o modificar éstos Términos y Condiciones a nuestra discreción y en cualquier momento, sin previo aviso. Por esta razón, recomendamos revisar los Términos y Condiciones cada vez que utilice la página web.</p>
+
+                    <h5>Su consentimiento a los términos de esta Política de Privacidad</h5>
+                    <p>Usar este sitio Web implica su consentimiento y aceptación a todos los términos de esta Política de Privacidad y de nuestras Condiciones de Uso. Si usted no está de acuerdo con alguno de los términos de la presente Política de Privacidad y Condiciones de Uso, por favor no utilice este sitio ni envíe información de identificación personal.</p>
+
+                    <h5>Cómo contactarse con nosotros</h5>
+                    <p>Si usted tuviese preguntas o consultas sobre esta Política de Privacidad o sobre nuestra recolección o nuestro uso de información, por favor Contáctenos.</p>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                <div class="row">
+                    <div class="col-lg-4">
+                    </div>
+                    <div class="col-lg-4">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Estoy de acuerdo</button>
+                    </div>
+                    <div class="col-lg-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--modal dialog-->
+
+<div class="modal fade" tabindex="-1" role="dialog" id="mydialog">
+    <div class="modal-dialog" role="dialog">
+        <div class="modal-content" style="height:auto !important">
+            <div class="modal-header">
+                <!--<h5 class="modal-title">Modal title</h5>-->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Se ha detectado que su correo tiene una cuenta asociada<br> ¿desea convertir su cuenta a usuario empresa?</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" id="btnconversion" class="btn btn-danger" data-dismiss="modal">Aceptar</button>
+                <button type="button" id="btnrechazo" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>

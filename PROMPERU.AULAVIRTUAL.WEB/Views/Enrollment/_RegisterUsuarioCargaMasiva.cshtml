@@ -1,0 +1,23 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Enrollment._RegisterUsuarioCargaMasivaViewModel
+
+@{
+    Layout = ConstantHelpers.Layout.MODAL_LAYOUT_PATH;
+    ViewBag.ModalDialogClass = "modal-md";
+    ViewBag.Form = new ModalFormHelpers("_RegisterUsuarioCargaMasiva", "Enrollment", FormMethod.Post, new { enctype = "multipart/form-data" });
+    ViewBag.GUID = ViewBag.GUID ?? Guid.NewGuid().ToString();
+    ViewBag.Title = "Carga Masiva";
+}
+
+<div class="alert alert-warning" role="alert">Recuerde que los usuarios deben estar registrados previamente en el Portal (sección de Gestión de Usuarios).</div>
+<div class="alert alert-info" role="alert">Recuerde adjuntar un Archivo <strong>Excel</strong> ('.xls','.xlsx').</div>
+
+@Html.AntiForgeryToken()
+@Html.HiddenFor(x => x.CursoOnlineId)
+@Html.TextBoxFor(x => x.FileCargaMasiva, new { Type = "File" })
+@Html.ValidationMessageFor(x => x.FileCargaMasiva)
+
+@section Footer{
+    <a class="btn  btn-guardar-matricula text-btn-generico" href="@Url.Action("_DownloadFormatoCargaMasiva")">Descargar formato</a>
+    <button class="btn btn-guardar-matricula text-btn-generico" type="submit">Realizar Carga Masiva</button>
+
+}

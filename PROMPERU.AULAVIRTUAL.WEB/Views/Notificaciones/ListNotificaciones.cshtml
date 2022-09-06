@@ -1,0 +1,119 @@
+﻿@model PROMPERU.AULAVIRTUAL.WEB.ViewModel.Notificaciones.ListNotificacionesViewModel
+@{
+    ViewBag.Title = "Notificaciones";
+    ViewBag.Icon = "envelope";
+    ViewBag.Seccion = "Notificaciones";
+}
+
+@*@section Breadcrumbs{
+
+    }*@
+
+
+@section Jumbotron{
+    <div class="container-fluid container-lg sm-p-l-20 sm-p-r-20 full-height">
+        <h3 class="usuarios m-b-20">Notificaciones</h3>
+        <div class="inner full-height" style="transform: translateY(0px); opacity: 1;">
+
+            <form class="form row" method="get" action="@Url.Action("ListNotificaciones","Notificaciones",new { p = 1 })">
+                <div class="col-md-5 m-b-30">
+                    <div class="form-group form-group-default input-group transparent center-margin rectangle-31">
+                        @*@Html.LabelFor(x => x.CadenaBuscar, new { @class = "buscar-usuario" })*@
+                        @Html.TextBoxFor(x => x.CadenaBuscar, new { @class = "form-control input-group-addon text-left", @placeholder = "Buscar Notificacion", @autocomplete = "off" })
+                        <span class="input-group-addon"><i class="pg-search"></i></span>
+                    </div>
+                </div>
+                <div class="col-md-5 m-b-30">
+                    <div class="form-group form-group-default input-group transparent center-margin rectangle-31" style="width: 100% !important;">
+                        @Html.LabelFor(x => x.TipoNotificacionId, new { @class = "buscar-usuario" })
+                        @Html.DropDownListFor(x => x.TipoNotificacionId, new SelectList(Model.LstTipoNotificaciones, "TipoNotificacionId", "Nombre"), "[ - Seleccione - ]", new { @class = "form-control buscar-usuario" })
+                    </div>
+                </div>
+                <div class="col-md-2 m-b-30">
+                    <button type="submit" class="btn btn-filtrar-usuario  btn-lg m-t-5 filtrar">&nbsp;FILTRAR</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+}
+
+
+<div class="container-fluid container-fixed-lg">
+    <div class="panel panel-default">
+
+
+
+        <div class="panel-heading">
+            <div class="panel-title">
+                <h4 class="m-t-0 m-b-0"><i class="fa fa-@ViewBag.Icon"></i>&nbsp;@ViewBag.Title</h4>
+            </div>
+            <div class="btn-group pull-right m-b-10">
+                @if (Session.GetRol() == AppRol.Administrador)
+                {
+                    <div class="pull-right m-t-10 m-l-20"> <a class="btn btn-course-enable" href="@Url.Action("EditAddNotificacion", "Notificaciones")">Agregar Notificacion <i class="pg-plus"></i></a></div>
+                }
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+
+
+
+
+
+
+
+        <div class="panel-body">
+            <div class="table-responsive">
+                <div class="dataTables_wrapper form-inline no-footer" id="basicTable_wrapper">
+                    <table role="grid" class="table table-hover dataTable no-footer" id="basicTable">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-7 title-table">Titulo</th>
+                                <th class="col-sm-5 title-table">Contenido</th>
+                                <th class="col-sm-5 title-table">Tipo Notificación</th>
+                                <th class="text-center title-table">Estado</th>
+                                <th class="text-center title-table" style="min-width: 9.3em">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var notificacion in Model.LstNotificaciones)
+                            {
+
+                                <tr>
+                                    <td class="text-table">@notificacion.Titulo</td>
+                                    <td class="text-table">@notificacion.Contenido</td>
+                                    <td class="text-table">@notificacion.TipoNotificaciones.Nombre</td>
+                                    <td class="text-table"><span class="label @(notificacion.Estado == ConstantHelpers.ESTADO.ACTIVO ? "label-success" : "label-important")">@(notificacion.Estado == ConstantHelpers.ESTADO.ACTIVO ? "Activo" : "Inactivo")</span></td>
+                                    <td class="text-right text-table">
+                                        <div class='base dropdown p-t-5 p-b-5'>
+                                            <a class="base m-r-80" href="@Url.Action("EditAddNotificacion", "Notificaciones", new { NotificacionId = notificacion.NotificacionId})">Editar</a>
+                                            <i class='fa fa-chevron-down dropdown-toggle m-r-10' data-toggle='dropdown' style="cursor:pointer"></i>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="btn-xs" href="@Url.Action("ChangeStateNotificacion", "Notificaciones", new { NotificacionId = notificacion.NotificacionId })">
+                                                        @if (notificacion.Estado.Equals(ConstantHelpers.ESTADO.INACTIVO))
+                                                        {
+                                                            <text><i class="fa fa-user fa-fw"></i>&nbsp;Activar Notificación</text>
+                                                        }
+                                                        else
+                                                        {
+                                                            <text><i class="fa fa-user-times fa-fw"></i>&nbsp;Desactivar Notificación</text>
+                                                        }
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.PagedListPager(Model.LstNotificaciones, page => Url.Action("ListNotificaciones", "Notificaciones", new { p = page, CadenaBuscar = Model.CadenaBuscar, TipoNotificacionId = Model.TipoNotificacionId }), ConstantHelpers.Bootstrap3Pager)
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
